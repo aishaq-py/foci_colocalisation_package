@@ -8,21 +8,22 @@ print('Python Version ' + sys.version)
 print('Pandas Version ' + pd.__version__)
 print('Np Version ' + np.__version__)
 
-input_file_H2AX = 'C:/Users/Ishaq/Documents/All spreadsheets/H2AX CA3R6S9.xlsx'
-input_file_TELO = 'C:/Users/Ishaq/Documents/All spreadsheets/TELO CA3R6S9.xlsx'
-input_file_DAPI = 'C:/Users/Ishaq/Documents/All spreadsheets/NUCLEI CA3R6S9.xlsx'
-output_file = 'C:/Users/Ishaq/Documents/All spreadsheets/TTAF output.csv'
-output_file_2 = 'C:/Users/Ishaq/Documents/All spreadsheets/HTAF output.csv'
+root = 'D:\\C drive backups and transfers\\Documents\\All Spreadsheets\\HUAD test data\\'
+input_file_H2AX = root + '11102018 H2AX untreated.xlsx'
+input_file_TELO = root + '11102018 TELO untreated.xlsx'
+input_file_DAPI = root + '11102018 DAPI untreated.xlsx'
+output_file = root + 'TTAF_untreated_huad.csv'
+output_file_2 = root + 'HTAF_untreated_huad.csv'
 
 #parameters for analysis - change to absolute values if needed as such
 print("\n Input all requested values as decimal numbers (floats).")
-px = float(input("Define pixel length or width in micron: \n")) #DONT NEED THIS, ICY has Area in um2 and box depth
-z_size = float(input("Define size of z-step in mixron: \n"))
-top_overlap_ratio = input("Upper threshold for H2AX:TAF overlap ratio (> 1 means H2AX encompasses Telo, max 5): \n")
-bottom_overlap_ratio = input("Lower threshold for H2AX:TAF overlap ratio (0 means no overlap): \n")
-TAF_size_threshold = input("TAF size threshold in micron (0 will return no threshold): \n")
-TAF_positive_threshold = input("Number of TAF to qualify as senescence-positive: \n")
-upper_TAF_positive_threshold = input("Maximum number of TAF per nucleus (to filter aberrant nuclei: \n")
+px = float(0.16) #float(input("Define pixel length or width in micron: \n")) 
+z_size = float(0.45) #float(input("Define size of z-step in mixron: \n"))
+top_overlap_ratio = float(1.5) #input("Upper threshold for H2AX:TAF overlap ratio (> 1 means H2AX encompasses Telo, max 5): \n")
+bottom_overlap_ratio = float(0.3) #input("Lower threshold for H2AX:TAF overlap ratio (0 means no overlap): \n")
+TAF_size_threshold = float(0.5) #input("TAF size threshold in micron (0 will return no threshold): \n")
+TAF_positive_threshold = float(2) #input("Number of TAF to qualify as senescence-positive: \n")
+upper_TAF_positive_threshold = float(10) #input("Maximum number of TAF per nucleus (to filter aberrant nuclei: \n")
 
 start = time.time()
 
@@ -322,7 +323,7 @@ for (Tkey, Tval), (Hkey, Hval) in zip(dict_nuclei_TELO.items(), dict_nuclei_H2AX
     TAF_TELO.clear()
     num += 1
     #print("Nucleus " + str(num) + " of " + str(len(start_end_vectors_DAPI_merged)) + " done.")
-    if len(TTAF.get(Tkey)) < int(TAF_positive_threshold) or len(TTAF.get(Tkey)) > int(upper_TAF_positive_threshold):
+    if (len(TTAF.get(Tkey)) < int(TAF_positive_threshold)) or (len(TTAF.get(Tkey)) > int(upper_TAF_positive_threshold)):
         pass
     else:
         TAF_positive_nuclei.append("1")
