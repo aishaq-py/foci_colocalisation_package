@@ -1,0 +1,642 @@
+<protocol VERSION="4">
+<blocks>
+<block CommandLineID="" ID="2044608234" blockType="plugins.adufour.blocks.tools.input.Sequence" className="plugins.adufour.blocks.tools.input.Sequence" collapsed="false" definedName="Sequence" height="61" keepsResults="true" width="237" xLocation="36" yLocation="93">
+<variables>
+<input>
+<variable ID="input sequence" name="sequence" runtime="false" value="Active Sequence" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1551881366" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="extract DAPI channel" height="115" keepsResults="true" width="308" xLocation="37" yLocation="216">
+<variables>
+<input>
+<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
+<variable ID="channel" name="Channel" runtime="false" value="0" visible="true"/>
+</input>
+<output>
+<variable ID="extracted" name="Extracted" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="1702485951" blockType="plugins.adufour.projection.Projection" className="plugins.adufour.projection.Projection" collapsed="false" definedName="Intensity Projection" height="166" keepsResults="true" width="344" xLocation="415" yLocation="14">
+<variables>
+<input>
+<variable ID="input" name="Input" runtime="false" visible="true"/>
+<variable ID="projection direction" name="Project along" runtime="false" value="Z" visible="true"/>
+<variable ID="projection type" name="Projection type" runtime="false" value="MAX" visible="true"/>
+<variable ID="restrict to ROI" name="Restrict to ROI" runtime="false" value="false" visible="true"/>
+</input>
+<output>
+<variable ID="projection output" name="projected sequence" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="511287273" blockType="plugins.adufour.hierarchicalkmeans.HierarchicalKMeans" className="plugins.adufour.hierarchicalkmeans.HierarchicalKMeans" collapsed="false" definedName="HK-Means to Find the nucleus" height="297" keepsResults="true" width="362" xLocation="402" yLocation="219">
+<variables>
+<input>
+<variable ID="Input" name="Input" runtime="false" visible="true"/>
+<variable ID="Gaussian pre-filter" name="Gaussian pre-filter" runtime="false" value="0.19999999999999998" visible="true"/>
+<variable ID="Frame" name="Frame" runtime="false" value="0" visible="true"/>
+<variable ID="Number of classes" name="Intensity classes" runtime="false" value="60" visible="true"/>
+<variable ID="Min size (px)" name="Min object size (px)" runtime="false" value="1000" visible="true"/>
+<variable ID="Max size (px)" name="Max object size (px)" runtime="false" value="10000" visible="true"/>
+<variable ID="Final threshold" name="Min object intensity" runtime="false" value="1.0" visible="true"/>
+</input>
+<output>
+<variable ID="binary sequence" name="binary sequence" runtime="false" visible="true"/>
+<variable ID="output regions" name="list of ROI" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="978444089" blockType="plugins.adufour.activecontours.ActiveContours" className="plugins.adufour.activecontours.ActiveContours" collapsed="false" definedName="Active Contours to find nucleus  precisely" height="734" keepsResults="true" width="383" xLocation="825" yLocation="34">
+<variables>
+<input>
+<variable ID="input sequence" name="Input" runtime="false" visible="true"/>
+<variable ID="Input ROI" name="input ROI" runtime="false" visible="true"/>
+<variable ID="regularization: weight" name="Contour smoothness" runtime="false" value="0.15" visible="false"/>
+<variable ID="edge: weight" name="Edge weight" runtime="false" value="-0.1" visible="false"/>
+<variable ID="edge: channel" name="Find edges in channel" runtime="false" value="0" visible="false"/>
+<variable ID="region: weight" name="Region weight" runtime="false" value="0.5" visible="false"/>
+<variable ID="region: sensitivity" name="Region sensitivity" runtime="false" value="0.35" visible="false"/>
+<variable ID="region: channel" name="Find regions in channel" runtime="false" value="0" visible="false"/>
+<variable ID="balloon: weight" name="Contour inflation" runtime="false" value="0.045" visible="false"/>
+<variable ID="contour resolution" name="Contour sampling" runtime="false" value="3.0" visible="true"/>
+<variable ID="region bounds" name="Bound field to ROI of" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="time step" name="Evolution time step" runtime="false" value="0.15000000000000002" visible="true"/>
+<variable ID="convergence value" name="Convergence criterion" runtime="false" value="0.001" visible="true"/>
+<variable ID="max. iterations" name="Max. iterations" runtime="false" value="50000" visible="true"/>
+<variable ID="type of ROI output" name="Type of ROI" runtime="false" value="POLYGON" visible="true"/>
+<variable ID="tracking" name="Track objects over time" runtime="false" value="false" visible="true"/>
+<variable ID="division sensitivity" name="Division sensitivity" runtime="false" value="0.30000000000000004" visible="true"/>
+<variable ID="axis constraint" name="Axis constraint" runtime="false" value="0.01" visible="true"/>
+<variable ID="volume constraint" name="Volume constraint" runtime="false" value="false" visible="true"/>
+<variable ID="watch entering objects" name="Watch entering objects" runtime="false" value="false" visible="true"/>
+</input>
+<output>
+<variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
+<variable ID="Tracks" name="Tracks" runtime="false" visible="true"/>
+<variable ID="Labels" name="Labels" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="923752089" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="120" keepsResults="true" width="316" xLocation="1412" yLocation="44">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="true"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="831960192" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="foci channel " height="115" keepsResults="true" width="293" xLocation="158" yLocation="806">
+<variables>
+<input>
+<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
+<variable ID="channel" name="Channel" runtime="false" value="1" visible="true"/>
+</input>
+<output>
+<variable ID="extracted" name="Extracted" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="911806092" blockType="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" className="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" collapsed="false" definedName="Wavelet Spot Detector Block to adjust on size of foci" height="575" keepsResults="true" width="435" xLocation="510" yLocation="803">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" runtime="false" visible="true"/>
+<variable ID="Spot to detect" name="Spot to detect" runtime="false" value="BRIGHT_SPOT" visible="true"/>
+<variable ID="input Sequence ROIs" name="ROIs from sequence for WAT" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" runtime="false" value="true" visible="true"/>
+<variable ID="ROIs for detection mask" name="ROIs for detection mask" runtime="false" visible="true"/>
+<variable ID="Scale 1" name="Scale 1" runtime="false" value="false" visible="true"/>
+<variable ID="Scale 2" name="Scale 2" runtime="false" value="true" visible="true"/>
+<variable ID="Scale 3" name="Scale 3" runtime="false" value="false" visible="true"/>
+<variable ID="Scale 4" name="Scale 4" runtime="false" value="false" visible="true"/>
+<variable ID="Scale 5" name="Scale 5" runtime="false" value="false" visible="true"/>
+<variable ID="Th. scale 1:" name="Th. scale 1:" runtime="false" value="100" visible="false"/>
+<variable ID="Th. scale 2:" name="Th. scale 2:" runtime="false" value="95" visible="false"/>
+<variable ID="Th. scale 3:" name="Th. scale 3:" runtime="false" value="40" visible="false"/>
+<variable ID="Th. scale 4:" name="Th. scale 4:" runtime="false" value="100" visible="false"/>
+<variable ID="Th. scale 5:" name="Th. scale 5:" runtime="false" value="100" visible="false"/>
+<variable ID="Force 2D Wavelets" name="Force 2D Wavelets" runtime="false" value="true" visible="true"/>
+</input>
+<output>
+<variable ID="binary Spot Sequence" name="binary Spot Sequence" runtime="false" visible="true"/>
+<variable ID="detection as ROIs" name="detection as ROIs" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="127209534" blockType="plugins.stef.roi.bloc.op.FilterROIBySize" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Filter ROI by size" height="177" keepsResults="true" width="243" xLocation="1018" yLocation="1177">
+<variables>
+<input>
+<variable ID="roi" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="minSize" name="Min size (px)" runtime="false" value="5.0" visible="true"/>
+<variable ID="maxSize" name="Max size (px)" runtime="false" value="1000.0" visible="true"/>
+<variable ID="incBorder" name="Include border pixels" runtime="false" value="true" visible="true"/>
+</input>
+<output>
+<variable ID="out" name="ROI(s)" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="309448072" blockType="plugins.stef.roi.bloc.property.SetROIPositionC" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Set ROI position C" height="94" keepsResults="true" width="203" xLocation="1350" yLocation="1228">
+<variables>
+<input>
+<variable ID="rois" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="posC" name="position C" runtime="false" value="0.0" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1816857391" blockType="plugins.stef.roi.bloc.op.FilterROI" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Filter ROI" height="192" keepsResults="true" width="283" xLocation="1530" yLocation="797">
+<variables>
+<input>
+<variable ID="roi" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="descriptors" name="Filter on" runtime="false" value="Max intensity" visible="true"/>
+<variable ID="operator" name="Accept if" runtime="false" value="GREATER" visible="true"/>
+<variable ID="value" name="Value" runtime="false" value="1000.0" visible="true"/>
+</input>
+<output>
+<variable ID="out" name="Filtered ROI(s)" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="399605819" blockType="plugins.adufour.roi.ROIMeasures" className="plugins.adufour.roi.ROIMeasures" collapsed="false" definedName="ROI Statistics" height="136" keepsResults="true" width="362" xLocation="1637" yLocation="1346">
+<variables>
+<input>
+<variable ID="measures" name="Select features..." runtime="false" value="33288028191" visible="true"/>
+<variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+</input>
+<output>
+<variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="284889220" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="686" keepsResults="true" width="1082" xLocation="2531" yLocation="1034">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="org.apache.poi.ss.usermodel.Workbook" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="502730829" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="telomeres channel" height="115" keepsResults="true" width="278" xLocation="44" yLocation="1033">
+<variables>
+<input>
+<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
+<variable ID="channel" name="Channel" runtime="false" value="2" visible="true"/>
+</input>
+<output>
+<variable ID="extracted" name="Extracted" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="1441472901" blockType="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" className="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" collapsed="false" definedName="Wavelet Spot Detector Block" height="540" keepsResults="true" width="420" xLocation="501" yLocation="1486">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" runtime="false" visible="true"/>
+<variable ID="Spot to detect" name="Spot to detect" runtime="false" value="BRIGHT_SPOT" visible="true"/>
+<variable ID="input Sequence ROIs" name="ROIs from sequence for WAT" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" runtime="false" value="false" visible="true"/>
+<variable ID="ROIs for detection mask" name="ROIs for detection mask" runtime="false" visible="true"/>
+<variable ID="Scale 1" name="Scale 1" runtime="false" value="false" visible="true"/>
+<variable ID="Scale 2" name="Scale 2" runtime="false" value="true" visible="true"/>
+<variable ID="Scale 3" name="Scale 3" runtime="false" value="false" visible="true"/>
+<variable ID="Scale 4" name="Scale 4" runtime="false" value="false" visible="true"/>
+<variable ID="Scale 5" name="Scale 5" runtime="false" value="false" visible="true"/>
+<variable ID="Th. scale 1:" name="Th. scale 1:" runtime="false" value="80" visible="false"/>
+<variable ID="Th. scale 2:" name="Th. scale 2:" runtime="false" value="90" visible="false"/>
+<variable ID="Th. scale 3:" name="Th. scale 3:" runtime="false" value="40" visible="false"/>
+<variable ID="Th. scale 4:" name="Th. scale 4:" runtime="false" value="100" visible="false"/>
+<variable ID="Th. scale 5:" name="Th. scale 5:" runtime="false" value="100" visible="false"/>
+<variable ID="Force 2D Wavelets" name="Force 2D Wavelets" runtime="false" value="true" visible="true"/>
+</input>
+<output>
+<variable ID="binary Spot Sequence" name="binary Spot Sequence" runtime="false" visible="true"/>
+<variable ID="detection as ROIs" name="detection as ROIs" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="679127552" blockType="plugins.stef.roi.bloc.op.FilterROIBySize" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Filter ROI by size" height="177" keepsResults="true" width="243" xLocation="1027" yLocation="1934">
+<variables>
+<input>
+<variable ID="roi" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="minSize" name="Min size (px)" runtime="false" value="6.0" visible="true"/>
+<variable ID="maxSize" name="Max size (px)" runtime="false" value="200.0" visible="true"/>
+<variable ID="incBorder" name="Include border pixels" runtime="false" value="true" visible="true"/>
+</input>
+<output>
+<variable ID="out" name="ROI(s)" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="1526546032" blockType="plugins.adufour.roi.ROIMeasures" className="plugins.adufour.roi.ROIMeasures" collapsed="false" definedName="ROI Statistics" height="136" keepsResults="true" width="338" xLocation="1461" yLocation="1922">
+<variables>
+<input>
+<variable ID="measures" name="Select features..." runtime="false" value="33288028191" visible="true"/>
+<variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+</input>
+<output>
+<variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="2572793" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="individual telomeres" height="593" keepsResults="true" width="859" xLocation="2540" yLocation="1754">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="org.apache.poi.ss.usermodel.Workbook" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="123641383" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="194" keepsResults="true" width="226" xLocation="1861" yLocation="165">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1331058712" blockType="plugins.adufour.roi.ROIMeasures" className="plugins.adufour.roi.ROIMeasures" collapsed="false" definedName="ROI Statistics" height="136" keepsResults="true" width="368" xLocation="1455" yLocation="389">
+<variables>
+<input>
+<variable ID="measures" name="Select features..." runtime="false" value="1" visible="true"/>
+<variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+</input>
+<output>
+<variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="1782491576" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="241" keepsResults="true" width="316" xLocation="1105" yLocation="811">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="2058850804" blockType="plugins.adufour.roi.ROIInclusionAnalysis" className="plugins.adufour.roi.ROIInclusionAnalysis" collapsed="false" definedName="ROI Inclusion analysis" height="136" keepsResults="true" width="249" xLocation="1698" yLocation="595">
+<variables>
+<input>
+<variable ID="Outer ROI" name="Outer (enclosing) ROI" runtime="false" visible="true"/>
+<variable ID="Inner ROI" name="Inner (enclosed) ROI" runtime="false" visible="true"/>
+<variable ID="Include overlap" name="Include overlapping ROI" runtime="false" value="true" visible="true"/>
+</input>
+<output>
+<variable ID="workbook" name="Analysis" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="559795598" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Results foci per nucleus to save, done!" height="525" keepsResults="true" width="2161" xLocation="2594" yLocation="367">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="org.apache.poi.ss.usermodel.Workbook" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="644916527" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="239" keepsResults="true" width="193" xLocation="965" yLocation="1614">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1586575775" blockType="plugins.stef.tools.ROIToDetection" className="plugins.stef.tools.ROIToDetection" collapsed="false" definedName="ROI to detection" height="135" keepsResults="true" width="383" xLocation="378" yLocation="2421">
+<variables>
+<input>
+<variable ID="sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="rois" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="exportSP" name="Export to Swimming Pool" runtime="false" value="true" visible="true"/>
+</input>
+<output>
+<variable ID="detection result" name="Detection result" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="1911932226" blockType="plugins.stef.tools.ROIToDetection" className="plugins.stef.tools.ROIToDetection" collapsed="false" definedName="ROI to detection" height="135" keepsResults="true" width="383" xLocation="1086" yLocation="2217">
+<variables>
+<input>
+<variable ID="sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="rois" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="exportSP" name="Export to Swimming Pool" runtime="false" value="true" visible="true"/>
+</input>
+<output>
+<variable ID="detection result" name="Detection result" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="216766287" blockType="plugins.lagache.colocalizationstudio.ColocalizationStudio_Object" className="plugins.lagache.colocalizationstudio.ColocalizationStudio" collapsed="false" definedName="Colocalization studio_ object" height="396" keepsResults="true" width="654" xLocation="262" yLocation="2625">
+<variables>
+<input>
+<variable ID="Input Sequence 1" name="Input sequence 1" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="Input Sequence 2" name="Input sequence 2" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="ROI of Analysis" name="ROI of Analysis" runtime="false" value="No ROI" visible="true"/>
+<variable ID="Detections 1 (ROIs)" name="List of detections 1 (ROIS)" runtime="false" visible="true"/>
+<variable ID="Detections 2 (ROIs)" name="List of detections 2 (ROIS)" runtime="false" visible="true"/>
+<variable ID="Positions 1 inside masks 2" name="Positions 1 inside Masks 2" runtime="false" value="true" visible="true"/>
+<variable ID="Fit of Ripley's K function" name="Fit of Ripley's function" runtime="false" value="true" visible="true"/>
+<variable ID="SODA" name="SODA" runtime="false" value="true" visible="true"/>
+<variable ID="Max. Radius (in pixels) for Ripley analysis" name="Max. Radius (in pixels)" runtime="false" value="5.0" visible="true"/>
+<variable ID="Step (in pixels)" name="Step" runtime="false" value="1.0" visible="true"/>
+<variable ID="Export colocalized spots (ROIs)" name="Export colocalized detections (ROIs)" runtime="false" value="true" visible="true"/>
+</input>
+<output>
+<variable ID="Colocalized Detections 1" name="List of colocalized detections 1 (ROIS)" runtime="false" visible="true"/>
+<variable ID="Colocalized Detections 2" name="List of colocalized detections 2 (ROIS)" runtime="false" visible="true"/>
+<variable ID="Single Detections 1" name="List of single detections 1 (ROIS)" runtime="false" visible="true"/>
+<variable ID="Single Detections 2" name="List of single detections 2 (ROIS)" runtime="false" visible="true"/>
+<variable ID="Coupling Probabilities" name="Coupling probabilities" runtime="false" visible="true"/>
+<variable ID="Coupling Distances" name="Coupling distances" runtime="false" visible="true"/>
+<variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="422402138" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="308" keepsResults="true" width="703" xLocation="2083" yLocation="2237">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="org.apache.poi.ss.usermodel.Workbook" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="2131649068" blockType="plugins.stef.roi.bloc.op.FilterROIBySize" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Filter ROI by size" height="177" keepsResults="true" width="243" xLocation="1079" yLocation="2606">
+<variables>
+<input>
+<variable ID="roi" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="minSize" name="Min size (px)" runtime="false" value="5.0" visible="true"/>
+<variable ID="maxSize" name="Max size (px)" runtime="false" value="1500.0" visible="true"/>
+<variable ID="incBorder" name="Include border pixels" runtime="false" value="true" visible="true"/>
+</input>
+<output>
+<variable ID="out" name="ROI(s)" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="1093979203" blockType="plugins.stef.roi.bloc.property.SetROIPositionC" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Set ROI position C" height="94" keepsResults="true" width="203" xLocation="1223" yLocation="2871">
+<variables>
+<input>
+<variable ID="rois" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="posC" name="position C" runtime="false" value="1.0" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1968680020" blockType="plugins.stef.roi.bloc.op.FilterROI" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Filter ROI" height="192" keepsResults="true" width="291" xLocation="1510" yLocation="2703">
+<variables>
+<input>
+<variable ID="roi" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="descriptors" name="Filter on" runtime="false" value="Mean intensity" visible="true"/>
+<variable ID="operator" name="Accept if" runtime="false" value="GREATER" visible="true"/>
+<variable ID="value" name="Value" runtime="false" value="200.0" visible="true"/>
+</input>
+<output>
+<variable ID="out" name="Filtered ROI(s)" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="599242256" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="113" keepsResults="true" width="291" xLocation="1882" yLocation="2678">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="true"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="620699679" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="246" keepsResults="true" width="208" xLocation="1527" yLocation="2304">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="279435381" blockType="plugins.adufour.roi.ROIInclusionAnalysis" className="plugins.adufour.roi.ROIInclusionAnalysis" collapsed="false" definedName="ROI Inclusion analysis" height="136" keepsResults="true" width="249" xLocation="1823" yLocation="2991">
+<variables>
+<input>
+<variable ID="Outer ROI" name="Outer (enclosing) ROI" runtime="false" visible="true"/>
+<variable ID="Inner ROI" name="Inner (enclosed) ROI" runtime="false" visible="true"/>
+<variable ID="Include overlap" name="Include overlapping ROI" runtime="false" value="true" visible="true"/>
+</input>
+<output>
+<variable ID="workbook" name="Analysis" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="1792976867" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="number of colocalisation per cell" height="570" keepsResults="true" width="1122" xLocation="2241" yLocation="2594">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="org.apache.poi.ss.usermodel.Workbook" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="486817727" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="162" keepsResults="true" width="144" xLocation="509" yLocation="547">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="286196563" blockType="plugins.tprovoost.sequenceblocks.creation.DuplicateSequence" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Duplicate sequence" height="109" keepsResults="true" width="300" xLocation="1828" yLocation="1016">
+<variables>
+<input>
+<variable ID="sequence" name="sequence" runtime="false" visible="true"/>
+</input>
+<output>
+<variable ID="duplicated" name="duplicated" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="300368409" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="149" keepsResults="true" width="307" xLocation="1408" yLocation="1505">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" visible="true"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="true"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="2121435868" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="gh2ax detection only" height="241" keepsResults="true" width="316" xLocation="2506" yLocation="823">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1065642841" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="148" keepsResults="true" width="144" xLocation="701" yLocation="551">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1300652303" blockType="plugins.tprovoost.sequenceblocks.creation.DuplicateSequence" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Duplicate sequence" height="83" keepsResults="true" width="276" xLocation="2078" yLocation="15">
+<variables>
+<input>
+<variable ID="sequence" name="sequence" runtime="false" value="Active Sequence" visible="true"/>
+</input>
+<output>
+<variable ID="duplicated" name="duplicated" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="2035337222" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="113" keepsResults="true" width="286" xLocation="2440" yLocation="109">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" visible="true"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="true"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1609791787" blockType="plugins.stef.roi.bloc.property.SetROIColor" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Set ROI color" height="88" keepsResults="true" width="175" xLocation="2620" yLocation="2">
+<variables>
+<input>
+<variable ID="rois" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="color" name="Color" runtime="false" value="java.awt.Color[r=52,g=255,b=26]" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="2076624160" blockType="plugins.tprovoost.sequenceblocks.add.AddRois" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Add rois" height="113" keepsResults="true" width="328" xLocation="2898" yLocation="11">
+<variables>
+<input>
+<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
+<variable ID="rois(s)" name="Roi(s)" runtime="false" visible="true"/>
+<variable ID="remove" name="Remove previous" runtime="false" value="false" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="575703426" blockType="plugins.stef.roi.bloc.property.SetROIColor" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Set ROI color" height="88" keepsResults="true" width="175" xLocation="2612" yLocation="248">
+<variables>
+<input>
+<variable ID="rois" name="ROI(s)" runtime="false" visible="true"/>
+<variable ID="color" name="Color" runtime="false" value="java.awt.Color[r=255,g=20,b=32]" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1248092533" blockType="plugins.tprovoost.sequenceblocks.add.AddRois" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Add rois" height="113" keepsResults="true" width="328" xLocation="2904" yLocation="212">
+<variables>
+<input>
+<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
+<variable ID="rois(s)" name="Roi(s)" runtime="false" visible="true"/>
+<variable ID="remove" name="Remove previous" runtime="false" value="false" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="518996642" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="147" keepsResults="true" width="144" xLocation="3450" yLocation="216">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="812502658" blockType="plugins.adufour.roi.ROIMeasures" className="plugins.adufour.roi.ROIMeasures" collapsed="false" definedName="ROI Statistics" height="136" keepsResults="true" width="344" xLocation="1160" yLocation="3096">
+<variables>
+<input>
+<variable ID="measures" name="Select features..." runtime="false" value="549755813887" visible="true"/>
+<variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+</input>
+<output>
+<variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="628306422" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="514" keepsResults="true" width="3279" xLocation="1635" yLocation="3030">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="org.apache.poi.ss.usermodel.Workbook" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="227620331" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="157" keepsResults="true" width="144" xLocation="1917" yLocation="402">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="java.lang.Object" value="" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+</blocks>
+<links>
+<link dstBlockID="1551881366" dstVarID="sequence" srcBlockID="2044608234" srcVarID="input sequence"/>
+<link dstBlockID="831960192" dstVarID="sequence" srcBlockID="2044608234" srcVarID="input sequence"/>
+<link dstBlockID="502730829" dstVarID="sequence" srcBlockID="2044608234" srcVarID="input sequence"/>
+<link dstBlockID="286196563" dstVarID="sequence" srcBlockID="2044608234" srcVarID="input sequence"/>
+<link dstBlockID="1702485951" dstVarID="input" srcBlockID="1551881366" srcVarID="extracted"/>
+<link dstBlockID="511287273" dstVarID="Input" srcBlockID="1702485951" srcVarID="projection output"/>
+<link dstBlockID="978444089" dstVarID="input sequence" srcBlockID="1702485951" srcVarID="projection output"/>
+<link dstBlockID="978444089" dstVarID="Input ROI" srcBlockID="511287273" srcVarID="output regions"/>
+<link dstBlockID="1065642841" dstVarID="object" srcBlockID="511287273" srcVarID="binary sequence"/>
+<link dstBlockID="923752089" dstVarID="input rois" srcBlockID="978444089" srcVarID="Regions of interest"/>
+<link dstBlockID="2058850804" dstVarID="Outer ROI" srcBlockID="978444089" srcVarID="Regions of interest"/>
+<link dstBlockID="123641383" dstVarID="object" srcBlockID="923752089" srcVarID="target sequence"/>
+<link dstBlockID="1331058712" dstVarID="Regions of interest" srcBlockID="923752089" srcVarID="input rois"/>
+<link dstBlockID="911806092" dstVarID="ROIs for detection mask" srcBlockID="923752089" srcVarID="input rois"/>
+<link dstBlockID="1441472901" dstVarID="ROIs for detection mask" srcBlockID="923752089" srcVarID="input rois"/>
+<link dstBlockID="279435381" dstVarID="Outer ROI" srcBlockID="923752089" srcVarID="input rois"/>
+<link dstBlockID="2035337222" dstVarID="input rois" srcBlockID="923752089" srcVarID="input rois"/>
+<link dstBlockID="911806092" dstVarID="input Sequence" srcBlockID="831960192" srcVarID="extracted"/>
+<link dstBlockID="486817727" dstVarID="object" srcBlockID="831960192" srcVarID="extracted"/>
+<link dstBlockID="1782491576" dstVarID="object" srcBlockID="911806092" srcVarID="binary Spot Sequence"/>
+<link dstBlockID="127209534" dstVarID="roi" srcBlockID="911806092" srcVarID="detection as ROIs"/>
+<link dstBlockID="309448072" dstVarID="rois" srcBlockID="127209534" srcVarID="out"/>
+<link dstBlockID="1816857391" dstVarID="roi" srcBlockID="309448072" srcVarID="rois"/>
+<link dstBlockID="2058850804" dstVarID="Inner ROI" srcBlockID="1816857391" srcVarID="out"/>
+<link dstBlockID="399605819" dstVarID="Regions of interest" srcBlockID="1816857391" srcVarID="out"/>
+<link dstBlockID="1586575775" dstVarID="rois" srcBlockID="1816857391" srcVarID="out"/>
+<link dstBlockID="300368409" dstVarID="input rois" srcBlockID="1816857391" srcVarID="out"/>
+<link dstBlockID="284889220" dstVarID="object" srcBlockID="399605819" srcVarID="Workbook"/>
+<link dstBlockID="1609791787" dstVarID="rois" srcBlockID="399605819" srcVarID="Regions of interest"/>
+<link dstBlockID="1441472901" dstVarID="input Sequence" srcBlockID="502730829" srcVarID="extracted"/>
+<link dstBlockID="644916527" dstVarID="object" srcBlockID="1441472901" srcVarID="binary Spot Sequence"/>
+<link dstBlockID="679127552" dstVarID="roi" srcBlockID="1441472901" srcVarID="detection as ROIs"/>
+<link dstBlockID="1526546032" dstVarID="Regions of interest" srcBlockID="679127552" srcVarID="out"/>
+<link dstBlockID="1911932226" dstVarID="rois" srcBlockID="679127552" srcVarID="out"/>
+<link dstBlockID="2572793" dstVarID="object" srcBlockID="1526546032" srcVarID="Workbook"/>
+<link dstBlockID="575703426" dstVarID="rois" srcBlockID="1526546032" srcVarID="Regions of interest"/>
+<link dstBlockID="559795598" dstVarID="object" srcBlockID="2058850804" srcVarID="workbook"/>
+<link dstBlockID="216766287" dstVarID="Detections 1 (ROIs)" srcBlockID="1586575775" srcVarID="rois"/>
+<link dstBlockID="216766287" dstVarID="Detections 2 (ROIs)" srcBlockID="1911932226" srcVarID="rois"/>
+<link dstBlockID="422402138" dstVarID="object" srcBlockID="216766287" srcVarID="Workbook"/>
+<link dstBlockID="2131649068" dstVarID="roi" srcBlockID="216766287" srcVarID="Colocalized Detections 1"/>
+<link dstBlockID="1093979203" dstVarID="rois" srcBlockID="2131649068" srcVarID="out"/>
+<link dstBlockID="1968680020" dstVarID="roi" srcBlockID="1093979203" srcVarID="rois"/>
+<link dstBlockID="599242256" dstVarID="input rois" srcBlockID="1968680020" srcVarID="out"/>
+<link dstBlockID="812502658" dstVarID="Regions of interest" srcBlockID="1968680020" srcVarID="out"/>
+<link dstBlockID="620699679" dstVarID="object" srcBlockID="599242256" srcVarID="target sequence"/>
+<link dstBlockID="279435381" dstVarID="Inner ROI" srcBlockID="599242256" srcVarID="input rois"/>
+<link dstBlockID="1792976867" dstVarID="object" srcBlockID="279435381" srcVarID="workbook"/>
+<link dstBlockID="300368409" dstVarID="target sequence" srcBlockID="286196563" srcVarID="duplicated"/>
+<link dstBlockID="2121435868" dstVarID="object" srcBlockID="300368409" srcVarID="target sequence"/>
+<link dstBlockID="2035337222" dstVarID="target sequence" srcBlockID="1300652303" srcVarID="duplicated"/>
+<link dstBlockID="2076624160" dstVarID="sequence" srcBlockID="2035337222" srcVarID="target sequence"/>
+<link dstBlockID="2076624160" dstVarID="rois(s)" srcBlockID="1609791787" srcVarID="rois"/>
+<link dstBlockID="1248092533" dstVarID="sequence" srcBlockID="2076624160" srcVarID="sequence"/>
+<link dstBlockID="1248092533" dstVarID="rois(s)" srcBlockID="575703426" srcVarID="rois"/>
+<link dstBlockID="518996642" dstVarID="object" srcBlockID="1248092533" srcVarID="sequence"/>
+<link dstBlockID="628306422" dstVarID="object" srcBlockID="812502658" srcVarID="Workbook"/>
+</links>
+</protocol>
