@@ -32,24 +32,31 @@ df_TELO = pd.read_excel(input_file_TELO, header=None)
 df_DAPI = pd.read_excel(input_file_DAPI, header=None)
 
 #x_H2AX = pd.to_numeric(df_H2AX[3], errors='coerce')
-x_H2AX = np.array(df_H2AX[2])
-y_H2AX = np.array(df_H2AX[3])
-z_H2AX = np.array(df_H2AX[4])
-width_H2AX = np.array(df_H2AX[5])
-height_H2AX = np.array(df_H2AX[6])
-depth_H2AX = np.array(df_H2AX[7])
-x_TELO = np.array(df_TELO[2])
-y_TELO = np.array(df_TELO[3])
-z_TELO = np.array(df_TELO[4])
-width_TELO = np.array(df_TELO[5])  
-height_TELO = np.array(df_TELO[6]) 
-depth_TELO = np.array(df_TELO[7])
-x_DAPI = np.array(df_DAPI[2])
-y_DAPI = np.array(df_DAPI[3])
-z_DAPI = np.array(df_DAPI[4])
-width_DAPI = np.array(df_DAPI[5])
-height_DAPI = np.array(df_DAPI[6])
-depth_DAPI = np.array(df_DAPI[7])
+#based on my mod of Antho's Icy protocol, df 0-Full path, 1-Parent Folder, 2- Dataset, 3- ROI
+#4- Colour, 5- X, 6- Y, 7- Z, 8- Width, 9- Height, 10- Depth, 11-Contour, 12- Interior,
+#13- Sphericity, 14- Roundness, 15- Convexity, 16- Min intensity, 17- Avg. intensity,
+#18- Max intensity, 19- Sum Intensity, 20- Std dev Intensity
+x_H2AX = np.array(df_H2AX[5])
+y_H2AX = np.array(df_H2AX[6])
+z_H2AX = np.array(df_H2AX[7])
+width_H2AX = np.array(df_H2AX[8])
+height_H2AX = np.array(df_H2AX[9])
+depth_H2AX = np.array(df_H2AX[10])
+x_TELO = np.array(df_TELO[5])
+y_TELO = np.array(df_TELO[6])
+z_TELO = np.array(df_TELO[7])
+width_TELO = np.array(df_TELO[8])  
+height_TELO = np.array(df_TELO[9]) 
+depth_TELO = np.array(df_TELO[10])
+minint_TELO = np.array(df_TELO[16])
+maxint_TELO = np.array(df_TELO[18])
+avint_TELO = np.array(df_TELO[17])
+x_DAPI = np.array(df_DAPI[5])
+y_DAPI = np.array(df_DAPI[6])
+z_DAPI = np.array(df_DAPI[7])
+width_DAPI = np.array(df_DAPI[8])
+height_DAPI = np.array(df_DAPI[9])
+depth_DAPI = np.array(df_DAPI[10])
 x_dim_DAPI = []
 y_dim_DAPI = []
 z_dim_DAPI = []
@@ -88,6 +95,7 @@ sxmicron_TELO = []
 symicron_TELO = []
 szmicron_TELO = []
 filt_TELO = []
+rellen_TELO = []
 xmicron_TELO_end = []
 ymicron_TELO_end = []
 zmicron_TELO_end = []
@@ -101,7 +109,7 @@ totaled_TAF_count = []
 values = []
 
 all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX, depth_H2AX))
-all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, depth_TELO))
+all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, depth_TELO, avint_TELO))
 all_DAPI = list(zip(x_DAPI, y_DAPI, z_DAPI, width_DAPI, height_DAPI, depth_DAPI))
 
 def floatify(val):
@@ -171,6 +179,8 @@ all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX,
                     sxmicron_H2AX, symicron_H2AX, szmicron_H2AX, 
                     xmicron_H2AX_end, ymicron_H2AX_end, zmicron_H2AX_end))
 
+
+
 #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
 for vector in all_TELO:
     if vector[0] == all_TELO[0][0]:
@@ -197,10 +207,22 @@ for vector in all_TELO:
         xmicron_TELO_end.append(convert_size_micron(px,vector[0],vector[3]))
         ymicron_TELO_end.append(convert_size_micron(px,vector[1],vector[4]))
         zmicron_TELO_end.append(convert_size_micron(px,vector[2],vector[5]))
+all_TELO = list(zip(x_TELO, y_TELO, z_TELO, avint_TELO))
+
+maxsize_TELO = max(all_TELO[17])
+def telo_rellen(avint_TELO): #relative telo len in spreadsheet
+    return avint_TELO/maxsize_TELO
+
+for vector in all_TELO:
+    if vector[0] == all_TELO[0][0]:
+        rellen_TELO.append("Relative Telo Length")
+    else:
+        rellen_TELO.append(telo_rellen(vector[3]))
 all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, 
                     depth_TELO, xmicron_TELO, ymicron_TELO, zmicron_TELO, 
                     sxmicron_TELO, symicron_TELO, szmicron_TELO, 
-                    xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end))
+                    xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end,
+                    rellen_TELO, minint_TELO, maxint_TELO, avint_TELO))
 
 def nuclear_filter(p,p0,p1,DAPI1,DAPI2,DAPI3,DAPI4):
     if (      floatify(point[0]) > floatify(DAPI1) #filters for within nuclear regions only
@@ -311,7 +333,7 @@ for (Tkey, Tval), (Hkey, Hval) in zip(dict_nuclei_TELO.items(), dict_nuclei_H2AX
                 if positive(Hval2[2] - Tval2[2]) > float(z_stacks_per_TAF):
                     pass
                 elif coloc > float(bottom_overlap_ratio) and coloc < float(top_overlap_ratio):
-                    TAF_TELO.append(Tval2[0:3])
+                    TAF_TELO.append(Tval2[0:3,15]) #15 is relative telomere length
                     TAF_H2AX.append(Hval2[0:3])
     n_TAF_TELO.append(len(TAF_TELO))
     TTAF[Tkey] = TAF_TELO[:]
