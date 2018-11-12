@@ -32,7 +32,19 @@
 </output>
 </variables>
 </block>
-<block ID="511287273" blockType="plugins.adufour.hierarchicalkmeans.HierarchicalKMeans" className="plugins.adufour.hierarchicalkmeans.HierarchicalKMeans" collapsed="false" definedName="HK-Means to Find the nucleus" height="297" keepsResults="true" width="362" xLocation="402" yLocation="219">
+<block ID="1701055455" blockType="plugins.spop.medianfilter.MedianFilter" className="plugins.spop.medianfilter.MedianFilter" collapsed="false" definedName="Median Filter" height="130" keepsResults="true" width="200" xLocation="371" yLocation="312">
+<variables>
+<input>
+<variable ID="Input" name="Input" runtime="false" visible="true"/>
+<variable ID="Type" name="Type" runtime="false" value="2D" visible="true"/>
+<variable ID="Half Size" name="Half Size" runtime="false" value="1" visible="true"/>
+</input>
+<output>
+<variable ID="Output" name="Output" runtime="false" visible="true"/>
+</output>
+</variables>
+</block>
+<block ID="511287273" blockType="plugins.adufour.hierarchicalkmeans.HierarchicalKMeans" className="plugins.adufour.hierarchicalkmeans.HierarchicalKMeans" collapsed="false" definedName="HK-Means to Find the nucleus" height="297" keepsResults="true" width="362" xLocation="576" yLocation="216">
 <variables>
 <input>
 <variable ID="Input" name="Input" runtime="false" visible="true"/>
@@ -49,7 +61,7 @@
 </output>
 </variables>
 </block>
-<block ID="978444089" blockType="plugins.adufour.activecontours.ActiveContours" className="plugins.adufour.activecontours.ActiveContours" collapsed="false" definedName="Active Contours to find nucleus  precisely" height="734" keepsResults="true" width="383" xLocation="825" yLocation="34">
+<block ID="978444089" blockType="plugins.adufour.activecontours.ActiveContours" className="plugins.adufour.activecontours.ActiveContours" collapsed="false" definedName="Active Contours to find nucleus  precisely" height="734" keepsResults="true" width="383" xLocation="1004" yLocation="38">
 <variables>
 <input>
 <variable ID="input sequence" name="Input" runtime="false" visible="true"/>
@@ -62,7 +74,7 @@
 <variable ID="region: channel" name="Find regions in channel" runtime="false" value="0" visible="false"/>
 <variable ID="balloon: weight" name="Contour inflation" runtime="false" value="0.045" visible="false"/>
 <variable ID="contour resolution" name="Contour sampling" runtime="false" value="3.0" visible="true"/>
-<variable ID="region bounds" name="Bound field to ROI of" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="region bounds" name="Bound field to ROI of" runtime="false" value="No Sequence" visible="true"/>
 <variable ID="time step" name="Evolution time step" runtime="false" value="0.15000000000000002" visible="true"/>
 <variable ID="convergence value" name="Convergence criterion" runtime="false" value="0.001" visible="true"/>
 <variable ID="max. iterations" name="Max. iterations" runtime="false" value="50000" visible="true"/>
@@ -166,7 +178,7 @@
 <block ID="399605819" blockType="plugins.adufour.roi.ROIMeasures" className="plugins.adufour.roi.ROIMeasures" collapsed="false" definedName="ROI Statistics" height="136" keepsResults="true" width="362" xLocation="1637" yLocation="1346">
 <variables>
 <input>
-<variable ID="measures" name="Select features..." runtime="false" value="33288028191" visible="true"/>
+<variable ID="measures" name="Select features..." runtime="false" value="33286709500" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
 <variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
 </input>
@@ -236,7 +248,7 @@
 <block ID="1526546032" blockType="plugins.adufour.roi.ROIMeasures" className="plugins.adufour.roi.ROIMeasures" collapsed="false" definedName="ROI Statistics" height="136" keepsResults="true" width="338" xLocation="1461" yLocation="1922">
 <variables>
 <input>
-<variable ID="measures" name="Select features..." runtime="false" value="33288028191" visible="true"/>
+<variable ID="measures" name="Select features..." runtime="false" value="33286709500" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
 <variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
 </input>
@@ -264,7 +276,7 @@
 <block ID="1331058712" blockType="plugins.adufour.roi.ROIMeasures" className="plugins.adufour.roi.ROIMeasures" collapsed="false" definedName="ROI Statistics" height="136" keepsResults="true" width="368" xLocation="1455" yLocation="389">
 <variables>
 <input>
-<variable ID="measures" name="Select features..." runtime="false" value="1" visible="true"/>
+<variable ID="measures" name="Select features..." runtime="false" value="33286709484" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
 <variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
 </input>
@@ -338,7 +350,7 @@
 <input>
 <variable ID="Input Sequence 1" name="Input sequence 1" runtime="false" value="Active Sequence" visible="true"/>
 <variable ID="Input Sequence 2" name="Input sequence 2" runtime="false" value="Active Sequence" visible="true"/>
-<variable ID="ROI of Analysis" name="ROI of Analysis" runtime="false" value="No ROI" visible="true"/>
+<variable ID="ROI of Analysis" name="ROI of Analysis" runtime="false" value="" visible="true"/>
 <variable ID="Detections 1 (ROIs)" name="List of detections 1 (ROIS)" runtime="false" visible="true"/>
 <variable ID="Detections 2 (ROIs)" name="List of detections 2 (ROIS)" runtime="false" visible="true"/>
 <variable ID="Positions 1 inside masks 2" name="Positions 1 inside Masks 2" runtime="false" value="true" visible="true"/>
@@ -554,7 +566,7 @@
 <block ID="812502658" blockType="plugins.adufour.roi.ROIMeasures" className="plugins.adufour.roi.ROIMeasures" collapsed="false" definedName="ROI Statistics" height="136" keepsResults="true" width="344" xLocation="1160" yLocation="3096">
 <variables>
 <input>
-<variable ID="measures" name="Select features..." runtime="false" value="549755813887" visible="true"/>
+<variable ID="measures" name="Select features..." runtime="false" value="33286709500" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
 <variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
 </input>
@@ -563,7 +575,7 @@
 </output>
 </variables>
 </block>
-<block ID="628306422" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="514" keepsResults="true" width="3279" xLocation="1635" yLocation="3030">
+<block ID="628306422" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="514" keepsResults="true" width="2575" xLocation="2339" yLocation="3030">
 <variables>
 <input>
 <variable ID="object" name="object" runtime="false" type="org.apache.poi.ss.usermodel.Workbook" visible="true"/>
@@ -579,6 +591,50 @@
 <output/>
 </variables>
 </block>
+<block ID="1395598800" blockType="plugins.adufour.blocks.tools.io.WorkbookToFile" className="plugins.adufour.blocks.tools.io.WorkbookToFile" collapsed="false" definedName="Nuclei" height="207" keepsResults="true" width="499" xLocation="2061" yLocation="552">
+<variables>
+<input>
+<variable ID="workbook" name="workbook" runtime="false" visible="true"/>
+<variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="D:\C drive backups and transfers\Documents\All Spreadsheets\20181112 nuclei" visible="true"/>
+<variable ID="If file exists" name="If file exists" runtime="false" value="Overwrite" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1950848431" blockType="plugins.adufour.blocks.tools.io.WorkbookToFile" className="plugins.adufour.blocks.tools.io.WorkbookToFile" collapsed="false" definedName="Individual Telo" height="207" keepsResults="true" width="499" xLocation="1958" yLocation="1670">
+<variables>
+<input>
+<variable ID="workbook" name="workbook" runtime="false" visible="true"/>
+<variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="D:\C drive backups and transfers\Documents\All Spreadsheets\20181112 TELO" visible="true"/>
+<variable ID="If file exists" name="If file exists" runtime="false" value="Overwrite" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1513622015" blockType="plugins.adufour.blocks.tools.io.WorkbookToFile" className="plugins.adufour.blocks.tools.io.WorkbookToFile" collapsed="false" definedName="TAF" height="207" keepsResults="true" width="499" xLocation="1624" yLocation="3240">
+<variables>
+<input>
+<variable ID="workbook" name="workbook" runtime="false" visible="true"/>
+<variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="D:\C drive backups and transfers\Documents\All Spreadsheets\20181112 TAF" visible="true"/>
+<variable ID="If file exists" name="If file exists" runtime="false" value="Overwrite" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="31935443" blockType="plugins.adufour.blocks.tools.io.WorkbookToFile" className="plugins.adufour.blocks.tools.io.WorkbookToFile" collapsed="false" definedName="H2AX all" height="207" keepsResults="true" width="499" xLocation="2019" yLocation="1151">
+<variables>
+<input>
+<variable ID="workbook" name="workbook" runtime="false" visible="true"/>
+<variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="D:\C drive backups and transfers\Documents\All Spreadsheets\20181112 H2AX" visible="true"/>
+<variable ID="If file exists" name="If file exists" runtime="false" value="Overwrite" visible="true"/>
+</input>
+<output/>
+</variables>
+</block>
 </blocks>
 <links>
 <link dstBlockID="1551881366" dstVarID="sequence" srcBlockID="2044608234" srcVarID="input sequence"/>
@@ -586,7 +642,6 @@
 <link dstBlockID="502730829" dstVarID="sequence" srcBlockID="2044608234" srcVarID="input sequence"/>
 <link dstBlockID="286196563" dstVarID="sequence" srcBlockID="2044608234" srcVarID="input sequence"/>
 <link dstBlockID="1702485951" dstVarID="input" srcBlockID="1551881366" srcVarID="extracted"/>
-<link dstBlockID="511287273" dstVarID="Input" srcBlockID="1702485951" srcVarID="projection output"/>
 <link dstBlockID="978444089" dstVarID="input sequence" srcBlockID="1702485951" srcVarID="projection output"/>
 <link dstBlockID="978444089" dstVarID="Input ROI" srcBlockID="511287273" srcVarID="output regions"/>
 <link dstBlockID="1065642841" dstVarID="object" srcBlockID="511287273" srcVarID="binary sequence"/>
@@ -638,5 +693,11 @@
 <link dstBlockID="1248092533" dstVarID="rois(s)" srcBlockID="575703426" srcVarID="rois"/>
 <link dstBlockID="518996642" dstVarID="object" srcBlockID="1248092533" srcVarID="sequence"/>
 <link dstBlockID="628306422" dstVarID="object" srcBlockID="812502658" srcVarID="Workbook"/>
+<link dstBlockID="1513622015" dstVarID="workbook" srcBlockID="812502658" srcVarID="Workbook"/>
+<link dstBlockID="1950848431" dstVarID="workbook" srcBlockID="1526546032" srcVarID="Workbook"/>
+<link dstBlockID="1395598800" dstVarID="workbook" srcBlockID="1331058712" srcVarID="Workbook"/>
+<link dstBlockID="31935443" dstVarID="workbook" srcBlockID="399605819" srcVarID="Workbook"/>
+<link dstBlockID="1701055455" dstVarID="Input" srcBlockID="1702485951" srcVarID="projection output"/>
+<link dstBlockID="511287273" dstVarID="Input" srcBlockID="1701055455" srcVarID="Output"/>
 </links>
 </protocol>
