@@ -8,10 +8,10 @@ print('Python Version ' + sys.version)
 print('Pandas Version ' + pd.__version__)
 print('Np Version ' + np.__version__)
 
-root = 'D:\\C drive backups and transfers\\Documents\\All Spreadsheets\\HUAD test data\\'
-input_file_H2AX = root + '11102018 H2AX untreated.xlsx'
-input_file_TELO = root + '11102018 TELO untreated.xlsx'
-input_file_DAPI = root + '11102018 DAPI untreated.xlsx'
+root = 'D:\\C drive backups and transfers\\Documents\\All Spreadsheets\\'
+input_file_H2AX = root + '20181112 H2AX.xlsx'
+input_file_TELO = root + '20181112 TELO.xlsx'
+input_file_DAPI = root + '20181112 nuclei.xlsx'
 output_file = root + 'TTAF_untreated_huad.csv'
 output_file_2 = root + 'HTAF_untreated_huad.csv'
 
@@ -36,27 +36,27 @@ df_DAPI = pd.read_excel(input_file_DAPI, header=None)
 #4- Colour, 5- X, 6- Y, 7- Z, 8- Width, 9- Height, 10- Depth, 11-Contour, 12- Interior,
 #13- Sphericity, 14- Roundness, 15- Convexity, 16- Min intensity, 17- Avg. intensity,
 #18- Max intensity, 19- Sum Intensity, 20- Std dev Intensity
-x_H2AX = np.array(df_H2AX[5])
-y_H2AX = np.array(df_H2AX[6])
-z_H2AX = np.array(df_H2AX[7])
-width_H2AX = np.array(df_H2AX[8])
-height_H2AX = np.array(df_H2AX[9])
-depth_H2AX = np.array(df_H2AX[10])
-x_TELO = np.array(df_TELO[5])
-y_TELO = np.array(df_TELO[6])
-z_TELO = np.array(df_TELO[7])
-width_TELO = np.array(df_TELO[8])  
-height_TELO = np.array(df_TELO[9]) 
-depth_TELO = np.array(df_TELO[10])
-minint_TELO = np.array(df_TELO[16])
-maxint_TELO = np.array(df_TELO[18])
-avint_TELO = np.array(df_TELO[17])
-x_DAPI = np.array(df_DAPI[5])
-y_DAPI = np.array(df_DAPI[6])
-z_DAPI = np.array(df_DAPI[7])
-width_DAPI = np.array(df_DAPI[8])
-height_DAPI = np.array(df_DAPI[9])
-depth_DAPI = np.array(df_DAPI[10])
+x_H2AX = np.array(df_H2AX[3])
+y_H2AX = np.array(df_H2AX[4])
+z_H2AX = np.array(df_H2AX[5])
+width_H2AX = np.array(df_H2AX[6])
+height_H2AX = np.array(df_H2AX[7])
+depth_H2AX = np.array(df_H2AX[8])
+x_TELO = np.array(df_TELO[3])
+y_TELO = np.array(df_TELO[4])
+z_TELO = np.array(df_TELO[5])
+width_TELO = np.array(df_TELO[6])  
+height_TELO = np.array(df_TELO[7]) 
+depth_TELO = np.array(df_TELO[8])
+minint_TELO = np.array(df_TELO[11])
+maxint_TELO = np.array(df_TELO[13])
+avint_TELO = np.array(df_TELO[12])
+x_DAPI = np.array(df_DAPI[3])
+y_DAPI = np.array(df_DAPI[4])
+z_DAPI = np.array(df_DAPI[5])
+width_DAPI = np.array(df_DAPI[6])
+height_DAPI = np.array(df_DAPI[7])
+depth_DAPI = np.array(df_DAPI[8])
 x_dim_DAPI = []
 y_dim_DAPI = []
 z_dim_DAPI = []
