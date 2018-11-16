@@ -3,7 +3,7 @@
 <block CommandLineID="" ID="2044608234" blockType="plugins.adufour.blocks.tools.input.Sequence" className="plugins.adufour.blocks.tools.input.Sequence" collapsed="false" definedName="Sequence" height="61" keepsResults="true" width="237" xLocation="36" yLocation="93">
 <variables>
 <input>
-<variable ID="input sequence" name="sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="input sequence" name="sequence" runtime="false" visible="true"/>
 </input>
 <output/>
 </variables>
@@ -95,7 +95,7 @@
 <block ID="923752089" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="120" keepsResults="true" width="316" xLocation="1412" yLocation="44">
 <variables>
 <input>
-<variable ID="target sequence" name="Source" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="target sequence" name="Source" runtime="false" visible="true"/>
 <variable ID="input rois" name="ROI to add" runtime="false" visible="true"/>
 <variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="true"/>
 </input>
@@ -118,7 +118,7 @@
 <input>
 <variable ID="input Sequence" name="input Sequence" runtime="false" visible="true"/>
 <variable ID="Spot to detect" name="Spot to detect" runtime="false" value="BRIGHT_SPOT" visible="true"/>
-<variable ID="input Sequence ROIs" name="ROIs from sequence for WAT" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="input Sequence ROIs" name="ROIs from sequence for WAT" runtime="false" visible="true"/>
 <variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" runtime="false" value="true" visible="true"/>
 <variable ID="ROIs for detection mask" name="ROIs for detection mask" runtime="false" visible="true"/>
 <variable ID="Scale 1" name="Scale 1" runtime="false" value="false" visible="true"/>
@@ -165,7 +165,7 @@
 <variables>
 <input>
 <variable ID="roi" name="ROI(s)" runtime="false" visible="true"/>
-<variable ID="sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
 <variable ID="descriptors" name="Filter on" runtime="false" value="Max intensity" visible="true"/>
 <variable ID="operator" name="Accept if" runtime="false" value="GREATER" visible="true"/>
 <variable ID="value" name="Value" runtime="false" value="1000.0" visible="true"/>
@@ -180,7 +180,7 @@
 <input>
 <variable ID="measures" name="Select features..." runtime="false" value="33286709500" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
-<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" visible="true"/>
 </input>
 <output>
 <variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
@@ -211,7 +211,7 @@
 <input>
 <variable ID="input Sequence" name="input Sequence" runtime="false" visible="true"/>
 <variable ID="Spot to detect" name="Spot to detect" runtime="false" value="BRIGHT_SPOT" visible="true"/>
-<variable ID="input Sequence ROIs" name="ROIs from sequence for WAT" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="input Sequence ROIs" name="ROIs from sequence for WAT" runtime="false" visible="true"/>
 <variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" runtime="false" value="false" visible="true"/>
 <variable ID="ROIs for detection mask" name="ROIs for detection mask" runtime="false" visible="true"/>
 <variable ID="Scale 1" name="Scale 1" runtime="false" value="false" visible="true"/>
@@ -250,7 +250,7 @@
 <input>
 <variable ID="measures" name="Select features..." runtime="false" value="33286709500" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
-<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" visible="true"/>
 </input>
 <output>
 <variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
@@ -278,7 +278,7 @@
 <input>
 <variable ID="measures" name="Select features..." runtime="false" value="33286709484" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
-<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" visible="true"/>
 </input>
 <output>
 <variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
@@ -324,7 +324,7 @@
 <block ID="1586575775" blockType="plugins.stef.tools.ROIToDetection" className="plugins.stef.tools.ROIToDetection" collapsed="false" definedName="ROI to detection" height="135" keepsResults="true" width="383" xLocation="378" yLocation="2421">
 <variables>
 <input>
-<variable ID="sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
 <variable ID="rois" name="ROI(s)" runtime="false" visible="true"/>
 <variable ID="exportSP" name="Export to Swimming Pool" runtime="false" value="true" visible="true"/>
 </input>
@@ -336,7 +336,7 @@
 <block ID="1911932226" blockType="plugins.stef.tools.ROIToDetection" className="plugins.stef.tools.ROIToDetection" collapsed="false" definedName="ROI to detection" height="135" keepsResults="true" width="383" xLocation="1086" yLocation="2217">
 <variables>
 <input>
-<variable ID="sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
 <variable ID="rois" name="ROI(s)" runtime="false" visible="true"/>
 <variable ID="exportSP" name="Export to Swimming Pool" runtime="false" value="true" visible="true"/>
 </input>
@@ -348,8 +348,8 @@
 <block ID="216766287" blockType="plugins.lagache.colocalizationstudio.ColocalizationStudio_Object" className="plugins.lagache.colocalizationstudio.ColocalizationStudio" collapsed="false" definedName="Colocalization studio_ object" height="396" keepsResults="true" width="654" xLocation="262" yLocation="2625">
 <variables>
 <input>
-<variable ID="Input Sequence 1" name="Input sequence 1" runtime="false" value="Active Sequence" visible="true"/>
-<variable ID="Input Sequence 2" name="Input sequence 2" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="Input Sequence 1" name="Input sequence 1" runtime="false" visible="true"/>
+<variable ID="Input Sequence 2" name="Input sequence 2" runtime="false" visible="true"/>
 <variable ID="ROI of Analysis" name="ROI of Analysis" runtime="false" value="" visible="true"/>
 <variable ID="Detections 1 (ROIs)" name="List of detections 1 (ROIS)" runtime="false" visible="true"/>
 <variable ID="Detections 2 (ROIs)" name="List of detections 2 (ROIS)" runtime="false" visible="true"/>
@@ -405,7 +405,7 @@
 <variables>
 <input>
 <variable ID="roi" name="ROI(s)" runtime="false" visible="true"/>
-<variable ID="sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
 <variable ID="descriptors" name="Filter on" runtime="false" value="Mean intensity" visible="true"/>
 <variable ID="operator" name="Accept if" runtime="false" value="GREATER" visible="true"/>
 <variable ID="value" name="Value" runtime="false" value="200.0" visible="true"/>
@@ -418,7 +418,7 @@
 <block ID="599242256" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="113" keepsResults="true" width="291" xLocation="1882" yLocation="2678">
 <variables>
 <input>
-<variable ID="target sequence" name="Source" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="target sequence" name="Source" runtime="false" visible="true"/>
 <variable ID="input rois" name="ROI to add" runtime="false" visible="true"/>
 <variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="true"/>
 </input>
@@ -500,7 +500,7 @@
 <block ID="1300652303" blockType="plugins.tprovoost.sequenceblocks.creation.DuplicateSequence" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Duplicate sequence" height="83" keepsResults="true" width="276" xLocation="2078" yLocation="15">
 <variables>
 <input>
-<variable ID="sequence" name="sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="sequence" name="sequence" runtime="false" visible="true"/>
 </input>
 <output>
 <variable ID="duplicated" name="duplicated" runtime="false" visible="true"/>
@@ -568,7 +568,7 @@
 <input>
 <variable ID="measures" name="Select features..." runtime="false" value="33286709500" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
-<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" visible="true"/>
 </input>
 <output>
 <variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
