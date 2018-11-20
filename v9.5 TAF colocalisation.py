@@ -364,7 +364,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     allTdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfTTAF_len,dfTTAF], axis=1, sort=False)
     allHdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfHTAF], axis=1, sort=False)
 
-    return allTdf, allHdf, dfTTAF_len, dfTAFpercent
+    return TTAF, TTAF_len, n_TAF
 
 def retrieve_index(df):
     index_list = []
