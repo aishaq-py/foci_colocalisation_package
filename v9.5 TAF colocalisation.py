@@ -62,7 +62,6 @@ x_dim_DAPI = []
 y_dim_DAPI = []
 z_dim_DAPI = []
 ROI_end_DAPI = []
-IMG_no_DAPI = []
 nuclear_count = []
 x_dim_H2AX = []
 y_dim_H2AX = []
@@ -127,15 +126,12 @@ def convert_micron(pixel_size,V1):
 def convert_size_micron(pixel_size,V1,V2):
     return floatify(V1*pixel_size)+floatify(V2*pixel_size)
 
-def full_analysis():
+def full_analysis(index_1,index_2):
     all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX, depth_H2AX))
     all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, depth_TELO, avint_TELO))
     all_DAPI = list(zip(x_DAPI, y_DAPI, z_DAPI, width_DAPI, height_DAPI, depth_DAPI))
     for point in all_DAPI:
-        num = 1
         if point[0] == all_DAPI[0][0]: #numbers the images
-            IMG_no_DAPI.append('IMG_' + 'num')
-            num += 1
             x_dim_DAPI.append('Position X')
             y_dim_DAPI.append('Position Y')
             z_dim_DAPI.append('Position Z')
@@ -374,19 +370,23 @@ def full_analysis():
     return allTdf, allHdf, dfTTAF_len, dfTAFpercent
 
 all_images = {}
-
+previous_index = []
 num = 1
-for index, obj in enumerate(x_H2AX):
-    if obj == 0:
+for index_2, obj in enumerate(x_H2AX):
+    if index_2 == 0:
         pass
     elif obj == x_H2AX[0]:
+        previous_index.append(index_2)
         image_num = "image_" + str(num)
+        index_1 = previous_index[num-1] if num > 1 else 1
+        all_images[image_num] = full_analysis(index_1,index_2)
         num += 1
-    elif index + 1 == len(x_H2AX):
+    elif index_2 + 1 == len(x_H2AX):
         image_num = "image_" + str(num)
-        all_images[image_num] = full_analysis()
+        index_1 = previous_index[num-1] if num > 1 else 1
+        all_images[image_num] = full_analysis(index_1,index_2)
     else:
-        all_images[image_num] = full_analysis()
+        
 #now we need to specify how to only analyse between one header and the next        
         
 
