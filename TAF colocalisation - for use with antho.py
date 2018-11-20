@@ -8,17 +8,18 @@ print('Python Version ' + sys.version)
 print('Pandas Version ' + pd.__version__)
 print('Np Version ' + np.__version__)
 
-root = 'D:\\C drive backups and transfers\\Documents\\All Spreadsheets\\'
-input_file_H2AX = root + '20181112 H2AX.xlsx'
-input_file_TELO = root + '20181112 TELO.xlsx'
-input_file_DAPI = root + '20181112 nuclei.xlsx'
-output_file = root + 'TTAF_untreated_huad.csv'
-output_file_2 = root + 'HTAF_untreated_huad.csv'
+root = 'H:\\Ed TAF\\20181120 test 2\\' #remember to use double backslash or single forward slash (is a requirement for python convention)
+input_file_H2AX = root + 'S9_H2AX.xlsx'
+input_file_TELO = root + 'S9_TELO.xlsx'
+input_file_DAPI = root + 'S9_DAPI.xlsx'
+output_file = root + 'TTAF_after_script.csv'
+output_file_2 = root + 'HTAF_after_script.csv'
+output_file_3 = root + 'Telo_len_after_script.csv'
 
 #parameters for analysis - change to absolute values if needed as such
 print("\n Input all requested values as decimal numbers (floats).")
-px = float(0.16) #float(input("Define pixel length or width in micron: \n")) 
-z_size = float(0.45) #float(input("Define size of z-step in mixron: \n"))
+px = float(0.065) #float(input("Define pixel length or width in micron: \n")) 
+z_size = float(0.18) #float(input("Define size of z-step in mixron: \n"))
 top_overlap_ratio = float(1.5) #input("Upper threshold for H2AX:TAF overlap ratio (> 1 means H2AX encompasses Telo, max 5): \n")
 bottom_overlap_ratio = float(0.3) #input("Lower threshold for H2AX:TAF overlap ratio (0 means no overlap): \n")
 TAF_size_threshold = float(0.5) #input("TAF size threshold in micron (0 will return no threshold): \n")
@@ -36,6 +37,7 @@ df_DAPI = pd.read_excel(input_file_DAPI, header=None)
 #4- Colour, 5- X, 6- Y, 7- Z, 8- Width, 9- Height, 10- Depth, 11-Contour, 12- Interior,
 #13- Sphericity, 14- Roundness, 15- Convexity, 16- Min intensity, 17- Avg. intensity,
 #18- Max intensity, 19- Sum Intensity, 20- Std dev Intensity
+#channel 2 for red
 x_H2AX = np.array(df_H2AX[3])
 y_H2AX = np.array(df_H2AX[4])
 z_H2AX = np.array(df_H2AX[5])
@@ -48,9 +50,8 @@ z_TELO = np.array(df_TELO[5])
 width_TELO = np.array(df_TELO[6])  
 height_TELO = np.array(df_TELO[7]) 
 depth_TELO = np.array(df_TELO[8])
-minint_TELO = np.array(df_TELO[11])
-maxint_TELO = np.array(df_TELO[13])
-avint_TELO = np.array(df_TELO[12])
+maxint_TELO = np.array(df_TELO[21])
+avint_TELO = np.array(df_TELO[20])
 x_DAPI = np.array(df_DAPI[3])
 y_DAPI = np.array(df_DAPI[4])
 z_DAPI = np.array(df_DAPI[5])
@@ -313,10 +314,12 @@ def colocalisation(x1,y1,w1,h1,x2,y2,w2,h2):
         return False
 
 TTAF = {}
+TTAF_len = {}
 HTAF = {}
 n_TAF = {}
 TAF_TELO = []
 TAF_H2AX = []
+TELO_length = []
 n_TAF_TELO = []
 TAF_positive_nuclei = []
 time_list = []
@@ -333,14 +336,17 @@ for (Tkey, Tval), (Hkey, Hval) in zip(dict_nuclei_TELO.items(), dict_nuclei_H2AX
                 if positive(Hval2[2] - Tval2[2]) > float(z_stacks_per_TAF):
                     pass
                 elif coloc > float(bottom_overlap_ratio) and coloc < float(top_overlap_ratio):
-                    TAF_TELO.append(Tval2[0:3,15]) #15 is relative telomere length
+                    TAF_TELO.append(Tval2[0:3])
+                    TELO_length.append(Tval2[15]) #15 is relative telomere length
                     TAF_H2AX.append(Hval2[0:3])
     n_TAF_TELO.append(len(TAF_TELO))
     TTAF[Tkey] = TAF_TELO[:]
+    TTAF_len[Tkey] = TELO_length[:]
     HTAF[Tkey] = TAF_H2AX[:]
     n_TAF[Tkey] = len(TAF_TELO[:])
     TAF_TELO.clear()
     TAF_H2AX.clear()
+    TELO_length.clear()
     #print(TAF_TELO)
     TAF_TELO.clear()
     num += 1
@@ -359,13 +365,15 @@ TAF_percent_positive.append(len(TTAF))
 dffoci = pd.DataFrame.from_dict(dict_H2AX_count, orient='index', columns=['H2A.X count'])
 dffoci_2 = pd.DataFrame.from_dict(dict_TELO_count, orient='index', columns=['Telomere count'])
 dfTTAF = pd.DataFrame.from_dict(TTAF, orient='index')
+dfTTAF_len = pd.DataFrame.from_dict(TTAF_len, orient='index')
 dfHTAF = pd.DataFrame.from_dict(HTAF, orient='index')
 dfnTAF = pd.DataFrame.from_dict(n_TAF, orient='index', columns=['TAF count'])
 dfTAFpercent = pd.DataFrame(data = TAF_percent_positive, index=['Percent TAF positive','TAF positive count','Total nuclei count'])
-allTdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfTTAF], axis=1, sort=False)
+allTdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfTTAF_len,dfTTAF], axis=1, sort=False)
 allHdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfHTAF], axis=1, sort=False)
 allTdf.to_csv(output_file, index=True)
 allHdf.to_csv(output_file_2, index=True)
+dfTTAF_len.to_csv(output_file_3, index=True)
 
 end = time.time()
 print("Runtime = %s" % (end - start))
