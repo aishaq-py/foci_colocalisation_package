@@ -9,12 +9,12 @@ print('Pandas Version ' + pd.__version__)
 print('Np Version ' + np.__version__)
 
 root = 'H:\\Ed TAF\\20181120 test 2\\' #remember to use double backslash or single forward slash (is a requirement for python convention)
-input_file_H2AX = root + 'S12_H2AX.xlsx'
-input_file_TELO = root + 'S12_TELO.xlsx'
-input_file_DAPI = root + 'S12_DAPI.xlsx'
-output_file = root + 'S12_TTAF_after_script.csv'
-output_file_2 = root + 'S12_HTAF_after_script.csv'
-output_file_3 = root + 'S12_Telo_len_after_script.csv'
+input_file_H2AX = root + 'S18_H2AX.xlsx'
+input_file_TELO = root + 'S18_TELO.xlsx'
+input_file_DAPI = root + 'S18_DAPI.xlsx'
+output_file = root + 'S18_TTAF_after_script.csv'
+output_file_2 = root + 'S18_HTAF_after_script.csv'
+output_file_3 = root + 'S18_Telo_len_after_script.csv'
 
 #parameters for analysis - change to absolute values if needed as such
 print("\n Input all requested values as decimal numbers (floats).")
