@@ -9,12 +9,12 @@ print('Pandas Version ' + pd.__version__)
 print('Np Version ' + np.__version__)
 
 root = 'H:\\Ed TAF\\20181120 test 2\\' #remember to use double backslash or single forward slash (is a requirement for python convention)
-input_file_H2AX = root + 'S9_H2AX.xlsx'
-input_file_TELO = root + 'S9_TELO.xlsx'
-input_file_DAPI = root + 'S9_DAPI.xlsx'
-output_file = root + 'TTAF_after_script.csv'
-output_file_2 = root + 'HTAF_after_script.csv'
-output_file_3 = root + 'Telo_len_after_script.csv'
+input_file_H2AX = root + 'All_H2AX.xlsx'
+input_file_TELO = root + 'All_TELO.xlsx'
+input_file_DAPI = root + 'All_DAPI.xlsx'
+output_file = root + 'All_TTAF_after_script.csv'
+output_file_2 = root + 'All_HTAF_after_script.csv'
+output_file_3 = root + 'All_Telo_len_after_script.csv'
 
 #parameters for analysis - change to absolute values if needed as such
 print("\n Input all requested values as decimal numbers (floats).")
@@ -25,6 +25,8 @@ bottom_overlap_ratio = float(0.3) #input("Lower threshold for H2AX:TAF overlap r
 TAF_size_threshold = float(0.5) #input("TAF size threshold in micron (0 will return no threshold): \n")
 TAF_positive_threshold = float(2) #input("Number of TAF to qualify as senescence-positive: \n")
 upper_TAF_positive_threshold = float(10) #input("Maximum number of TAF per nucleus (to filter aberrant nuclei: \n")
+H2AX_size_threshold = 0 #input("H2AX foci size threshold in micron (0 will return no threshold): \n")
+TELO_size_threshold = 0 #input("Telo foci size threshold in micron (0 will return no threshold): \n")
 
 start = time.time()
 
@@ -108,6 +110,10 @@ TAF_count = []
 totaled_TAF_count = []
 values = []
 
+all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX, depth_H2AX))
+all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, depth_TELO, avint_TELO))
+all_DAPI = list(zip(x_DAPI, y_DAPI, z_DAPI, width_DAPI, height_DAPI, depth_DAPI))
+
 def floatify(val):
     if type(val) == int:
         return np.float32(val)
@@ -119,6 +125,15 @@ def positive(val):
         return val * -1
     else:
         return val
+    
+def nuclear_filter(p,p0,p1,DAPI1,DAPI2,DAPI3,DAPI4):
+    if (      floatify(point[0]) > floatify(DAPI1) #filters for within nuclear regions only
+                and floatify(point[0]) < floatify(DAPI2) #dapi_vector0 < point0 < dapi_vector3
+                and floatify(point[1]) > floatify(DAPI3) 
+                and floatify(point[1]) < floatify(DAPI4)):
+        return True
+    else:
+        return False
 
 def convert_micron(pixel_size,V1):
     return floatify(V1*pixel_size)
@@ -127,10 +142,7 @@ def convert_size_micron(pixel_size,V1,V2):
     return floatify(V1*pixel_size)+floatify(V2*pixel_size)
 
 def full_analysis(index_1,index_2):
-    all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX, depth_H2AX))
-    all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, depth_TELO, avint_TELO))
-    all_DAPI = list(zip(x_DAPI, y_DAPI, z_DAPI, width_DAPI, height_DAPI, depth_DAPI))
-    for point in all_DAPI:
+    for point in all_DAPI[index_1,index_2]:
         if point[0] == all_DAPI[0][0]: #numbers the images
             x_dim_DAPI.append('Position X')
             y_dim_DAPI.append('Position Y')
@@ -146,7 +158,7 @@ def full_analysis(index_1,index_2):
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     #px = pixel size
-    for vector in all_H2AX:
+    for vector in all_H2AX[index_1,index_2]:
         if vector[0] == all_H2AX[0][0]:
             xmicron_H2AX.append("X") #converts x-val into microns (max is 2080x0.16)
             ymicron_H2AX.append("Y")
@@ -177,7 +189,7 @@ def full_analysis(index_1,index_2):
                         xmicron_H2AX_end, ymicron_H2AX_end, zmicron_H2AX_end))
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
-    for vector in all_TELO:
+    for vector in all_TELO[index_1,index_2]:
         if vector[0] == all_TELO[0][0]:
             xmicron_TELO.append("X") #converts x-val into microns (max is 2080x0.16)
             ymicron_TELO.append("Y")
@@ -218,17 +230,7 @@ def full_analysis(index_1,index_2):
                         sxmicron_TELO, symicron_TELO, szmicron_TELO, 
                         xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end,
                         rellen_TELO, maxint_TELO, avint_TELO))
-    
-    def nuclear_filter(p,p0,p1,DAPI1,DAPI2,DAPI3,DAPI4):
-        if (      floatify(point[0]) > floatify(DAPI1) #filters for within nuclear regions only
-                    and floatify(point[0]) < floatify(DAPI2) #dapi_vector0 < point0 < dapi_vector3
-                    and floatify(point[1]) > floatify(DAPI3) 
-                    and floatify(point[1]) < floatify(DAPI4)):
-            return True
-        else:
-            return False
-    
-    H2AX_size_threshold = 0 #input("H2AX foci size threshold in micron (0 will return no threshold): \n")
+
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     num = 0
     for DAPI_vectors in start_end_vectors_DAPI_merged:
@@ -248,7 +250,6 @@ def full_analysis(index_1,index_2):
                 pass
     #totaled_H2AX_count.remove(0)
         
-    TELO_size_threshold = 0 #input("Telo foci size threshold in micron (0 will return no threshold): \n")
     for DAPI_vectors in start_end_vectors_DAPI_merged:
         for point in all_TELO:
             if point[0] == all_TELO[0][0]:
@@ -363,32 +364,43 @@ def full_analysis(index_1,index_2):
     dfTAFpercent = pd.DataFrame(data = TAF_percent_positive, index=['Percent TAF positive','TAF positive count','Total nuclei count'])
     allTdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfTTAF_len,dfTTAF], axis=1, sort=False)
     allHdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfHTAF], axis=1, sort=False)
-    allTdf.to_csv(output_file, index=True)
-    allHdf.to_csv(output_file_2, index=True)
-    dfTTAF_len.to_csv(output_file_3, index=True)
 
     return allTdf, allHdf, dfTTAF_len, dfTAFpercent
 
 all_images = {}
-previous_index = []
-num = 1
-for index_2, obj in enumerate(x_H2AX):
-    if index_2 == 0:
-        pass
-    elif obj == x_H2AX[0]:
-        previous_index.append(index_2)
-        image_num = "image_" + str(num)
-        index_1 = previous_index[num-1] if num > 1 else 1
-        all_images[image_num] = full_analysis(index_1,index_2)
-        num += 1
-    elif index_2 + 1 == len(x_H2AX):
-        image_num = "image_" + str(num)
-        index_1 = previous_index[num-1] if num > 1 else 1
-        all_images[image_num] = full_analysis(index_1,index_2)
-    else:
-        
-#now we need to specify how to only analyse between one header and the next        
-        
 
+def retrieve_index(df,index_list):
+    index_list = []
+    num = 1
+    for index_2, obj in enumerate(df):
+        if index_2 == 0:
+            index_list.append(0)
+        elif obj == x_H2AX[0]:
+            index_list.append(index_2)
+            image_num = "image_" + str(num)
+            index_1 = index_list[num-1] if num > 1 else 0
+            all_images[image_num] = full_analysis(index_1,index_2-1)
+            num += 1
+        elif index_2 + 1 == len(x_H2AX):
+            image_num = "image_" + str(num)
+            index_1 = index_list[num-1]
+            all_images[image_num] = full_analysis(index_1,index_2-1)
+            break
+        else:
+            pass
+#have to set separate indices for DAPI, H2AX and TELO since they all have diff lengths
+    
+DAPI_index = retrieve_index(x_DAPI)
+H2AX_index = retrieve_index(x_H2AX)
+TELO_index = retrieve_index(x_TELO)
+
+        
+        
+# =============================================================================
+# allTdf.to_csv(output_file, index=True)
+# allHdf.to_csv(output_file_2, index=True)
+# dfTTAF_len.to_csv(output_file_3, index=True)
+# 
+# =============================================================================
 end = time.time()
 print("Runtime = %s" % (end - start))
