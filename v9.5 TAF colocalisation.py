@@ -41,12 +41,14 @@ df_DAPI = pd.read_excel(input_file_DAPI, header=None)
 #13- Sphericity, 14- Roundness, 15- Convexity, 16- Min intensity, 17- Avg. intensity,
 #18- Max intensity, 19- Sum Intensity, 20- Std dev Intensity
 #channel 2 for red
+dataset_H2AX = np.array(df_H2AX[0])
 x_H2AX = np.array(df_H2AX[3])
 y_H2AX = np.array(df_H2AX[4])
 z_H2AX = np.array(df_H2AX[5])
 width_H2AX = np.array(df_H2AX[6])
 height_H2AX = np.array(df_H2AX[7])
 depth_H2AX = np.array(df_H2AX[8])
+dataset_TELO = np.array(df_TELO[0])
 x_TELO = np.array(df_TELO[3])
 y_TELO = np.array(df_TELO[4])
 z_TELO = np.array(df_TELO[5])
@@ -55,6 +57,7 @@ height_TELO = np.array(df_TELO[7])
 depth_TELO = np.array(df_TELO[8])
 maxint_TELO = np.array(df_TELO[21])
 avint_TELO = np.array(df_TELO[20])
+dataset_DAPI = np.array(df_DAPI[0])
 x_DAPI = np.array(df_DAPI[3])
 y_DAPI = np.array(df_DAPI[4])
 z_DAPI = np.array(df_DAPI[5])
@@ -322,7 +325,6 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     n_TAF_TELO = []
     TAF_positive_nuclei = []
     num = 0
-    TTAF.clear()
     #colocalisation of H2AX and TELO
     z_stacks_per_TAF = float(TAF_size_threshold) / float(z_size)
     for (Tkey, Tval), (Hkey, Hval) in zip(dict_nuclei_TELO.items(), dict_nuclei_H2AX.items()):
@@ -347,7 +349,6 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         #print(TAF_TELO)
         TAF_TELO.clear()
         num += 1
-        #print("Nucleus " + str(num) + " of " + str(len(start_end_vectors_DAPI_merged)) + " done.")
         if (len(TTAF.get(Tkey)) < int(TAF_positive_threshold)) or (len(TTAF.get(Tkey)) > int(upper_TAF_positive_threshold)):
             pass
         else:
@@ -373,6 +374,21 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
 # 
 # =============================================================================
     
+def sortby_treatment(dataset):
+    obj_list = []
+    index_list = []
+    for index, obj in enumerate(dataset):
+        if index == 0:
+            pass
+        elif obj == dataset_H2AX[0]:
+            pass
+        elif obj not in obj_list:
+            obj_list.append(obj)
+            index_list.append(max(0,index-2))
+        elif index+1 == len(dataset):
+            index_list.append(index)
+            break
+    return obj_list, index_list
 
 def retrieve_index(df):
     index_list = []
@@ -388,6 +404,11 @@ def retrieve_index(df):
             pass
     return index_list
 #have to set separate indices for DAPI, H2AX and TELO since they all have diff lengths
+
+all_datasets = {}
+dataset_indices = list(zip(sortby_treatment(dataset_DAPI),sortby_treatment(dataset_H2AX), sortby_treatment(dataset_TELO)))
+print(sortby_treatment(dataset_DAPI))
+
 
 all_images = {}
 all_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),retrieve_index(x_TELO)))
