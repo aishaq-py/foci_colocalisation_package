@@ -8,7 +8,8 @@ print('Python Version ' + sys.version)
 print('Pandas Version ' + pd.__version__)
 print('Np Version ' + np.__version__)
 
-root = 'H:\\Ed TAF\\20181120 test 2\\' #remember to use double backslash or single forward slash (is a requirement for python convention)
+
+root = 'D:\\C drive backups and transfers\\Documents\\Ed TAF\\20181120 test 2\\' #remember to use double backslash or single forward slash (is a requirement for python convention)
 input_file_H2AX = root + 'All_H2AX.xlsx'
 input_file_TELO = root + 'All_TELO.xlsx'
 input_file_DAPI = root + 'All_DAPI.xlsx'
@@ -123,10 +124,10 @@ def positive(val):
         return val
     
 def nuclear_filter(p,p0,p1,DAPI1,DAPI2,DAPI3,DAPI4):
-    if (      floatify(point[0]) > floatify(DAPI1) #filters for within nuclear regions only
-                and floatify(point[0]) < floatify(DAPI2) #dapi_vector0 < point0 < dapi_vector3
-                and floatify(point[1]) > floatify(DAPI3) 
-                and floatify(point[1]) < floatify(DAPI4)):
+    if (      floatify(p[0]) > floatify(DAPI1) #filters for within nuclear regions only
+                and floatify(p[0]) < floatify(DAPI2) #dapi_vector0 < point0 < dapi_vector3
+                and floatify(p[1]) > floatify(DAPI3) 
+                and floatify(p[1]) < floatify(DAPI4)):
         return True
     else:
         return False
@@ -136,6 +137,36 @@ def convert_micron(pixel_size,V1):
 
 def convert_size_micron(pixel_size,V1,V2):
     return floatify(V1*pixel_size)+floatify(V2*pixel_size)
+
+@jit
+def left(x1,x2):
+    return max(x1,x2)
+
+@jit
+def right(w1,w2):
+    return min(w1,w2)
+
+@jit
+def bottom(y1,y2):
+    return max(y1,y2)
+
+@jit
+def top(h1,h2):
+    return min(h1,h2)
+
+@jit
+def colocalisation(x1,y1,w1,h1,x2,y2,w2,h2):
+    left = max(x1,x2)
+    right = min(w1,w2)
+    bottom = max(y1,y2)
+    top = min(h1,h2)
+    Aoverlap = (bottom - top)*(right - left)
+    ratio_to_TELO = Aoverlap/((w1-x1)*(h1-y1))
+    #ratio_to_H2AX = Aoverlap/((w2-x2)*(h2-y2))
+    if ratio_to_TELO > 0 and ratio_to_TELO < 5:
+        return ratio_to_TELO
+    else:
+        return False
 
 def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX, depth_H2AX))
@@ -153,7 +184,9 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             z_dim_DAPI.append(float(1)) #z_dim_calc
     nuclear_count.append(len(x_dim_DAPI))
     #nuclear_count.remove(0)
-    start_end_vectors_DAPI_merged = list(zip(x_DAPI, y_DAPI, z_DAPI, x_dim_DAPI, y_dim_DAPI, z_dim_DAPI)) #one less list level to iterate
+    start_end_vectors_DAPI_merged = list(zip(x_DAPI[index_1:index_2], y_DAPI[index_1:index_2], 
+                                             z_DAPI[index_1:index_2], x_dim_DAPI, 
+                                             y_dim_DAPI, z_dim_DAPI)) #one less list level to iterate
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     #px = pixel size
@@ -182,10 +215,11 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             xmicron_H2AX_end.append(convert_size_micron(px,vector[0],vector[3]))
             ymicron_H2AX_end.append(convert_size_micron(px,vector[1],vector[4]))
             zmicron_H2AX_end.append(convert_size_micron(px,vector[2],vector[5]))
-    all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX, 
-                        depth_H2AX, xmicron_H2AX, ymicron_H2AX, zmicron_H2AX, 
-                        sxmicron_H2AX, symicron_H2AX, szmicron_H2AX, 
-                        xmicron_H2AX_end, ymicron_H2AX_end, zmicron_H2AX_end))
+    all_H2AX = list(zip(x_H2AX[index_3:index_4], y_H2AX[index_3:index_4], z_H2AX[index_3:index_4], 
+                        width_H2AX[index_3:index_4], height_H2AX[index_3:index_4], 
+                        depth_H2AX[index_3:index_4], xmicron_H2AX, ymicron_H2AX, zmicron_H2AX, 
+                        sxmicron_H2AX, symicron_H2AX, szmicron_H2AX, xmicron_H2AX_end, 
+                        ymicron_H2AX_end, zmicron_H2AX_end))
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     for vector in all_TELO[index_5:index_6]:
@@ -213,7 +247,8 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             xmicron_TELO_end.append(convert_size_micron(px,vector[0],vector[3]))
             ymicron_TELO_end.append(convert_size_micron(px,vector[1],vector[4]))
             zmicron_TELO_end.append(convert_size_micron(px,vector[2],vector[5]))
-    all_TELO = list(zip(x_TELO, y_TELO, z_TELO, avint_TELO))
+    #all_TELO = list(zip(x_TELO[index_5:index_6], y_TELO[index_5:index_6], z_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
+    
     
     maxsize_TELO = max(all_TELO[17])
     def telo_rellen(avint_TELO): #relative telo len in spreadsheet
@@ -224,12 +259,13 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             rellen_TELO.append("Relative Telo Length")
         else:
             rellen_TELO.append(telo_rellen(vector[3]))
-    all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, 
-                        depth_TELO, xmicron_TELO, ymicron_TELO, zmicron_TELO, 
+    all_TELO = list(zip(x_TELO[index_5:index_6], y_TELO[index_5:index_6], z_TELO[index_5:index_6], 
+                        width_TELO[index_5:index_6], height_TELO[index_5:index_6], 
+                        depth_TELO[index_5:index_6], xmicron_TELO, ymicron_TELO, zmicron_TELO, 
                         sxmicron_TELO, symicron_TELO, szmicron_TELO, 
                         xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end,
-                        rellen_TELO, maxint_TELO, avint_TELO))
-
+                        rellen_TELO, maxint_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
+    
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     num = 0
     for DAPI_vectors in start_end_vectors_DAPI_merged:
@@ -275,37 +311,6 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         dict_nuclei_TELO["Nucleus no. " + str(i)] = (filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]])
         dict_H2AX_count["Nucleus no. " + str(i)] = len((filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]]))
         dict_TELO_count["Nucleus no. " + str(i)] = len((filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]]))
-    #nuclei 0 and 1 are showing 0 count, but 2 is showing 10
-        
-    @jit
-    def left(x1,x2):
-        return max(x1,x2)
-    
-    @jit
-    def right(w1,w2):
-        return min(w1,w2)
-    
-    @jit
-    def bottom(y1,y2):
-        return max(y1,y2)
-    
-    @jit
-    def top(h1,h2):
-        return min(h1,h2)
-    
-    @jit
-    def colocalisation(x1,y1,w1,h1,x2,y2,w2,h2):
-        left = max(x1,x2)
-        right = min(w1,w2)
-        bottom = max(y1,y2)
-        top = min(h1,h2)
-        Aoverlap = (bottom - top)*(right - left)
-        ratio_to_TELO = Aoverlap/((w1-x1)*(h1-y1))
-        #ratio_to_H2AX = Aoverlap/((w2-x2)*(h2-y2))
-        if ratio_to_TELO > 0 and ratio_to_TELO < 5:
-            return ratio_to_TELO
-        else:
-            return False
     
     TTAF = {}
     TTAF_len = {}
@@ -317,8 +322,8 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     n_TAF_TELO = []
     TAF_positive_nuclei = []
     num = 0
+    TTAF.clear()
     #colocalisation of H2AX and TELO
-    
     z_stacks_per_TAF = float(TAF_size_threshold) / float(z_size)
     for (Tkey, Tval), (Hkey, Hval) in zip(dict_nuclei_TELO.items(), dict_nuclei_H2AX.items()):
         if Hkey == Tkey:
@@ -353,28 +358,31 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     TAF_percent_positive.append(len(TAF_positive_nuclei)/len(TTAF)*100)
     TAF_percent_positive.append(len(TAF_positive_nuclei))
     TAF_percent_positive.append(len(TTAF))
-
-    dffoci = pd.DataFrame.from_dict(dict_H2AX_count, orient='index', columns=['H2A.X count'])
-    dffoci_2 = pd.DataFrame.from_dict(dict_TELO_count, orient='index', columns=['Telomere count'])
-    dfTTAF = pd.DataFrame.from_dict(TTAF, orient='index')
-    dfTTAF_len = pd.DataFrame.from_dict(TTAF_len, orient='index')
-    dfHTAF = pd.DataFrame.from_dict(HTAF, orient='index')
-    dfnTAF = pd.DataFrame.from_dict(n_TAF, orient='index', columns=['TAF count'])
-    dfTAFpercent = pd.DataFrame(data = TAF_percent_positive, index=['Percent TAF positive','TAF positive count','Total nuclei count'])
-    allTdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfTTAF_len,dfTTAF], axis=1, sort=False)
-    allHdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfHTAF], axis=1, sort=False)
-
-    return TTAF, TTAF_len, n_TAF
+    return TTAF
+    
+# =============================================================================
+#     dffoci = pd.DataFrame.from_dict(dict_H2AX_count, orient='index', columns=['H2A.X count'])
+#     dffoci_2 = pd.DataFrame.from_dict(dict_TELO_count, orient='index', columns=['Telomere count'])
+#     dfTTAF = pd.DataFrame.from_dict(TTAF, orient='index')
+#     dfTTAF_len = pd.DataFrame.from_dict(TTAF_len, orient='index')
+#     dfHTAF = pd.DataFrame.from_dict(HTAF, orient='index')
+#     dfnTAF = pd.DataFrame.from_dict(n_TAF, orient='index', columns=['TAF count'])
+#     dfTAFpercent = pd.DataFrame(data = TAF_percent_positive, index=['Percent TAF positive','TAF positive count','Total nuclei count'])
+#     allTdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfTTAF_len,dfTTAF], axis=1, sort=False)
+#     allHdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfHTAF], axis=1, sort=False)
+# 
+# =============================================================================
+    
 
 def retrieve_index(df):
     index_list = []
-    for index_2, obj in enumerate(df):
-        if index_2 == 0:
+    for index, obj in enumerate(df):
+        if index == 0:
             index_list.append(0)
         elif obj == x_H2AX[0]:
-            index_list.append(index_2)
-        elif index_2+1 == len(df):
-            index_list.append(index_2)
+            index_list.append(index)
+        elif index+1 == len(df):
+            index_list.append(index)
             break
         else:
             pass
@@ -385,14 +393,12 @@ all_images = {}
 all_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),retrieve_index(x_TELO)))
 for n, obj in enumerate(all_indices):
     if n > 0 and n <= len(all_indices):
-        image_num = "image_" + str(n)
-        print(image_num)
-        all_images[image_num] = full_analysis(all_indices[n-1][0],all_indices[n][0],
+        Image_num = "Image_" + str(n)
+        all_images[Image_num] = full_analysis(all_indices[n-1][0],all_indices[n][0],
                                      all_indices[n-1][1],all_indices[n][1],
                                      all_indices[n-1][2],all_indices[n][2])
-        print("Bongos")
 
-
+        
 # =============================================================================
 # allTdf.to_csv(output_file, index=True)
 # allHdf.to_csv(output_file_2, index=True)

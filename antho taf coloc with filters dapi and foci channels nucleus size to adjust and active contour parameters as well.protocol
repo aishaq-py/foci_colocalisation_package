@@ -3,7 +3,7 @@
 <block CommandLineID="" ID="2044608234" blockType="plugins.adufour.blocks.tools.input.Sequence" className="plugins.adufour.blocks.tools.input.Sequence" collapsed="false" definedName="Sequence" height="61" keepsResults="true" width="237" xLocation="36" yLocation="197">
 <variables>
 <input>
-<variable ID="input sequence" name="sequence" runtime="false" visible="true"/>
+<variable ID="input sequence" name="sequence" runtime="false" value="Active Sequence" visible="true"/>
 </input>
 <output/>
 </variables>
@@ -32,7 +32,7 @@
 </output>
 </variables>
 </block>
-<block ID="600379288" blockType="plugins.spop.medianfilter.MedianFilter" className="plugins.spop.medianfilter.MedianFilter" collapsed="false" definedName="Median Filter" height="130" keepsResults="true" width="200" xLocation="896" yLocation="117">
+<block ID="600379288" blockType="plugins.spop.medianfilter.MedianFilter" className="plugins.spop.medianfilter.MedianFilter" collapsed="false" definedName="Median Filter" height="130" keepsResults="true" width="200" xLocation="894" yLocation="25">
 <variables>
 <input>
 <variable ID="Input" name="Input" runtime="false" visible="true"/>
@@ -44,7 +44,7 @@
 </output>
 </variables>
 </block>
-<block ID="511287273" blockType="plugins.adufour.hierarchicalkmeans.HierarchicalKMeans" className="plugins.adufour.hierarchicalkmeans.HierarchicalKMeans" collapsed="false" definedName="HK-Means to Find the nucleus" height="358" keepsResults="true" width="362" xLocation="825" yLocation="271">
+<block ID="511287273" blockType="plugins.adufour.hierarchicalkmeans.HierarchicalKMeans" className="plugins.adufour.hierarchicalkmeans.HierarchicalKMeans" collapsed="false" definedName="HK-Means to Find the nucleus" height="358" keepsResults="true" width="362" xLocation="821" yLocation="224">
 <variables>
 <input>
 <variable ID="Input" name="Input" runtime="false" visible="true"/>
@@ -95,7 +95,7 @@
 <block ID="923752089" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="true" definedName="Add ROI to sequence" height="120" keepsResults="true" width="316" xLocation="1604" yLocation="104">
 <variables>
 <input>
-<variable ID="target sequence" name="Source" runtime="false" visible="true"/>
+<variable ID="target sequence" name="Source" runtime="false" value="Active Sequence" visible="true"/>
 <variable ID="input rois" name="ROI to add" runtime="false" visible="true"/>
 <variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="true"/>
 </input>
@@ -135,7 +135,7 @@
 <input>
 <variable ID="input Sequence" name="input Sequence" runtime="false" visible="true"/>
 <variable ID="Spot to detect" name="Spot to detect" runtime="false" value="BRIGHT_SPOT" visible="true"/>
-<variable ID="input Sequence ROIs" name="ROIs from sequence for WAT" runtime="false" visible="true"/>
+<variable ID="input Sequence ROIs" name="ROIs from sequence for WAT" runtime="false" value="Active Sequence" visible="true"/>
 <variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" runtime="false" value="true" visible="true"/>
 <variable ID="ROIs for detection mask" name="ROIs for detection mask" runtime="false" visible="true"/>
 <variable ID="Scale 1" name="Scale 1" runtime="false" value="false" visible="true"/>
@@ -156,7 +156,7 @@
 </output>
 </variables>
 </block>
-<block ID="127209534" blockType="plugins.stef.roi.bloc.op.FilterROIBySize" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Filter ROI by size" height="201" keepsResults="true" width="298" xLocation="1070" yLocation="1232">
+<block ID="127209534" blockType="plugins.stef.roi.bloc.op.FilterROIBySize" className="plugins.stef.roi.bloc.RoiBlocks" collapsed="false" definedName="Filter ROI by size" height="201" keepsResults="true" width="298" xLocation="1138" yLocation="1283">
 <variables>
 <input>
 <variable ID="roi" name="ROI(s)" runtime="false" visible="true"/>
@@ -174,7 +174,7 @@
 <input>
 <variable ID="measures" name="Select features..." runtime="false" value="32212967676" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
-<variable ID="Sequence" name="Sequence" runtime="false" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
 </input>
 <output>
 <variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
@@ -205,7 +205,7 @@
 <input>
 <variable ID="input Sequence" name="input Sequence" runtime="false" visible="true"/>
 <variable ID="Spot to detect" name="Spot to detect" runtime="false" value="BRIGHT_SPOT" visible="true"/>
-<variable ID="input Sequence ROIs" name="ROIs from sequence for WAT" runtime="false" visible="true"/>
+<variable ID="input Sequence ROIs" name="ROIs from sequence for WAT" runtime="false" value="Active Sequence" visible="true"/>
 <variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" runtime="false" value="true" visible="true"/>
 <variable ID="ROIs for detection mask" name="ROIs for detection mask" runtime="false" visible="true"/>
 <variable ID="Scale 1" name="Scale 1" runtime="false" value="false" visible="true"/>
@@ -231,7 +231,7 @@
 <input>
 <variable ID="measures" name="Select features..." runtime="false" value="32212967676" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
-<variable ID="Sequence" name="Sequence" runtime="false" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
 </input>
 <output>
 <variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
@@ -259,7 +259,7 @@
 <input>
 <variable ID="measures" name="Select features..." runtime="false" value="32212967676" visible="true"/>
 <variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="true"/>
-<variable ID="Sequence" name="Sequence" runtime="false" visible="true"/>
+<variable ID="Sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
 </input>
 <output>
 <variable ID="Workbook" name="Workbook" runtime="false" visible="true"/>
@@ -305,7 +305,7 @@
 <block ID="1586575775" blockType="plugins.stef.tools.ROIToDetection" className="plugins.stef.tools.ROIToDetection" collapsed="false" definedName="ROI to detection" height="157" keepsResults="true" width="383" xLocation="32" yLocation="2215">
 <variables>
 <input>
-<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
+<variable ID="sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
 <variable ID="rois" name="ROI(s)" runtime="false" visible="true"/>
 <variable ID="exportSP" name="Export to Swimming Pool" runtime="false" value="true" visible="true"/>
 </input>
@@ -317,7 +317,7 @@
 <block ID="1911932226" blockType="plugins.stef.tools.ROIToDetection" className="plugins.stef.tools.ROIToDetection" collapsed="false" definedName="ROI to detection" height="188" keepsResults="true" width="383" xLocation="1033" yLocation="2392">
 <variables>
 <input>
-<variable ID="sequence" name="Sequence" runtime="false" visible="true"/>
+<variable ID="sequence" name="Sequence" runtime="false" value="Active Sequence" visible="true"/>
 <variable ID="rois" name="ROI(s)" runtime="false" visible="true"/>
 <variable ID="exportSP" name="Export to Swimming Pool" runtime="false" value="true" visible="true"/>
 </input>
@@ -326,12 +326,12 @@
 </output>
 </variables>
 </block>
-<block ID="216766287" blockType="plugins.lagache.colocalizationstudio.ColocalizationStudio_Object" className="plugins.lagache.colocalizationstudio.ColocalizationStudio" collapsed="false" definedName="Colocalization studio_ object" height="620" keepsResults="true" width="654" xLocation="287" yLocation="2763">
+<block ID="216766287" blockType="plugins.lagache.colocalizationstudio.ColocalizationStudio_Object" className="plugins.lagache.colocalizationstudio.ColocalizationStudio" collapsed="false" definedName="Colocalization studio_ object" height="620" keepsResults="true" width="654" xLocation="235" yLocation="2735">
 <variables>
 <input>
-<variable ID="Input Sequence 1" name="Input sequence 1" runtime="false" visible="true"/>
-<variable ID="Input Sequence 2" name="Input sequence 2" runtime="false" visible="true"/>
-<variable ID="ROI of Analysis" name="ROI of Analysis" runtime="false" value="" visible="true"/>
+<variable ID="Input Sequence 1" name="Input sequence 1" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="Input Sequence 2" name="Input sequence 2" runtime="false" value="Active Sequence" visible="true"/>
+<variable ID="ROI of Analysis" name="ROI of Analysis" runtime="false" value="No ROI" visible="true"/>
 <variable ID="Detections 1 (ROIs)" name="List of detections 1 (ROIS)" runtime="false" visible="true"/>
 <variable ID="Detections 2 (ROIs)" name="List of detections 2 (ROIS)" runtime="false" visible="true"/>
 <variable ID="Positions 1 inside masks 2" name="Positions 1 inside Masks 2" runtime="false" value="true" visible="true"/>
@@ -363,7 +363,7 @@
 <block ID="1452204443" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="126" keepsResults="true" width="286" xLocation="1208" yLocation="3029">
 <variables>
 <input>
-<variable ID="target sequence" name="Source" runtime="false" visible="true"/>
+<variable ID="target sequence" name="Source" runtime="false" value="Active Sequence" visible="true"/>
 <variable ID="input rois" name="ROI to add" runtime="false" visible="true"/>
 <variable ID="replace existing" name="Overwrite" runtime="false" value="false" visible="true"/>
 </input>
@@ -394,7 +394,7 @@
 <block ID="599242256" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="true" definedName="Add ROI to sequence" height="109" keepsResults="true" width="291" xLocation="1893" yLocation="2778">
 <variables>
 <input>
-<variable ID="target sequence" name="Source" runtime="false" visible="true"/>
+<variable ID="target sequence" name="Source" runtime="false" value="Active Sequence" visible="true"/>
 <variable ID="input rois" name="ROI to add" runtime="false" visible="true"/>
 <variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="true"/>
 </input>
@@ -476,7 +476,7 @@
 <block ID="1300652303" blockType="plugins.tprovoost.sequenceblocks.creation.DuplicateSequence" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Duplicate sequence" height="105" keepsResults="true" width="276" xLocation="2092" yLocation="135">
 <variables>
 <input>
-<variable ID="sequence" name="sequence" runtime="false" visible="true"/>
+<variable ID="sequence" name="sequence" runtime="false" value="Active Sequence" visible="true"/>
 </input>
 <output>
 <variable ID="duplicated" name="duplicated" runtime="false" visible="true"/>
@@ -539,12 +539,12 @@
 <output/>
 </variables>
 </block>
-<block ID="1578644882" blockType="plugins.adufour.blocks.tools.io.WorkbookToFile" className="plugins.adufour.blocks.tools.io.WorkbookToFile" collapsed="false" definedName="DAPI workbook" height="207" keepsResults="true" width="499" xLocation="2180" yLocation="494">
+<block ID="1578644882" blockType="plugins.adufour.blocks.tools.io.WorkbookToFile" className="plugins.adufour.blocks.tools.io.WorkbookToFile" collapsed="false" definedName="DAPI workbook" height="308" keepsResults="true" width="499" xLocation="2175" yLocation="328">
 <variables>
 <input>
 <variable ID="workbook" name="workbook" runtime="false" visible="true"/>
 <variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
-<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S16_DAPI" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S18_DAPI" visible="true"/>
 <variable ID="If file exists" name="If file exists" runtime="false" value="Merge_sheets" visible="true"/>
 </input>
 <output/>
@@ -555,7 +555,7 @@
 <input>
 <variable ID="workbook" name="workbook" runtime="false" visible="true"/>
 <variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
-<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S16_H2AX_in_nuclei" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S18_H2AX_in_nuclei" visible="true"/>
 <variable ID="If file exists" name="If file exists" runtime="false" value="Merge_sheets" visible="true"/>
 </input>
 <output/>
@@ -566,7 +566,7 @@
 <input>
 <variable ID="workbook" name="workbook" runtime="false" visible="true"/>
 <variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
-<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S16_TELO" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S18_TELO" visible="true"/>
 <variable ID="If file exists" name="If file exists" runtime="false" value="Merge_sheets" visible="true"/>
 </input>
 <output/>
@@ -577,7 +577,7 @@
 <input>
 <variable ID="workbook" name="workbook" runtime="false" visible="true"/>
 <variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
-<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S16_TAF" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S18_TAF" visible="true"/>
 <variable ID="If file exists" name="If file exists" runtime="false" value="Merge_sheets" visible="true"/>
 </input>
 <output/>
@@ -588,7 +588,7 @@
 <input>
 <variable ID="workbook" name="workbook" runtime="false" visible="true"/>
 <variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
-<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S12_H2AX" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S18_H2AX" visible="true"/>
 <variable ID="If file exists" name="If file exists" runtime="false" value="Overwrite" visible="true"/>
 </input>
 <output/>
@@ -602,6 +602,8 @@
 <link dstBlockID="286196563" dstVarID="sequence" srcBlockID="2044608234" srcVarID="input sequence"/>
 <link dstBlockID="1702485951" dstVarID="input" srcBlockID="1551881366" srcVarID="extracted"/>
 <link dstBlockID="978444089" dstVarID="input sequence" srcBlockID="1702485951" srcVarID="projection output"/>
+<link dstBlockID="600379288" dstVarID="Input" srcBlockID="1702485951" srcVarID="projection output"/>
+<link dstBlockID="511287273" dstVarID="Input" srcBlockID="600379288" srcVarID="Output"/>
 <link dstBlockID="978444089" dstVarID="Input ROI" srcBlockID="511287273" srcVarID="output regions"/>
 <link dstBlockID="1065642841" dstVarID="object" srcBlockID="511287273" srcVarID="binary sequence"/>
 <link dstBlockID="923752089" dstVarID="input rois" srcBlockID="978444089" srcVarID="Regions of interest"/>
@@ -623,12 +625,16 @@
 <link dstBlockID="300368409" dstVarID="input rois" srcBlockID="127209534" srcVarID="out"/>
 <link dstBlockID="284889220" dstVarID="object" srcBlockID="399605819" srcVarID="Workbook"/>
 <link dstBlockID="1609791787" dstVarID="rois" srcBlockID="399605819" srcVarID="Regions of interest"/>
+<link dstBlockID="1399836801" dstVarID="workbook" srcBlockID="399605819" srcVarID="Workbook"/>
+<link dstBlockID="1360774762" dstVarID="workbook" srcBlockID="399605819" srcVarID="Workbook"/>
 <link dstBlockID="1441472901" dstVarID="input Sequence" srcBlockID="502730829" srcVarID="extracted"/>
 <link dstBlockID="644916527" dstVarID="object" srcBlockID="1441472901" srcVarID="binary Spot Sequence"/>
 <link dstBlockID="1526546032" dstVarID="Regions of interest" srcBlockID="1441472901" srcVarID="detection as ROIs"/>
 <link dstBlockID="1911932226" dstVarID="rois" srcBlockID="1441472901" srcVarID="detection as ROIs"/>
 <link dstBlockID="2572793" dstVarID="object" srcBlockID="1526546032" srcVarID="Workbook"/>
 <link dstBlockID="575703426" dstVarID="rois" srcBlockID="1526546032" srcVarID="Regions of interest"/>
+<link dstBlockID="846953087" dstVarID="workbook" srcBlockID="1526546032" srcVarID="Workbook"/>
+<link dstBlockID="1578644882" dstVarID="workbook" srcBlockID="1331058712" srcVarID="Workbook"/>
 <link dstBlockID="559795598" dstVarID="object" srcBlockID="2058850804" srcVarID="workbook"/>
 <link dstBlockID="216766287" dstVarID="Detections 1 (ROIs)" srcBlockID="1586575775" srcVarID="rois"/>
 <link dstBlockID="216766287" dstVarID="Detections 2 (ROIs)" srcBlockID="1911932226" srcVarID="rois"/>
@@ -640,6 +646,7 @@
 <link dstBlockID="620699679" dstVarID="object" srcBlockID="599242256" srcVarID="target sequence"/>
 <link dstBlockID="279435381" dstVarID="Inner ROI" srcBlockID="599242256" srcVarID="input rois"/>
 <link dstBlockID="1792976867" dstVarID="object" srcBlockID="279435381" srcVarID="workbook"/>
+<link dstBlockID="1344444125" dstVarID="workbook" srcBlockID="279435381" srcVarID="workbook"/>
 <link dstBlockID="300368409" dstVarID="target sequence" srcBlockID="286196563" srcVarID="duplicated"/>
 <link dstBlockID="2121435868" dstVarID="object" srcBlockID="300368409" srcVarID="target sequence"/>
 <link dstBlockID="2035337222" dstVarID="target sequence" srcBlockID="1300652303" srcVarID="duplicated"/>
@@ -648,12 +655,5 @@
 <link dstBlockID="1248092533" dstVarID="sequence" srcBlockID="2076624160" srcVarID="sequence"/>
 <link dstBlockID="1248092533" dstVarID="rois(s)" srcBlockID="575703426" srcVarID="rois"/>
 <link dstBlockID="518996642" dstVarID="object" srcBlockID="1248092533" srcVarID="sequence"/>
-<link dstBlockID="600379288" dstVarID="Input" srcBlockID="1702485951" srcVarID="projection output"/>
-<link dstBlockID="511287273" dstVarID="Input" srcBlockID="600379288" srcVarID="Output"/>
-<link dstBlockID="1578644882" dstVarID="workbook" srcBlockID="1331058712" srcVarID="Workbook"/>
-<link dstBlockID="1399836801" dstVarID="workbook" srcBlockID="399605819" srcVarID="Workbook"/>
-<link dstBlockID="846953087" dstVarID="workbook" srcBlockID="1526546032" srcVarID="Workbook"/>
-<link dstBlockID="1344444125" dstVarID="workbook" srcBlockID="279435381" srcVarID="workbook"/>
-<link dstBlockID="1360774762" dstVarID="workbook" srcBlockID="399605819" srcVarID="Workbook"/>
 </links>
 </protocol>
