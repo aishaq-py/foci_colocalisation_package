@@ -14,8 +14,8 @@ input_file_H2AX = root + 'All_H2AX.xlsx'
 input_file_TELO = root + 'All_TELO.xlsx'
 input_file_DAPI = root + 'All_DAPI.xlsx'
 output_file = root + 'All_TTAF_after_script.csv'
-output_file_2 = root + 'All_HTAF_after_script.csv'
-output_file_3 = root + 'All_Telo_len_after_script.csv'
+#output_file_2 = root + 'All_HTAF_after_script.csv'
+#output_file_3 = root + 'All_Telo_len_after_script.csv'
 
 #parameters for analysis - change to absolute values if needed as such
 print("\n Input all requested values as decimal numbers (floats).")
@@ -419,18 +419,14 @@ def retrieve_index(df):
         else:
             pass
     return index_list
-    print("x1")
 #have to set separate indices for DAPI, H2AX and TELO since they all have diff lengths
 
-all_datasets = {}
 dataset_obj = sortby_treatment(dataset_DAPI)
 dataset_indices = list(zip(treatment_index(dataset_DAPI),treatment_index(dataset_H2AX),treatment_index(dataset_TELO)))
 image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),retrieve_index(x_TELO)))
-#for n, obj in enumerate(dataset_indices):
     
 treatments = {}
 all_images = {}
-def sort_images_into_datasets(dataset_indices,channel):
 for n, obj in enumerate(dataset_indices):
     for m, obj_2 in enumerate(image_indices):
         if n > 0 and n <= len(dataset_indices):
@@ -439,30 +435,20 @@ for n, obj in enumerate(dataset_indices):
                 all_images[Image_num] = full_analysis(image_indices[n-1][0],image_indices[n][0],
                                      image_indices[n-1][1],image_indices[n][1],
                                      image_indices[n-1][2],image_indices[n][2])
-            print(n)
             treatments[dataset_obj[n-1]] = all_images
             all_images.clear()
 
+dftreatments = pd.DataFrame.from_dict(treatments, orient='index')
+dftreatments.to_csv(output_file, index=True)
+
 # =============================================================================
-# for n, obj in enumerate(dataset_indices):
-#     for m, obj_2 in enumerate(image_indices):
-#         if n > 0 and n <= len(dataset_indices):
-#             if image_indices[m-1][0] <= dataset_indices[n-1][0] and image_indices[n][0] <= dataset_indices[n][0]:
-#                 Image_num = "Image_" + str(m)
-#                 all_images[Image_num] = full_analysis(image_indices[n-1][0],image_indices[n][0],
+# for n, obj in enumerate(image_indices):
+#     if n > 0 and n <= len(image_indices):
+#         Image_num = "Image_" + str(n)
+#         all_images[Image_num] = full_analysis(image_indices[n-1][0],image_indices[n][0],
 #                                      image_indices[n-1][1],image_indices[n][1],
 #                                      image_indices[n-1][2],image_indices[n][2])
-#             print(n)
-#             treatments[dataset_obj[n-1]] = all_images
-#             all_images.clear()
 # =============================================================================
-
-for n, obj in enumerate(image_indices):
-    if n > 0 and n <= len(image_indices):
-        Image_num = "Image_" + str(n)
-        all_images[Image_num] = full_analysis(image_indices[n-1][0],image_indices[n][0],
-                                     image_indices[n-1][1],image_indices[n][1],
-                                     image_indices[n-1][2],image_indices[n][2])
 
         
 # =============================================================================
