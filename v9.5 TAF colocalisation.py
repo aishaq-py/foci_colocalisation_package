@@ -14,7 +14,7 @@ input_file_H2AX = root + 'All_H2AX.xlsx'
 input_file_TELO = root + 'All_TELO.xlsx'
 input_file_DAPI = root + 'All_DAPI.xlsx'
 output_file = root + 'All_TTAF_after_script.csv'
-#output_file_2 = root + 'All_HTAF_after_script.csv'
+output_file_2 = root + 'All_HTAF_after_script.csv'
 #output_file_3 = root + 'All_Telo_len_after_script.csv'
 
 #parameters for analysis - change to absolute values if needed as such
@@ -42,77 +42,34 @@ df_DAPI = pd.read_excel(input_file_DAPI, header=None)
 #18- Max intensity, 19- Sum Intensity, 20- Std dev Intensity
 #channel 2 for red
 dataset_H2AX = np.array(df_H2AX[0])
-x_H2AX = np.array(df_H2AX[3])
-y_H2AX = np.array(df_H2AX[4])
-z_H2AX = np.array(df_H2AX[5])
-width_H2AX = np.array(df_H2AX[6])
-height_H2AX = np.array(df_H2AX[7])
-depth_H2AX = np.array(df_H2AX[8])
+x_H2AX, y_H2AX, z_H2AX  = np.array(df_H2AX[3]), np.array(df_H2AX[4]), np.array(df_H2AX[5])
+width_H2AX, height_H2AX, depth_H2AX = np.array(df_H2AX[6]), np.array(df_H2AX[7]), np.array(df_H2AX[8])
 dataset_TELO = np.array(df_TELO[0])
-x_TELO = np.array(df_TELO[3])
-y_TELO = np.array(df_TELO[4])
-z_TELO = np.array(df_TELO[5])
-width_TELO = np.array(df_TELO[6])  
-height_TELO = np.array(df_TELO[7]) 
-depth_TELO = np.array(df_TELO[8])
+x_TELO, y_TELO, z_TELO = np.array(df_TELO[3]), np.array(df_TELO[4]), np.array(df_TELO[5])
+width_TELO, height_TELO, depth_TELO = np.array(df_TELO[6]), np.array(df_TELO[7]), np.array(df_TELO[8])
 maxint_TELO = np.array(df_TELO[21])
 avint_TELO = np.array(df_TELO[20])
 dataset_DAPI = np.array(df_DAPI[0])
-x_DAPI = np.array(df_DAPI[3])
-y_DAPI = np.array(df_DAPI[4])
-z_DAPI = np.array(df_DAPI[5])
-width_DAPI = np.array(df_DAPI[6])
-height_DAPI = np.array(df_DAPI[7])
-depth_DAPI = np.array(df_DAPI[8])
-x_dim_DAPI = []
-y_dim_DAPI = []
-z_dim_DAPI = []
-ROI_end_DAPI = []
+x_DAPI,y_DAPI, z_DAPI = np.array(df_DAPI[3]), np.array(df_DAPI[4]), np.array(df_DAPI[5])
+width_DAPI, height_DAPI, depth_DAPI = np.array(df_DAPI[6]), np.array(df_DAPI[7]), np.array(df_DAPI[8])
+
+x_dim_DAPI, y_dim_DAPI, z_dim_DAPI, ROI_end_DAPI = ([] for i in range(4))
 nuclear_count = []
-x_dim_H2AX = []
-y_dim_H2AX = []
-z_dim_H2AX = []
-xmicron_H2AX = []
-ymicron_H2AX = []
-zmicron_H2AX = []
-area_H2AX = []
-vol_H2AX = []
-sxmicron_H2AX = [] #size
-symicron_H2AX = []
-szmicron_H2AX = []
-filt_H2AX = []
-xmicron_H2AX_end = []
-ymicron_H2AX_end = []
-zmicron_H2AX_end = []
-totaled_H2AX_count = []
-H2AX_count = []
-H2AX_volume = []
-ROI_end_H2AX = []
-IMG_no_H2AX = []
-x_dim_TELO = []
-y_dim_TELO = []
-z_dim_TELO = []
-xmicron_TELO = []
-ymicron_TELO = []
-zmicron_TELO = []
-area_TELO = []
-vol_TELO = []
-sxmicron_TELO = []
-symicron_TELO = []
-szmicron_TELO = []
-filt_TELO = []
-rellen_TELO = []
-xmicron_TELO_end = []
-ymicron_TELO_end = []
-zmicron_TELO_end = []
-totaled_TELO_count = []
-TELO_count = []
-TELO_volume = []
-ROI_end_TELO = []
-IMG_no_TELO = []
-TAF_count = []
-totaled_TAF_count = []
-values = []
+x_dim_H2AX, y_dim_H2AX, z_dim_H2AX = ([] for i in range(3))
+xmicron_H2AX, ymicron_H2AX, zmicron_H2AX = ([] for i in range(3))
+sxmicron_H2AX, symicron_H2AX, szmicron_H2AX = ([] for i in range(3)) #size
+area_H2AX, vol_H2AX, filt_H2AX = ([] for i in range(3))
+xmicron_H2AX_end, ymicron_H2AX_end, zmicron_H2AX_end = ([] for i in range(3))
+totaled_H2AX_count, H2AX_count, H2AX_volume = ([] for i in range(3))
+ROI_end_H2AX, IMG_no_H2AX = [],[]
+x_dim_TELO, y_dim_TELO, z_dim_TELO = ([] for i in range(3))
+xmicron_TELO, ymicron_TELO, zmicron_TELO = ([] for i in range(3))
+area_TELO, vol_TELO, filt_TELO, rellen_TELO = ([] for i in range(4))
+sxmicron_TELO, symicron_TELO, szmicron_TELO = ([] for i in range(3))
+xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end = ([] for i in range(3))
+totaled_TELO_count, TELO_count, TELO_volume = ([] for i in range(3))
+ROI_end_TELO, IMG_no_TELO, values = ([] for i in range(3))
+TAF_count, totaled_TAF_count = [],[]
 
 def floatify(val):
     if type(val) == int:
@@ -171,7 +128,7 @@ def colocalisation(x1,y1,w1,h1,x2,y2,w2,h2):
     else:
         return False
 
-def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
+def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
     all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX, depth_H2AX))
     all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, depth_TELO, avint_TELO))
     all_DAPI = list(zip(x_DAPI, y_DAPI, z_DAPI, width_DAPI, height_DAPI, depth_DAPI))
@@ -252,7 +209,6 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             zmicron_TELO_end.append(convert_size_micron(px,vector[2],vector[5]))
     #all_TELO = list(zip(x_TELO[index_5:index_6], y_TELO[index_5:index_6], z_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
     
-    
     maxsize_TELO = max(all_TELO[17])
     def telo_rellen(avint_TELO): #relative telo len in spreadsheet
         return avint_TELO/maxsize_TELO
@@ -305,24 +261,16 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                 pass
     #totaled_TELO_count.remove(0)
 
-    dict_nuclei_H2AX = {}
-    dict_nuclei_TELO = {}
-    dict_H2AX_count = {}
-    dict_TELO_count = {}
+    dict_nuclei_H2AX, dict_nuclei_TELO = {},{}
+    dict_H2AX_count, dict_TELO_count = {},{}
     for i in range(len(start_end_vectors_DAPI_merged)-1):
         dict_nuclei_H2AX["Nucleus no. " + str(i)] = (filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]])
         dict_nuclei_TELO["Nucleus no. " + str(i)] = (filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]])
         dict_H2AX_count["Nucleus no. " + str(i)] = len((filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]]))
         dict_TELO_count["Nucleus no. " + str(i)] = len((filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]]))
     
-    TTAF = {}
-    TTAF_len = {}
-    HTAF = {}
-    n_TAF = {}
-    TAF_TELO = []
-    TAF_H2AX = []
-    TELO_length = []
-    n_TAF_TELO = []
+    TTAF, TTAF_len, HTAF, n_TAF = {},{},{},{}
+    TAF_TELO, TAF_H2AX, TELO_length, n_TAF_TELO = [],[],[],[]
     TAF_positive_nuclei = []
     num = 0
     #colocalisation of H2AX and TELO
@@ -359,7 +307,12 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     TAF_percent_positive.append(len(TAF_positive_nuclei)/len(TTAF)*100)
     TAF_percent_positive.append(len(TAF_positive_nuclei))
     TAF_percent_positive.append(len(TTAF))
-    return TTAF
+    if identifier == '1':
+        return TTAF
+    elif identifier == '2':
+        return n_TAF, TAF_percent_positive
+    else:
+        print('Set identifier')
     
 # =============================================================================
 #     dffoci = pd.DataFrame.from_dict(dict_H2AX_count, orient='index', columns=['H2A.X count'])
@@ -375,8 +328,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
 # =============================================================================
     
 def sortby_treatment(dataset):
-    obj_list = []
-    index_list = []
+    obj_list, index_list = [],[]
     for index, obj in enumerate(dataset):
         if index == 0:
             pass
@@ -391,8 +343,7 @@ def sortby_treatment(dataset):
     return obj_list
 
 def treatment_index(dataset):
-    obj_list = []
-    index_list = []
+    obj_list, index_list = [],[]
     for index, obj in enumerate(dataset):
         if index == 0:
             pass
@@ -425,21 +376,39 @@ dataset_obj = sortby_treatment(dataset_DAPI)
 dataset_indices = list(zip(treatment_index(dataset_DAPI),treatment_index(dataset_H2AX),treatment_index(dataset_TELO)))
 image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),retrieve_index(x_TELO)))
     
-treatments = {}
-all_images = {}
+treatments_TTAF, treatments_pos = {}, {}
+all_images_TTAF, all_images_pos = {}, {}
 for n, obj in enumerate(dataset_indices):
     for m, obj_2 in enumerate(image_indices):
         if n > 0 and n <= len(dataset_indices):
-            if image_indices[m-1][0] <= dataset_indices[n-1][0] and image_indices[n][0] <= dataset_indices[n][0]:
+            if image_indices[m-1][0] <= dataset_indices[n-1][0] and image_indices[m][0] <= dataset_indices[n][0]:
                 Image_num = "Image_" + str(m)
-                all_images[Image_num] = full_analysis(image_indices[n-1][0],image_indices[n][0],
+                all_images_TTAF[Image_num] = full_analysis(image_indices[n-1][0],image_indices[n][0],
                                      image_indices[n-1][1],image_indices[n][1],
-                                     image_indices[n-1][2],image_indices[n][2])
-            treatments[dataset_obj[n-1]] = all_images
-            all_images.clear()
+                                     image_indices[n-1][2],image_indices[n][2],"1")
+                all_images_pos[Image_num] = full_analysis(image_indices[n-1][0],image_indices[n][0],
+                                     image_indices[n-1][1],image_indices[n][1],
+                                     image_indices[n-1][2],image_indices[n][2],"2")
+                print(image_indices[n-1][0],image_indices[n][0],
+                                     image_indices[n-1][1],image_indices[n][1],
+                                     image_indices[n-1][2],image_indices[n][2],"1")
+        treatments_TTAF[dataset_obj[n-1]] = all_images_TTAF
+        #treatments_TTAF[dataset_obj[n-1]] = all_images_TTAF is presenting the correct data structure but not correct data sets,
+        #problem is inherent in the all_images_TAF part, not to treatments_TTAF
+        #possible that all values going into full_analysis are the same each run
+        #eg every nucleus 11 is showing 162.278, 1571.8, 16.8 regardless of image
 
-dftreatments = pd.DataFrame.from_dict(treatments, orient='index')
+dftreatments = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
+                                    for i in treatments_TTAF.keys()
+                                    for j in treatments_TTAF[i].keys()},
+                                    orient='index')
+dfTTAF = pd.DataFrame.from_dict(all_images_TTAF, orient='index')
+dftreatments_pos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
+                                    for i in treatments_pos.keys()
+                                    for j in treatments_pos[i].keys()},
+                                    orient='index')
 dftreatments.to_csv(output_file, index=True)
+dfTTAF.to_csv(output_file_2, index=True)
 
 # =============================================================================
 # for n, obj in enumerate(image_indices):
