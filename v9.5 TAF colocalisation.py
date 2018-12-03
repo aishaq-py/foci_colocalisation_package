@@ -376,27 +376,53 @@ dataset_obj = sortby_treatment(dataset_DAPI)
 dataset_indices = list(zip(treatment_index(dataset_DAPI),treatment_index(dataset_H2AX),treatment_index(dataset_TELO)))
 image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),retrieve_index(x_TELO)))
     
-treatments_TTAF, treatments_pos = {}, {}
-all_images_TTAF, all_images_pos = {}, {}
-for n, obj in enumerate(dataset_indices):
-    for m, obj_2 in enumerate(image_indices):
-        if n > 0 and n <= len(dataset_indices):
-            if image_indices[m-1][0] <= dataset_indices[n-1][0] and image_indices[m][0] <= dataset_indices[n][0]:
-                Image_num = "Image_" + str(m)
-                all_images_TTAF[Image_num] = full_analysis(image_indices[n-1][0],image_indices[n][0],
-                                     image_indices[n-1][1],image_indices[n][1],
-                                     image_indices[n-1][2],image_indices[n][2],"1")
-                all_images_pos[Image_num] = full_analysis(image_indices[n-1][0],image_indices[n][0],
-                                     image_indices[n-1][1],image_indices[n][1],
-                                     image_indices[n-1][2],image_indices[n][2],"2")
-                print(image_indices[n-1][0],image_indices[n][0],
-                                     image_indices[n-1][1],image_indices[n][1],
-                                     image_indices[n-1][2],image_indices[n][2],"1")
-        treatments_TTAF[dataset_obj[n-1]] = all_images_TTAF
+# =============================================================================
+# treatments_TTAF, treatments_pos = {}, {}
+# for n, obj in enumerate(dataset_indices):
+#     all_images_TTAF, all_images_pos = {}, {}
+#     for m, obj_2 in enumerate(image_indices):
+#         if m > 0 and n <= len(dataset_indices):
+#             if ((image_indices[m-1][0] >= dataset_indices[n-1][0]) and (image_indices[m][0] <= dataset_indices[n][0])):
+#                 Image_num = "Image_" + str(m)
+#                 all_images_TTAF.update({Image_num : full_analysis(image_indices[m-1][0],image_indices[m][0],
+#                                      image_indices[m-1][1],image_indices[m][1],
+#                                      image_indices[m-1][2],image_indices[m][2],"1")})
+#                 all_images_pos.update({Image_num : full_analysis(image_indices[m-1][0],image_indices[m][0],
+#                                      image_indices[m-1][1],image_indices[m][1],
+#                                      image_indices[m-1][2],image_indices[m][2],"2")})
+#                 print(image_indices[m-1][0],image_indices[m][0],
+#                                      image_indices[m-1][1],image_indices[m][1],
+#                                      image_indices[m-1][2],image_indices[m][2],"1")
+#                 print(dataset_indices[n-1][1],dataset_indices[n][1])
+#                 treatments_TTAF[dataset_obj[n-1]] = all_images_TTAF
+# =============================================================================
         #treatments_TTAF[dataset_obj[n-1]] = all_images_TTAF is presenting the correct data structure but not correct data sets,
         #problem is inherent in the all_images_TAF part, not to treatments_TTAF
         #possible that all values going into full_analysis are the same each run
         #eg every nucleus 11 is showing 162.278, 1571.8, 16.8 regardless of image
+        
+treatments_TTAF, treatments_pos = {}, {}
+for n, obj in enumerate(dataset_indices):
+    all_images_TTAF, all_images_pos = {}, {}
+    for m, obj_2 in enumerate(image_indices):
+        if m > 0 and n <= len(dataset_indices):
+            if ((image_indices[m-1][0] >= dataset_indices[n-1][0]) and (image_indices[m][0] <= dataset_indices[n][0])):
+                Image_num = "Image_" + str(m)
+                all_images_TTAF[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
+                                     image_indices[m-1][1],image_indices[m][1],
+                                     image_indices[m-1][2],image_indices[m][2],"1")
+                all_images_pos[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
+                                     image_indices[m-1][1],image_indices[m][1],
+                                     image_indices[m-1][2],image_indices[m][2],"2")
+# =============================================================================
+#                 print(image_indices[m-1][0],image_indices[m][0],
+#                                      image_indices[m-1][1],image_indices[m][1],
+#                                      image_indices[m-1][2],image_indices[m][2],"2")
+#                 print(dataset_indices[n-1][1],dataset_indices[n][1])
+# =============================================================================
+                treatments_TTAF.update({dataset_obj[n-1] : all_images_TTAF[Image_num]})
+                treatments_pos.update({dataset_obj[n-1] : all_images_pos})
+        
 
 dftreatments = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
                                     for i in treatments_TTAF.keys()
