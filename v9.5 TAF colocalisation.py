@@ -9,7 +9,7 @@ print('Pandas Version ' + pd.__version__)
 print('Np Version ' + np.__version__)
 
 
-root = 'D:\\C drive backups and transfers\\Documents\\Ed TAF\\20181120 test 2\\' #remember to use double backslash or single forward slash (is a requirement for python convention)
+root = 'C:\\Users\\Ishaq\\Documents\\All spreadsheets\\Ed\\' #remember to use double backslash or single forward slash (is a requirement for python convention)
 input_file_H2AX = root + 'All_H2AX.xlsx'
 input_file_TELO = root + 'All_TELO.xlsx'
 input_file_DAPI = root + 'All_DAPI.xlsx'
@@ -271,7 +271,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
     
     TTAF, TTAF_len, HTAF, n_TAF = {},{},{},{}
     TAF_TELO, TAF_H2AX, TELO_length, n_TAF_TELO = [],[],[],[]
-    TAF_positive_nuclei = []
+    TAF_positive_nuclei, TAF_percent_positive = [],[]
     num = 0
     #colocalisation of H2AX and TELO
     z_stacks_per_TAF = float(TAF_size_threshold) / float(z_size)
@@ -302,8 +302,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
         else:
             TAF_positive_nuclei.append("1")
         #print("Runtime = %s" % (end - start))
-    
-    TAF_percent_positive = []
+        
     TAF_percent_positive.append(len(TAF_positive_nuclei)/len(TTAF)*100)
     TAF_percent_positive.append(len(TAF_positive_nuclei))
     TAF_percent_positive.append(len(TTAF))
@@ -336,7 +335,7 @@ def sortby_treatment(dataset):
             pass
         elif obj not in obj_list:
             obj_list.append(obj)
-            index_list.append(max(0,index-2))
+            index_list.append(max(1,index-2))
         elif index+1 == len(dataset):
             index_list.append(index)
             break
@@ -351,7 +350,7 @@ def treatment_index(dataset):
             pass
         elif obj not in obj_list:
             obj_list.append(obj)
-            index_list.append(max(0,index-2))
+            index_list.append(max(1,index-2))
         elif index+1 == len(dataset):
             index_list.append(index)
             break
@@ -361,7 +360,7 @@ def retrieve_index(df):
     index_list = []
     for index, obj in enumerate(df):
         if index == 0:
-            index_list.append(0)
+            index_list.append(1)
         elif obj == x_H2AX[0]:
             index_list.append(index)
         elif index+1 == len(df):
@@ -406,22 +405,28 @@ for n, obj in enumerate(dataset_indices):
     all_images_TTAF, all_images_pos = {}, {}
     for m, obj_2 in enumerate(image_indices):
         if m > 0 and n <= len(dataset_indices):
-            if ((image_indices[m-1][0] >= dataset_indices[n-1][0]) and (image_indices[m][0] <= dataset_indices[n][0])):
+            print(image_indices[m-1][0],image_indices[m][0],
+                  image_indices[m-1][1],image_indices[m][1],
+                  image_indices[m-1][2],image_indices[m][2],"2")
+            print(dataset_indices[n-1][0],dataset_indices[n][0])
+            if ((image_indices[m-1][0] >= (dataset_indices[n-1][0])) and (image_indices[m][0] <= (dataset_indices[n][0])+1)):
                 Image_num = "Image_" + str(m)
-                all_images_TTAF[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
-                                     image_indices[m-1][1],image_indices[m][1],
-                                     image_indices[m-1][2],image_indices[m][2],"1")
-                all_images_pos[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
-                                     image_indices[m-1][1],image_indices[m][1],
-                                     image_indices[m-1][2],image_indices[m][2],"2")
 # =============================================================================
-#                 print(image_indices[m-1][0],image_indices[m][0],
+#                 all_images_TTAF[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
+#                                      image_indices[m-1][1],image_indices[m][1],
+#                                      image_indices[m-1][2],image_indices[m][2],"1")
+#                 all_images_pos[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
 #                                      image_indices[m-1][1],image_indices[m][1],
 #                                      image_indices[m-1][2],image_indices[m][2],"2")
-#                 print(dataset_indices[n-1][1],dataset_indices[n][1])
 # =============================================================================
-                treatments_TTAF.update({dataset_obj[n-1] : all_images_TTAF[Image_num]})
+                print("True")
+                treatments_TTAF.update({dataset_obj[n-1] : all_images_TTAF})
                 treatments_pos.update({dataset_obj[n-1] : all_images_pos})
+            else:
+                print("False")
+                #there should be 4 images per project00x
+                #currently getting 3, and getting same values for all of them
+                # One - skipping over iterations 3 and 7 because they are 1 larger than the dataset_index
         
 
 dftreatments = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
