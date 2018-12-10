@@ -129,6 +129,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
     xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end = ([] for i in range(3))
     totaled_TELO_count, TELO_count, TELO_volume = ([] for i in range(3))
     ROI_end_TELO, IMG_no_TELO, values = ([] for i in range(3))
+    
     for point in all_DAPI[index_1:index_2]:
         if point[0] == all_DAPI[0][0]: #numbers the images
             x_dim_DAPI.append('Position X')
@@ -140,10 +141,11 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
             y_dim_DAPI.append(point[1] + point[4]) #y_dim_calc
             z_dim_DAPI.append(float(1)) #z_dim_calc
     nuclear_count.append(len(x_dim_DAPI))
-    #nuclear_count.remove(0)
-    start_end_vectors_DAPI_merged = list(zip(x_DAPI[index_1:index_2], y_DAPI[index_1:index_2], 
+    nuclear_count.remove(nuclear_count[0])
+    all_DAPI = list(zip(x_DAPI[index_1:index_2], y_DAPI[index_1:index_2], 
                                              z_DAPI[index_1:index_2], x_dim_DAPI, 
                                              y_dim_DAPI, z_dim_DAPI)) #one less list level to iterate
+    all_DAPI.remove(all_DAPI[0])
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     #px = pixel size
@@ -177,6 +179,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
                         depth_H2AX[index_3:index_4], xmicron_H2AX, ymicron_H2AX, zmicron_H2AX, 
                         sxmicron_H2AX, symicron_H2AX, szmicron_H2AX, xmicron_H2AX_end, 
                         ymicron_H2AX_end, zmicron_H2AX_end))
+    all_H2AX.remove(all_H2AX[0])
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     for vector in all_TELO[index_5:index_6]:
@@ -221,14 +224,15 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
                         sxmicron_TELO, symicron_TELO, szmicron_TELO, 
                         xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end,
                         rellen_TELO, maxint_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
+    all_TELO.remove(all_TELO[0])
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     num = 0
-    for DAPI_vectors in start_end_vectors_DAPI_merged:
+    for DAPI_vectors in all_DAPI:
         for point in all_H2AX:
             if point[0] == all_H2AX[0][0]:
                 totaled_H2AX_count.append(len(filt_H2AX))
-            elif DAPI_vectors[0] == start_end_vectors_DAPI_merged[0][0]:
+            elif DAPI_vectors[0] == all_DAPI[0][0]:
                 pass #dapi_vector0 < point0 < dapi_vector3
             elif nuclear_filter(point,point[0],point[1],DAPI_vectors[0],DAPI_vectors[3],DAPI_vectors[1],DAPI_vectors[4]) == True:
                 if (not H2AX_size_threshold == 0) and (point[9]       #filters by H2AX foci size
@@ -239,13 +243,12 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
                     filt_H2AX.append(point)
             else:
                 pass
-    #totaled_H2AX_count.remove(0)
         
-    for DAPI_vectors in start_end_vectors_DAPI_merged:
+    for DAPI_vectors in all_DAPI:
         for point in all_TELO:
             if point[0] == all_TELO[0][0]:
                 totaled_TELO_count.append(len(filt_TELO))
-            elif DAPI_vectors[0] == start_end_vectors_DAPI_merged[0][0]:
+            elif DAPI_vectors[0] == all_DAPI[0][0]:
                 pass 
             elif nuclear_filter(point,point[0],point[1],DAPI_vectors[0],DAPI_vectors[3],DAPI_vectors[1],DAPI_vectors[4]) == True:
                 if (not TELO_size_threshold == 0) and (point[9]       #filters by H2AX foci size
@@ -256,11 +259,10 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
                     filt_TELO.append(point)
             else:
                 pass
-    #totaled_TELO_count.remove(0)
 
     dict_nuclei_H2AX, dict_nuclei_TELO = {},{}
     dict_H2AX_count, dict_TELO_count = {},{}
-    for i in range(len(start_end_vectors_DAPI_merged)-1):
+    for i in range(len(all_DAPI)-1):
         dict_nuclei_H2AX["Nucleus no. " + str(i)] = (filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]])
         dict_nuclei_TELO["Nucleus no. " + str(i)] = (filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]])
         dict_H2AX_count["Nucleus no. " + str(i)] = len((filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]]))
@@ -298,9 +300,8 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
             pass
         else:
             TAF_positive_nuclei.append("1")
-        #print("Runtime = %s" % (end - start))
         
-    TAF_percent_positive.append(len(TAF_positive_nuclei)/len(TTAF)*100)
+    TAF_percent_positive.append(len(TAF_positive_nuclei)/len(TTAF)*100) #percentage, count positive, count total
     TAF_percent_positive.append(len(TAF_positive_nuclei))
     TAF_percent_positive.append(len(TTAF))
     if identifier == '1':
@@ -332,7 +333,7 @@ def sortby_treatment(dataset):
             pass
         elif obj not in obj_list:
             obj_list.append(obj)
-            index_list.append(max(1,index-2))
+            index_list.append(max(0,index-2))
         elif index+1 == len(dataset):
             index_list.append(index)
             break
@@ -347,7 +348,7 @@ def treatment_index(dataset):
             pass
         elif obj not in obj_list:
             obj_list.append(obj)
-            index_list.append(max(1,index-2))
+            index_list.append(max(0,index-2))
         elif index+1 == len(dataset):
             index_list.append(index)
             break
@@ -357,7 +358,7 @@ def retrieve_index(df):
     index_list = []
     for index, obj in enumerate(df):
         if index == 0:
-            index_list.append(1)
+            index_list.append(0)
         elif obj == x_H2AX[0]:
             index_list.append(index)
         elif index+1 == len(df):
@@ -385,16 +386,10 @@ for n, obj in enumerate(dataset_indices):
                 all_images_pos[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
                                      image_indices[m-1][1],image_indices[m][1],
                                      image_indices[m-1][2],image_indices[m][2],"2")
-                print(image_indices[m-1][0],image_indices[m][0],
-                                     image_indices[m-1][1],image_indices[m][1],
-                                     image_indices[m-1][2],image_indices[m][2],"1")
                 treatments_TTAF.update({dataset_obj[n-1] : all_images_TTAF})
                 treatments_pos.update({dataset_obj[n-1] : all_images_pos})
             else:
-                print("False")        
-            
-            #images 2 3 4 are giving exact same nuclei count,
-            # but image 1 for project001 is giving 1 less nucleus
+                pass      
 
 dftreatments = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
                                     for i in treatments_TTAF.keys()
