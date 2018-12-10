@@ -53,24 +53,6 @@ dataset_DAPI = np.array(df_DAPI[0])
 x_DAPI,y_DAPI, z_DAPI = np.array(df_DAPI[3]), np.array(df_DAPI[4]), np.array(df_DAPI[5])
 width_DAPI, height_DAPI, depth_DAPI = np.array(df_DAPI[6]), np.array(df_DAPI[7]), np.array(df_DAPI[8])
 
-x_dim_DAPI, y_dim_DAPI, z_dim_DAPI, ROI_end_DAPI = ([] for i in range(4))
-nuclear_count = []
-x_dim_H2AX, y_dim_H2AX, z_dim_H2AX = ([] for i in range(3))
-xmicron_H2AX, ymicron_H2AX, zmicron_H2AX = ([] for i in range(3))
-sxmicron_H2AX, symicron_H2AX, szmicron_H2AX = ([] for i in range(3)) #size
-area_H2AX, vol_H2AX, filt_H2AX = ([] for i in range(3))
-xmicron_H2AX_end, ymicron_H2AX_end, zmicron_H2AX_end = ([] for i in range(3))
-totaled_H2AX_count, H2AX_count, H2AX_volume = ([] for i in range(3))
-ROI_end_H2AX, IMG_no_H2AX = [],[]
-x_dim_TELO, y_dim_TELO, z_dim_TELO = ([] for i in range(3))
-xmicron_TELO, ymicron_TELO, zmicron_TELO = ([] for i in range(3))
-area_TELO, vol_TELO, filt_TELO, rellen_TELO = ([] for i in range(4))
-sxmicron_TELO, symicron_TELO, szmicron_TELO = ([] for i in range(3))
-xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end = ([] for i in range(3))
-totaled_TELO_count, TELO_count, TELO_volume = ([] for i in range(3))
-ROI_end_TELO, IMG_no_TELO, values = ([] for i in range(3))
-TAF_count, totaled_TAF_count = [],[]
-
 def floatify(val):
     if type(val) == int:
         return np.float32(val)
@@ -132,6 +114,21 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
     all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX, depth_H2AX))
     all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, depth_TELO, avint_TELO))
     all_DAPI = list(zip(x_DAPI, y_DAPI, z_DAPI, width_DAPI, height_DAPI, depth_DAPI))
+    x_dim_DAPI, y_dim_DAPI, z_dim_DAPI, ROI_end_DAPI = ([] for i in range(4))
+    nuclear_count = []
+    x_dim_H2AX, y_dim_H2AX, z_dim_H2AX = ([] for i in range(3))
+    xmicron_H2AX, ymicron_H2AX, zmicron_H2AX = ([] for i in range(3))
+    sxmicron_H2AX, symicron_H2AX, szmicron_H2AX = ([] for i in range(3)) #size
+    area_H2AX, vol_H2AX, filt_H2AX = ([] for i in range(3))
+    xmicron_H2AX_end, ymicron_H2AX_end, zmicron_H2AX_end = ([] for i in range(3))
+    totaled_H2AX_count, H2AX_count, H2AX_volume = ([] for i in range(3))
+    x_dim_TELO, y_dim_TELO, z_dim_TELO = ([] for i in range(3))
+    xmicron_TELO, ymicron_TELO, zmicron_TELO = ([] for i in range(3))
+    area_TELO, vol_TELO, filt_TELO, rellen_TELO = ([] for i in range(4))
+    sxmicron_TELO, symicron_TELO, szmicron_TELO = ([] for i in range(3))
+    xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end = ([] for i in range(3))
+    totaled_TELO_count, TELO_count, TELO_volume = ([] for i in range(3))
+    ROI_end_TELO, IMG_no_TELO, values = ([] for i in range(3))
     for point in all_DAPI[index_1:index_2]:
         if point[0] == all_DAPI[0][0]: #numbers the images
             x_dim_DAPI.append('Position X')
@@ -207,7 +204,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
             xmicron_TELO_end.append(convert_size_micron(px,vector[0],vector[3]))
             ymicron_TELO_end.append(convert_size_micron(px,vector[1],vector[4]))
             zmicron_TELO_end.append(convert_size_micron(px,vector[2],vector[5]))
-    #all_TELO = list(zip(x_TELO[index_5:index_6], y_TELO[index_5:index_6], z_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
+    all_TELO = list(zip(x_TELO[index_5:index_6], y_TELO[index_5:index_6], z_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
     
     maxsize_TELO = max(all_TELO[17])
     def telo_rellen(avint_TELO): #relative telo len in spreadsheet
@@ -374,60 +371,30 @@ def retrieve_index(df):
 dataset_obj = sortby_treatment(dataset_DAPI)
 dataset_indices = list(zip(treatment_index(dataset_DAPI),treatment_index(dataset_H2AX),treatment_index(dataset_TELO)))
 image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),retrieve_index(x_TELO)))
-    
-# =============================================================================
-# treatments_TTAF, treatments_pos = {}, {}
-# for n, obj in enumerate(dataset_indices):
-#     all_images_TTAF, all_images_pos = {}, {}
-#     for m, obj_2 in enumerate(image_indices):
-#         if m > 0 and n <= len(dataset_indices):
-#             if ((image_indices[m-1][0] >= dataset_indices[n-1][0]) and (image_indices[m][0] <= dataset_indices[n][0])):
-#                 Image_num = "Image_" + str(m)
-#                 all_images_TTAF.update({Image_num : full_analysis(image_indices[m-1][0],image_indices[m][0],
-#                                      image_indices[m-1][1],image_indices[m][1],
-#                                      image_indices[m-1][2],image_indices[m][2],"1")})
-#                 all_images_pos.update({Image_num : full_analysis(image_indices[m-1][0],image_indices[m][0],
-#                                      image_indices[m-1][1],image_indices[m][1],
-#                                      image_indices[m-1][2],image_indices[m][2],"2")})
-#                 print(image_indices[m-1][0],image_indices[m][0],
-#                                      image_indices[m-1][1],image_indices[m][1],
-#                                      image_indices[m-1][2],image_indices[m][2],"1")
-#                 print(dataset_indices[n-1][1],dataset_indices[n][1])
-#                 treatments_TTAF[dataset_obj[n-1]] = all_images_TTAF
-# =============================================================================
-        #treatments_TTAF[dataset_obj[n-1]] = all_images_TTAF is presenting the correct data structure but not correct data sets,
-        #problem is inherent in the all_images_TAF part, not to treatments_TTAF
-        #possible that all values going into full_analysis are the same each run
-        #eg every nucleus 11 is showing 162.278, 1571.8, 16.8 regardless of image
         
 treatments_TTAF, treatments_pos = {}, {}
 for n, obj in enumerate(dataset_indices):
     all_images_TTAF, all_images_pos = {}, {}
     for m, obj_2 in enumerate(image_indices):
         if m > 0 and n <= len(dataset_indices):
-            print(image_indices[m-1][0],image_indices[m][0],
-                  image_indices[m-1][1],image_indices[m][1],
-                  image_indices[m-1][2],image_indices[m][2],"2")
-            print(dataset_indices[n-1][0],dataset_indices[n][0])
             if ((image_indices[m-1][0] >= (dataset_indices[n-1][0])) and (image_indices[m][0] <= (dataset_indices[n][0])+1)):
                 Image_num = "Image_" + str(m)
-# =============================================================================
-#                 all_images_TTAF[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
-#                                      image_indices[m-1][1],image_indices[m][1],
-#                                      image_indices[m-1][2],image_indices[m][2],"1")
-#                 all_images_pos[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
-#                                      image_indices[m-1][1],image_indices[m][1],
-#                                      image_indices[m-1][2],image_indices[m][2],"2")
-# =============================================================================
-                print("True")
+                all_images_TTAF[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
+                                     image_indices[m-1][1],image_indices[m][1],
+                                     image_indices[m-1][2],image_indices[m][2],"1")
+                all_images_pos[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
+                                     image_indices[m-1][1],image_indices[m][1],
+                                     image_indices[m-1][2],image_indices[m][2],"2")
+                print(image_indices[m-1][0],image_indices[m][0],
+                                     image_indices[m-1][1],image_indices[m][1],
+                                     image_indices[m-1][2],image_indices[m][2],"1")
                 treatments_TTAF.update({dataset_obj[n-1] : all_images_TTAF})
                 treatments_pos.update({dataset_obj[n-1] : all_images_pos})
             else:
-                print("False")
-                #there should be 4 images per project00x
-                #currently getting 3, and getting same values for all of them
-                # One - skipping over iterations 3 and 7 because they are 1 larger than the dataset_index
-        
+                print("False")        
+            
+            #images 2 3 4 are giving exact same nuclei count,
+            # but image 1 for project001 is giving 1 less nucleus
 
 dftreatments = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
                                     for i in treatments_TTAF.keys()
