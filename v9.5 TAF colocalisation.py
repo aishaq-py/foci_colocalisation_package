@@ -305,7 +305,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
     TAF_percent_positive.append(len(TAF_positive_nuclei))
     TAF_percent_positive.append(len(TTAF))
     if identifier == '1':
-        return TTAF
+        return n_TAF, TTAF, TTAF_len
     elif identifier == '2':
         return n_TAF, TAF_percent_positive
     else:
@@ -391,10 +391,13 @@ for n, obj in enumerate(dataset_indices):
             else:
                 pass      
 
-dftreatments = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
-                                    for i in treatments_TTAF.keys()
-                                    for j in treatments_TTAF[i].keys()},
-                                    orient='index')
+# =============================================================================
+# dftreatments = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
+#                                     for i in treatments_TTAF.keys()
+#                                     for j in treatments_TTAF[i].keys()},
+#                                     orient='index')
+# =============================================================================
+dftreatments = pd.DataFrame.from_dict()
 dfTTAF = pd.DataFrame.from_dict(all_images_TTAF, orient='index')
 dftreatments_pos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
                                     for i in treatments_pos.keys()
