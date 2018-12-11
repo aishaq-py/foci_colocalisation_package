@@ -3,19 +3,19 @@ import numpy as np
 import sys
 from numba import jit
 import time
+from datetime import date
+import statistics as st
+from math import sqrt
 
 print('Python Version ' + sys.version)
 print('Pandas Version ' + pd.__version__)
 print('Np Version ' + np.__version__)
 
-
 root = 'C:\\Users\\Ishaq\\Documents\\All spreadsheets\\Ed\\' #remember to use double backslash or single forward slash (is a requirement for python convention)
 input_file_H2AX = root + 'All_H2AX.xlsx'
 input_file_TELO = root + 'All_TELO.xlsx'
 input_file_DAPI = root + 'All_DAPI.xlsx'
-output_file = root + 'All_TTAF_after_script.csv'
-output_file_2 = root + 'All_HTAF_after_script.csv'
-#output_file_3 = root + 'All_Telo_len_after_script.csv'
+output_file = root + str(date.today()) + '_All_TTAF_after_script.xlsx'
 
 #parameters for analysis - change to absolute values if needed as such
 print("\n Input all requested values as decimal numbers (floats).")
@@ -167,18 +167,20 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             ymicron_H2AX.append(convert_micron(px,vector[1]))
             zmicron_H2AX.append(convert_micron(px,vector[2]))
             area_H2AX.append(convert_size_micron(px,vector[0],vector[1]))
-            vol_H2AX.append((floatify(vector[0])*px)*(floatify(vector[1])*px)*(floatify(vector[2])*z_size))
+            vol_H2AX.append((floatify(vector[0])*px)*(floatify(vector[1])*px)*
+                            (floatify(vector[2])*z_size))
             sxmicron_H2AX.append(convert_micron(px,vector[3]))
             symicron_H2AX.append(convert_micron(px,vector[4]))
             szmicron_H2AX.append(convert_micron(px,vector[5]))
             xmicron_H2AX_end.append(convert_size_micron(px,vector[0],vector[3]))
             ymicron_H2AX_end.append(convert_size_micron(px,vector[1],vector[4]))
             zmicron_H2AX_end.append(convert_size_micron(px,vector[2],vector[5]))
-    all_H2AX = list(zip(x_H2AX[index_3:index_4], y_H2AX[index_3:index_4], z_H2AX[index_3:index_4], 
-                        width_H2AX[index_3:index_4], height_H2AX[index_3:index_4], 
-                        depth_H2AX[index_3:index_4], xmicron_H2AX, ymicron_H2AX, zmicron_H2AX, 
-                        sxmicron_H2AX, symicron_H2AX, szmicron_H2AX, xmicron_H2AX_end, 
-                        ymicron_H2AX_end, zmicron_H2AX_end))
+    all_H2AX = list(zip(x_H2AX[index_3:index_4],y_H2AX[index_3:index_4],
+                        z_H2AX[index_3:index_4],width_H2AX[index_3:index_4], 
+                        height_H2AX[index_3:index_4],depth_H2AX[index_3:index_4], 
+                        xmicron_H2AX, ymicron_H2AX, zmicron_H2AX, 
+                        sxmicron_H2AX, symicron_H2AX, szmicron_H2AX, 
+                        xmicron_H2AX_end,ymicron_H2AX_end, zmicron_H2AX_end))
     all_H2AX.remove(all_H2AX[0])
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
@@ -200,14 +202,16 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             ymicron_TELO.append(convert_micron(px,vector[1]))
             zmicron_TELO.append(convert_micron(px,vector[2]))
             area_TELO.append(convert_size_micron(px,vector[0],vector[1]))
-            vol_TELO.append((floatify(vector[0])*px)*(floatify(vector[1])*px)*(floatify(vector[2])*z_size))
+            vol_TELO.append((floatify(vector[0])*px)*(floatify(vector[1])*px)*
+                            (floatify(vector[2])*z_size))
             sxmicron_TELO.append(convert_micron(px,vector[3]))
             symicron_TELO.append(convert_micron(px,vector[4]))
             szmicron_TELO.append(floatify(vector[5])*z_size)
             xmicron_TELO_end.append(convert_size_micron(px,vector[0],vector[3]))
             ymicron_TELO_end.append(convert_size_micron(px,vector[1],vector[4]))
             zmicron_TELO_end.append(convert_size_micron(px,vector[2],vector[5]))
-    all_TELO = list(zip(x_TELO[index_5:index_6], y_TELO[index_5:index_6], z_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
+    all_TELO = list(zip(x_TELO[index_5:index_6], y_TELO[index_5:index_6], 
+                        z_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
     
     maxsize_TELO = max(all_TELO[17])
     def telo_rellen(avint_TELO): #relative telo len in spreadsheet
@@ -218,12 +222,14 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             rellen_TELO.append("Relative Telo Length")
         else:
             rellen_TELO.append(telo_rellen(vector[3]))
-    all_TELO = list(zip(x_TELO[index_5:index_6], y_TELO[index_5:index_6], z_TELO[index_5:index_6], 
-                        width_TELO[index_5:index_6], height_TELO[index_5:index_6], 
-                        depth_TELO[index_5:index_6], xmicron_TELO, ymicron_TELO, zmicron_TELO, 
-                        sxmicron_TELO, symicron_TELO, szmicron_TELO, 
-                        xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end,
-                        rellen_TELO, maxint_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
+    all_TELO = list(zip(x_TELO[index_5:index_6],y_TELO[index_5:index_6],
+                        z_TELO[index_5:index_6],width_TELO[index_5:index_6],
+                        height_TELO[index_5:index_6],depth_TELO[index_5:index_6],
+                        xmicron_TELO, ymicron_TELO,zmicron_TELO, 
+                        sxmicron_TELO,symicron_TELO,szmicron_TELO, 
+                        xmicron_TELO_end,ymicron_TELO_end,zmicron_TELO_end,
+                        rellen_TELO,maxint_TELO[index_5:index_6],
+                        avint_TELO[index_5:index_6]))
     all_TELO.remove(all_TELO[0])
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
@@ -234,7 +240,8 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                 totaled_H2AX_count.append(len(filt_H2AX))
             elif DAPI_vectors[0] == all_DAPI[0][0]:
                 pass #dapi_vector0 < point0 < dapi_vector3
-            elif nuclear_filter(point,point[0],point[1],DAPI_vectors[0],DAPI_vectors[3],DAPI_vectors[1],DAPI_vectors[4]) == True:
+            elif (nuclear_filter(point,point[0],point[1],DAPI_vectors[0],
+                    DAPI_vectors[3],DAPI_vectors[1],DAPI_vectors[4]) == True):
                 if (not H2AX_size_threshold == 0) and (point[9]       #filters by H2AX foci size
                      or point[10] or point[11] >= H2AX_size_threshold):
                     pass
@@ -250,7 +257,8 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                 totaled_TELO_count.append(len(filt_TELO))
             elif DAPI_vectors[0] == all_DAPI[0][0]:
                 pass 
-            elif nuclear_filter(point,point[0],point[1],DAPI_vectors[0],DAPI_vectors[3],DAPI_vectors[1],DAPI_vectors[4]) == True:
+            elif (nuclear_filter(point,point[0],point[1],DAPI_vectors[0],
+                    DAPI_vectors[3],DAPI_vectors[1],DAPI_vectors[4]) == True):
                 if (not TELO_size_threshold == 0) and (point[9]       #filters by H2AX foci size
                      or point[10] or point[11] >= TELO_size_threshold):
                     pass
@@ -274,14 +282,16 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     num = 0
     #colocalisation of H2AX and TELO
     z_stacks_per_TAF = float(TAF_size_threshold) / float(z_size)
-    for (Tkey, Tval), (Hkey, Hval) in zip(dict_nuclei_TELO.items(), dict_nuclei_H2AX.items()):
+    for (Tkey, Tval), (Hkey, Hval) in zip(dict_nuclei_TELO.items(),dict_nuclei_H2AX.items()):
         if Hkey == Tkey:
             for Tval2 in Tval:
                 for Hval2 in Hval:
-                    coloc = colocalisation(Tval2[6],Tval2[7],Tval2[12],Tval2[13],Hval2[6],Hval2[7],Hval2[12],Hval2[13])
+                    coloc = colocalisation(Tval2[6],Tval2[7],Tval2[12],
+                            Tval2[13],Hval2[6],Hval2[7],Hval2[12],Hval2[13])
                     if positive(Hval2[2] - Tval2[2]) > float(z_stacks_per_TAF):
                         pass
-                    elif coloc > float(bottom_overlap_ratio) and coloc < float(top_overlap_ratio):
+                    elif (coloc > float(bottom_overlap_ratio) and 
+                          coloc < float(top_overlap_ratio)):
                         TAF_TELO.append(Tval2[0:3])
                         TELO_length.append(Tval2[15]) #15 is relative telomere length
                         TAF_H2AX.append(Hval2[0:3])
@@ -295,7 +305,8 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         TELO_length.clear()
         TAF_TELO.clear()
         num += 1
-        if (len(TTAF.get(Tkey)) < int(TAF_positive_threshold)) or (len(TTAF.get(Tkey)) > int(upper_TAF_positive_threshold)):
+        if ((len(TTAF.get(Tkey)) < int(TAF_positive_threshold)) or 
+            (len(TTAF.get(Tkey)) > int(upper_TAF_positive_threshold))):
             pass
         else:
             TAF_positive_nuclei.append("1")
@@ -304,19 +315,6 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     TAF_percent_positive.append(len(TAF_positive_nuclei))
     TAF_percent_positive.append(len(TTAF))
     return [TTAF, TELO_len, n_TAF, TAF_percent_positive]
-    
-# =============================================================================
-#     dffoci = pd.DataFrame.from_dict(dict_H2AX_count, orient='index', columns=['H2A.X count'])
-#     dffoci_2 = pd.DataFrame.from_dict(dict_TELO_count, orient='index', columns=['Telomere count'])
-#     dfTTAF = pd.DataFrame.from_dict(TTAF, orient='index')
-#     dfTTAF_len = pd.DataFrame.from_dict(TTAF_len, orient='index')
-#     dfHTAF = pd.DataFrame.from_dict(HTAF, orient='index')
-#     dfnTAF = pd.DataFrame.from_dict(n_TAF, orient='index', columns=['TAF count'])
-#     dfTAFpercent = pd.DataFrame(data = TAF_percent_positive, index=['Percent TAF positive','TAF positive count','Total nuclei count'])
-#     allTdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfTTAF_len,dfTTAF], axis=1, sort=False)
-#     allHdf = pd.concat([dfTAFpercent,dffoci,dffoci_2,dfnTAF,dfHTAF], axis=1, sort=False)
-# 
-# =============================================================================
     
 def sortby_treatment(dataset):
     obj_list, index_list = [],[]
@@ -364,15 +362,18 @@ def retrieve_index(df):
 #have to set separate indices for DAPI, H2AX and TELO since they all have diff lengths
 
 dataset_obj = sortby_treatment(dataset_DAPI)
-dataset_indices = list(zip(treatment_index(dataset_DAPI),treatment_index(dataset_H2AX),treatment_index(dataset_TELO)))
-image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),retrieve_index(x_TELO)))
+dataset_indices = list(zip(treatment_index(dataset_DAPI),
+                  treatment_index(dataset_H2AX),treatment_index(dataset_TELO)))
+image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),
+                         retrieve_index(x_TELO)))
         
 treatments_TTAF,treatments_pos,treatments_nTAF,treatments_Tlen = {},{},{},{}
 for n, obj in enumerate(dataset_indices):
     images_TTAF, images_pos, images_Tlen, images_nTAF = {},{},{},{}
     for m, obj_2 in enumerate(image_indices):
         if m > 0 and n <= len(dataset_indices):
-            if ((image_indices[m-1][0] >= (dataset_indices[n-1][0])) and (image_indices[m][0] <= (dataset_indices[n][0])+1)):
+            if ((image_indices[m-1][0] >= (dataset_indices[n-1][0])) and
+                (image_indices[m][0] <= (dataset_indices[n][0])+1)):
                 Image_num = "Image_" + str(m)
                 analysis = full_analysis(image_indices[m-1][0],image_indices[m][0],
                                      image_indices[m-1][1],image_indices[m][1],
@@ -387,38 +388,56 @@ for n, obj in enumerate(dataset_indices):
                 treatments_nTAF.update({dataset_obj[n-1] : images_nTAF})
                 treatments_Tlen.update({dataset_obj[n-1] : images_Tlen})
             else:
-                pass      
+                pass
 
-# =============================================================================
-# dftreatments = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
-#                                     for i in treatments_TTAF.keys()
-#                                     for j in treatments_TTAF[i].keys()},
-#                                     orient='index')
-# =============================================================================
+mean_pos_treatment = {}
+temp_percent = []
+for n,(treatments,images) in enumerate(treatments_pos.items()):
+    for k,v in images.items():
+        if treatments == dataset_obj[n]:
+            temp_percent.append(v[0])
+    if len(temp_percent) == len(images):
+        temp_percent = [st.mean(temp_percent),st.stdev(temp_percent),
+            (st.stdev(temp_percent)/sqrt(len(images))),len(images)]
+        mean_pos_treatment.update({dataset_obj[n] : temp_percent})
+        temp_percent = []
+            
+# percentage nuclei positive for senescence by treatment
+dfmeanpos = pd.DataFrame.from_dict(mean_pos_treatment,orient='index',
+        columns=['Percent TAF positive','SD','SE', 'n'])
+# percentage of nuclei positive for senescence by images
+dfpos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
+        for i in treatments_pos.keys()
+        for j in treatments_pos[i].keys()},
+        orient='index', columns=['Percent TAF positive',
+                                 'TAF positive count','Total nuclei count'])
+# coordinate of each TAF positive telomere
+dfTTAF = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
+                                    for i in treatments_TTAF.keys()
+                                    for j in treatments_TTAF[i].keys()},
+                                    orient='index')
+# relative length of each TAF positive telomere
+dfTlen = pd.DataFrame.from_dict({(i,j): treatments_Tlen[i][j]
+                                    for i in treatments_Tlen.keys()
+                                    for j in treatments_Tlen[i].keys()},
+                                    orient='index')
+# summarised number of TAF per nucleus
+dfnTAF = pd.DataFrame.from_dict({(i,j): treatments_nTAF[i][j]
+                                    for i in treatments_nTAF.keys()
+                                    for j in treatments_nTAF[i].keys()},
+                                    orient='index')
+df_allpos = pd.concat([dfmeanpos,dfpos], axis=1, sort=False)
 
-# =============================================================================
-# for i, j in enumerate(treatments_TTAF):
-#     dftreatments = pd.DataFrame(treatments_TTAF[dataset_obj[i]].values.tolist(), index=treatments_TTAF.index)
-# =============================================================================
+def dfs_tabs(df_list, sheet_list, file_name):
+    writer = pd.ExcelWriter(file_name,engine='xlsxwriter')   
+    for dataframe, sheet in zip(df_list, sheet_list):
+        dataframe.to_excel(writer, sheet_name=sheet, startrow=0 , startcol=0)   
+    writer.save()
 
-# =============================================================================
-# dftreatments_pos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
-#                                     for i in treatments_pos.keys()
-#                                     for j in treatments_pos[i].keys()},
-#                                     orient='index')
-# =============================================================================
-# =============================================================================
-# dftreatments_pos = pd.DataFrame(treatments_pos)
-# dftreatments.to_csv(output_file, index=True)
-# dftreatments_pos.to_csv(output_file_2, index=True)
-# =============================================================================
+df = [df_allpos,dfTTAF,dfTlen,dfnTAF]
+sheets = ["Percent positive","TAF coordinates","Relative Telo length","n TAF per nucleus"]
 
+dfs_tabs(df,sheets,output_file)
 
-# =============================================================================
-# allTdf.to_csv(output_file, index=True)
-# allHdf.to_csv(output_file_2, index=True)
-# dfTTAF_len.to_csv(output_file_3, index=True)
-# 
-# =============================================================================
 end = time.time()
 print("Runtime = %s" % (end - start))
