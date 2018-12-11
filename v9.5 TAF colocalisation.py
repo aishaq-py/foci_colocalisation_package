@@ -110,7 +110,7 @@ def colocalisation(x1,y1,w1,h1,x2,y2,w2,h2):
     else:
         return False
 
-def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
+def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX, depth_H2AX))
     all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, depth_TELO, avint_TELO))
     all_DAPI = list(zip(x_DAPI, y_DAPI, z_DAPI, width_DAPI, height_DAPI, depth_DAPI))
@@ -268,7 +268,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
         dict_H2AX_count["Nucleus no. " + str(i)] = len((filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]]))
         dict_TELO_count["Nucleus no. " + str(i)] = len((filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]]))
     
-    TTAF, TTAF_len, HTAF, n_TAF = {},{},{},{}
+    TTAF, TELO_len, HTAF, n_TAF = {},{},{},{}
     TAF_TELO, TAF_H2AX, TELO_length, n_TAF_TELO = [],[],[],[]
     TAF_positive_nuclei, TAF_percent_positive = [],[]
     num = 0
@@ -287,13 +287,12 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
                         TAF_H2AX.append(Hval2[0:3])
         n_TAF_TELO.append(len(TAF_TELO))
         TTAF[Tkey] = TAF_TELO[:]
-        TTAF_len[Tkey] = TELO_length[:]
+        TELO_len[Tkey] = TELO_length[:]
         HTAF[Tkey] = TAF_H2AX[:]
         n_TAF[Tkey] = len(TAF_TELO[:])
         TAF_TELO.clear()
         TAF_H2AX.clear()
         TELO_length.clear()
-        #print(TAF_TELO)
         TAF_TELO.clear()
         num += 1
         if (len(TTAF.get(Tkey)) < int(TAF_positive_threshold)) or (len(TTAF.get(Tkey)) > int(upper_TAF_positive_threshold)):
@@ -304,12 +303,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6,identifier):
     TAF_percent_positive.append(len(TAF_positive_nuclei)/len(TTAF)*100) #percentage, count positive, count total
     TAF_percent_positive.append(len(TAF_positive_nuclei))
     TAF_percent_positive.append(len(TTAF))
-    if identifier == '1':
-        return n_TAF, TTAF, TTAF_len
-    elif identifier == '2':
-        return n_TAF, TAF_percent_positive
-    else:
-        print('Set identifier')
+    return [TTAF, TELO_len, n_TAF, TAF_percent_positive]
     
 # =============================================================================
 #     dffoci = pd.DataFrame.from_dict(dict_H2AX_count, orient='index', columns=['H2A.X count'])
@@ -373,21 +367,25 @@ dataset_obj = sortby_treatment(dataset_DAPI)
 dataset_indices = list(zip(treatment_index(dataset_DAPI),treatment_index(dataset_H2AX),treatment_index(dataset_TELO)))
 image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),retrieve_index(x_TELO)))
         
-treatments_TTAF, treatments_pos = {}, {}
+treatments_TTAF,treatments_pos,treatments_nTAF,treatments_Tlen = {},{},{},{}
 for n, obj in enumerate(dataset_indices):
-    all_images_TTAF, all_images_pos = {}, {}
+    images_TTAF, images_pos, images_Tlen, images_nTAF = {},{},{},{}
     for m, obj_2 in enumerate(image_indices):
         if m > 0 and n <= len(dataset_indices):
             if ((image_indices[m-1][0] >= (dataset_indices[n-1][0])) and (image_indices[m][0] <= (dataset_indices[n][0])+1)):
                 Image_num = "Image_" + str(m)
-                all_images_TTAF[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
+                analysis = full_analysis(image_indices[m-1][0],image_indices[m][0],
                                      image_indices[m-1][1],image_indices[m][1],
-                                     image_indices[m-1][2],image_indices[m][2],"1")
-                all_images_pos[Image_num] = full_analysis(image_indices[m-1][0],image_indices[m][0],
-                                     image_indices[m-1][1],image_indices[m][1],
-                                     image_indices[m-1][2],image_indices[m][2],"2")
-                treatments_TTAF.update({dataset_obj[n-1] : all_images_TTAF})
-                treatments_pos.update({dataset_obj[n-1] : all_images_pos})
+                                     image_indices[m-1][2],image_indices[m][2])
+                # output for analysis is a list of dicts
+                images_TTAF[Image_num] = analysis[0]
+                images_Tlen[Image_num] = analysis[1]
+                images_nTAF[Image_num] = analysis[2]
+                images_pos[Image_num] = analysis[3]
+                treatments_TTAF.update({dataset_obj[n-1] : images_TTAF})
+                treatments_pos.update({dataset_obj[n-1] : images_pos})
+                treatments_nTAF.update({dataset_obj[n-1] : images_nTAF})
+                treatments_Tlen.update({dataset_obj[n-1] : images_Tlen})
             else:
                 pass      
 
@@ -397,25 +395,25 @@ for n, obj in enumerate(dataset_indices):
 #                                     for j in treatments_TTAF[i].keys()},
 #                                     orient='index')
 # =============================================================================
-dftreatments = pd.DataFrame.from_dict()
-dfTTAF = pd.DataFrame.from_dict(all_images_TTAF, orient='index')
-dftreatments_pos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
-                                    for i in treatments_pos.keys()
-                                    for j in treatments_pos[i].keys()},
-                                    orient='index')
-dftreatments.to_csv(output_file, index=True)
-dfTTAF.to_csv(output_file_2, index=True)
 
 # =============================================================================
-# for n, obj in enumerate(image_indices):
-#     if n > 0 and n <= len(image_indices):
-#         Image_num = "Image_" + str(n)
-#         all_images[Image_num] = full_analysis(image_indices[n-1][0],image_indices[n][0],
-#                                      image_indices[n-1][1],image_indices[n][1],
-#                                      image_indices[n-1][2],image_indices[n][2])
+# for i, j in enumerate(treatments_TTAF):
+#     dftreatments = pd.DataFrame(treatments_TTAF[dataset_obj[i]].values.tolist(), index=treatments_TTAF.index)
 # =============================================================================
 
-        
+# =============================================================================
+# dftreatments_pos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
+#                                     for i in treatments_pos.keys()
+#                                     for j in treatments_pos[i].keys()},
+#                                     orient='index')
+# =============================================================================
+# =============================================================================
+# dftreatments_pos = pd.DataFrame(treatments_pos)
+# dftreatments.to_csv(output_file, index=True)
+# dftreatments_pos.to_csv(output_file_2, index=True)
+# =============================================================================
+
+
 # =============================================================================
 # allTdf.to_csv(output_file, index=True)
 # allHdf.to_csv(output_file_2, index=True)
