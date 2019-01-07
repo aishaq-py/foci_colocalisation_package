@@ -286,7 +286,7 @@
 </output>
 </variables>
 </block>
-<block ID="559795598" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Results foci per nucleus to save, done!" height="525" keepsResults="true" width="2161" xLocation="2594" yLocation="471">
+<block ID="559795598" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Results foci per nucleus to save, done!" height="525" keepsResults="true" width="904" xLocation="3036" yLocation="479">
 <variables>
 <input>
 <variable ID="object" name="object" runtime="false" type="org.apache.poi.ss.usermodel.Workbook" visible="true"/>
@@ -544,7 +544,7 @@
 <input>
 <variable ID="workbook" name="workbook" runtime="false" visible="true"/>
 <variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
-<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S18_DAPI" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="C:\Users\Ishaq\Documents\All spreadsheets\Ed\20181217 DAPI" visible="true"/>
 <variable ID="If file exists" name="If file exists" runtime="false" value="Merge_sheets" visible="true"/>
 </input>
 <output/>
@@ -555,7 +555,7 @@
 <input>
 <variable ID="workbook" name="workbook" runtime="false" visible="true"/>
 <variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
-<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S18_H2AX_in_nuclei" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="C:\Users\Ishaq\Documents\All spreadsheets\Ed\20181217 H2AX_in_nuclei" visible="true"/>
 <variable ID="If file exists" name="If file exists" runtime="false" value="Merge_sheets" visible="true"/>
 </input>
 <output/>
@@ -566,7 +566,7 @@
 <input>
 <variable ID="workbook" name="workbook" runtime="false" visible="true"/>
 <variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
-<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S18_TELO" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="C:\Users\Ishaq\Documents\All spreadsheets\Ed\20181217 TELO" visible="true"/>
 <variable ID="If file exists" name="If file exists" runtime="false" value="Merge_sheets" visible="true"/>
 </input>
 <output/>
@@ -577,7 +577,7 @@
 <input>
 <variable ID="workbook" name="workbook" runtime="false" visible="true"/>
 <variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
-<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S18_TAF" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="C:\Users\Ishaq\Documents\All spreadsheets\Ed\20181217 TAF" visible="true"/>
 <variable ID="If file exists" name="If file exists" runtime="false" value="Merge_sheets" visible="true"/>
 </input>
 <output/>
@@ -588,7 +588,7 @@
 <input>
 <variable ID="workbook" name="workbook" runtime="false" visible="true"/>
 <variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="true"/>
-<variable ID="output file" name="output file" runtime="false" value="H:\Ed TAF\20181120 test 2\S18_H2AX" visible="true"/>
+<variable ID="output file" name="output file" runtime="false" value="C:\Users\Ishaq\Documents\All spreadsheets\Ed\20181217 H2AX" visible="true"/>
 <variable ID="If file exists" name="If file exists" runtime="false" value="Overwrite" visible="true"/>
 </input>
 <output/>
