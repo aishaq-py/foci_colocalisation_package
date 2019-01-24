@@ -80,21 +80,11 @@ def convert_micron(pixel_size,V1):
 def convert_size_micron(pixel_size,V1,V2):
     return floatify(V1*pixel_size)+floatify(V2*pixel_size)
 
-@jit
-def left(x1,x2):
-    return max(x1,x2)
-
-@jit
-def right(w1,w2):
-    return min(w1,w2)
-
-@jit
-def bottom(y1,y2):
-    return max(y1,y2)
-
-@jit
-def top(h1,h2):
-    return min(h1,h2)
+def convert_start(pixel_size,centre,vector):
+    return floatify((centre - (vector/2)) * pixel_size)
+    
+def convert_end(pixel_size,centre,vector):
+    return floatify((centre + (vector/2)) * pixel_size)
 
 @jit
 def colocalisation(x1,y1,w1,h1,x2,y2,w2,h2):
@@ -103,7 +93,8 @@ def colocalisation(x1,y1,w1,h1,x2,y2,w2,h2):
     bottom = max(y1,y2)
     top = min(h1,h2)
     Aoverlap = (bottom - top)*(right - left)
-    ratio_to_TELO = Aoverlap/((w1-x1)*(h1-y1))
+    if not ((w1-x1)*(h1-y1)) == 0: #this bit was added to skirt an unknown bug
+        ratio_to_TELO = Aoverlap/((w1-x1)*(h1-y1))
     #ratio_to_H2AX = Aoverlap/((w2-x2)*(h2-y2))
     if ratio_to_TELO > 0 and ratio_to_TELO < 5:
         return ratio_to_TELO
@@ -118,17 +109,17 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     x_DAPI_end, y_DAPI_end,nuclear_count = ([] for i in range(3))
     x_dim_H2AX, y_dim_H2AX, z_dim_H2AX = ([] for i in range(3))
     xmicron_H2AX, ymicron_H2AX, zmicron_H2AX = ([] for i in range(3))
-    sxmicron_H2AX, symicron_H2AX, szmicron_H2AX = ([] for i in range(3)) #size
-    area_H2AX, vol_H2AX, filt_H2AX = ([] for i in range(3))
+    filt_H2AX,filt_TELO,rellen_TELO = ([] for i in range(3))
     xmicron_H2AX_end, ymicron_H2AX_end, zmicron_H2AX_end = ([] for i in range(3))
     totaled_H2AX_count, H2AX_count, H2AX_volume = ([] for i in range(3))
     x_dim_TELO, y_dim_TELO, z_dim_TELO = ([] for i in range(3))
     xmicron_TELO, ymicron_TELO, zmicron_TELO = ([] for i in range(3))
-    area_TELO, vol_TELO, filt_TELO, rellen_TELO = ([] for i in range(4))
     sxmicron_TELO, symicron_TELO, szmicron_TELO = ([] for i in range(3))
     xmicron_TELO_end, ymicron_TELO_end, zmicron_TELO_end = ([] for i in range(3))
     totaled_TELO_count, TELO_count, TELO_volume = ([] for i in range(3))
     ROI_end_TELO, IMG_no_TELO, values = ([] for i in range(3))
+    xmicron_H2AX_start, ymicron_H2AX_start, zmicron_H2AX_start = [],[],[]
+    xmicron_TELO_start, ymicron_TELO_start, zmicron_TELO_start = [],[],[]
     
     for point in all_DAPI[index_1:index_2]:
         if point[0] == all_DAPI[0][0]: #numbers the images
@@ -147,9 +138,9 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     nuclear_count.append(len(x_DAPI_start))
     nuclear_count.remove(nuclear_count[0])
     all_DAPI = list(zip(x_DAPI[index_1:index_2], y_DAPI[index_1:index_2], 
-                                             z_DAPI[index_1:index_2], x_DAPI_start,
-                                             x_DAPI_end, y_DAPI_start,y_DAPI_end,
-                                             z_dim_DAPI)) #one less list level to iterate
+                        z_DAPI[index_1:index_2], x_DAPI_start,
+                        x_DAPI_end, y_DAPI_start,y_DAPI_end,
+                        z_dim_DAPI)) #one less list level to iterate
     all_DAPI.remove(all_DAPI[0])
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
@@ -159,11 +150,9 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             xmicron_H2AX.append("X") #converts x-val into microns (max is 2080x0.16)
             ymicron_H2AX.append("Y")
             zmicron_H2AX.append("Z")
-            area_H2AX.append("Area")
-            vol_H2AX.append("Vol.")
-            sxmicron_H2AX.append("sX") #converts box width values into microns
-            symicron_H2AX.append("sY")
-            szmicron_H2AX.append("sZ")
+            xmicron_H2AX_start.append("sX") #converts box width values into microns
+            ymicron_H2AX_start.append("sY")
+            zmicron_H2AX_start.append("sZ")
             xmicron_H2AX_end.append("X end") #adds box width in microns to x-val - calculates len of box side
             ymicron_H2AX_end.append("Y end")
             zmicron_H2AX_end.append("Z end")
@@ -171,21 +160,18 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             xmicron_H2AX.append(convert_micron(px,vector[0]))
             ymicron_H2AX.append(convert_micron(px,vector[1]))
             zmicron_H2AX.append(convert_micron(px,vector[2]))
-            area_H2AX.append(convert_size_micron(px,vector[0],vector[1]))
-            vol_H2AX.append((floatify(vector[0])*px)*(floatify(vector[1])*px)*
-                            (floatify(vector[2])*z_size))
-            sxmicron_H2AX.append(convert_micron(px,vector[3]))
-            symicron_H2AX.append(convert_micron(px,vector[4]))
-            szmicron_H2AX.append(convert_micron(px,vector[5]))
-            xmicron_H2AX_end.append(convert_size_micron(px,vector[0],vector[3]))
-            ymicron_H2AX_end.append(convert_size_micron(px,vector[1],vector[4]))
-            zmicron_H2AX_end.append(convert_size_micron(px,vector[2],vector[5]))
+            xmicron_H2AX_start.append(convert_start(px,vector[0],vector[3]))
+            ymicron_H2AX_start.append(convert_start(px,vector[1],vector[4]))
+            zmicron_H2AX_start.append(convert_start(px,vector[2],vector[5]))            
+            xmicron_H2AX_end.append(convert_end(px,vector[0],vector[3]))
+            ymicron_H2AX_end.append(convert_end(px,vector[1],vector[4]))
+            zmicron_H2AX_end.append(convert_end(px,vector[2],vector[5]))
     all_H2AX = list(zip(x_H2AX[index_3:index_4],y_H2AX[index_3:index_4],
                         z_H2AX[index_3:index_4],width_H2AX[index_3:index_4], 
                         height_H2AX[index_3:index_4],depth_H2AX[index_3:index_4], 
-                        xmicron_H2AX, ymicron_H2AX, zmicron_H2AX, 
-                        sxmicron_H2AX, symicron_H2AX, szmicron_H2AX, 
-                        xmicron_H2AX_end,ymicron_H2AX_end, zmicron_H2AX_end))
+                        xmicron_H2AX, ymicron_H2AX, zmicron_H2AX,
+                        xmicron_H2AX_start,ymicron_H2AX_start,zmicron_H2AX_end,
+                        xmicron_H2AX_end,ymicron_H2AX_end,zmicron_H2AX_end))
     all_H2AX.remove(all_H2AX[0])
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
@@ -194,27 +180,22 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
             xmicron_TELO.append("X") #converts x-val into microns (max is 2080x0.16)
             ymicron_TELO.append("Y")
             zmicron_TELO.append("Z")
-            area_TELO.append("Area")
-            vol_TELO.append("Vol.")
-            sxmicron_TELO.append("sX") #converts box width values into microns
-            symicron_TELO.append("sY")
-            szmicron_TELO.append("sZ")
-            xmicron_TELO_end.append("X end") #adds box width in microns to x-val - calculates len of box side
+            xmicron_TELO_start.append("sX") #converts box width values into microns
+            ymicron_TELO_start.append("sY")
+            xmicron_TELO_start.append("sZ")
+            xmicron_TELO_end.append("X end") #defines rightmost edges of the foci
             ymicron_TELO_end.append("Y end")
             zmicron_TELO_end.append("Z end")
         else:
             xmicron_TELO.append(convert_micron(px,vector[0]))
             ymicron_TELO.append(convert_micron(px,vector[1]))
             zmicron_TELO.append(convert_micron(px,vector[2]))
-            area_TELO.append(convert_size_micron(px,vector[0],vector[1]))
-            vol_TELO.append((floatify(vector[0])*px)*(floatify(vector[1])*px)*
-                            (floatify(vector[2])*z_size))
-            sxmicron_TELO.append(convert_micron(px,vector[3]))
-            symicron_TELO.append(convert_micron(px,vector[4]))
-            szmicron_TELO.append(floatify(vector[5])*z_size)
-            xmicron_TELO_end.append(convert_size_micron(px,vector[0],vector[3]))
-            ymicron_TELO_end.append(convert_size_micron(px,vector[1],vector[4]))
-            zmicron_TELO_end.append(convert_size_micron(px,vector[2],vector[5]))
+            xmicron_TELO_start.append(convert_start(px,vector[0],vector[3]))
+            ymicron_TELO_start.append(convert_start(px,vector[1],vector[4]))
+            zmicron_TELO_start.append(convert_start(px,vector[2],vector[5]))            
+            xmicron_TELO_end.append(convert_end(px,vector[0],vector[3]))
+            ymicron_TELO_end.append(convert_end(px,vector[1],vector[4]))
+            zmicron_TELO_end.append(convert_end(px,vector[2],vector[5]))
     all_TELO = list(zip(x_TELO[index_5:index_6], y_TELO[index_5:index_6], 
                         z_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
     
@@ -230,8 +211,8 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     all_TELO = list(zip(x_TELO[index_5:index_6],y_TELO[index_5:index_6],
                         z_TELO[index_5:index_6],width_TELO[index_5:index_6],
                         height_TELO[index_5:index_6],depth_TELO[index_5:index_6],
-                        xmicron_TELO, ymicron_TELO,zmicron_TELO, 
-                        sxmicron_TELO,symicron_TELO,szmicron_TELO, 
+                        xmicron_TELO,ymicron_TELO,zmicron_TELO,xmicron_TELO_start,
+                        ymicron_TELO_start,zmicron_TELO_start,
                         xmicron_TELO_end,ymicron_TELO_end,zmicron_TELO_end,
                         rellen_TELO,maxint_TELO[index_5:index_6],
                         avint_TELO[index_5:index_6]))
@@ -291,8 +272,8 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         if Hkey == Tkey:
             for Tval2 in Tval:
                 for Hval2 in Hval:
-                    coloc = colocalisation(Tval2[6],Tval2[7],Tval2[12],
-                            Tval2[13],Hval2[6],Hval2[7],Hval2[12],Hval2[13])
+                    coloc = colocalisation(Tval2[9],Tval2[10],Tval2[12],
+                            Tval2[13],Hval2[9],Hval2[10],Hval2[12],Hval2[13])
                     if positive(Hval2[2] - Tval2[2]) > float(z_stacks_per_TAF):
                         pass
                     elif (coloc > float(bottom_overlap_ratio) and 
