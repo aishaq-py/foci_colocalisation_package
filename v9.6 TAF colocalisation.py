@@ -310,10 +310,14 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                     dict_nuclei.pop('k2')
         else:
             pass
-
-    TAF_percent_positive.append(len(TAF_positive_nuclei)/len(TTAF)*100) #percentage, count positive, count total
-    TAF_percent_positive.append(len(TAF_positive_nuclei))
-    TAF_percent_positive.append(len(TTAF))
+    if len(TTAF) > 0:
+        TAF_percent_positive.append(len(TAF_positive_nuclei)/len(TTAF)*100) #percentage, count positive, count total
+        TAF_percent_positive.append(len(TAF_positive_nuclei))
+        TAF_percent_positive.append(len(TTAF))
+    else:
+        TAF_percent_positive.append(float(0))
+        TAF_percent_positive.append(float(0))
+        TAF_percent_positive.append(len(TTAF))
     return [TTAF, TELO_len, n_TAF, TAF_percent_positive, dict_nuclei]
     
 def sortby_treatment(dataset):
@@ -400,10 +404,13 @@ for n,(treatments,images) in enumerate(treatments_pos.items()):
     for k,v in images.items():
         if treatments == dataset_obj[n]:
             temp_percent.append(v[0])
-    if len(temp_percent) == len(images):
+    if len(temp_percent) == len(images) and len(temp_percent) > 1:
         temp_percent = [st.mean(temp_percent),st.stdev(temp_percent),
             (st.stdev(temp_percent)/sqrt(len(images))),len(images)]
         mean_pos_treatment.update({dataset_obj[n] : temp_percent})
+        temp_percent = []
+    else:
+        mean_pos_treatment.update({dataset_obj[n] : float(0)})
         temp_percent = []
             
 # percentage nuclei positive for senescence by treatment
@@ -445,7 +452,7 @@ def dfs_tabs(df_list, sheet_list, file_name):
 df = [df_allpos,dfTTAF,dfTlen,dfnTAF,dfnuclei]
 sheets = ["Percent positive","TAF coordinates","Relative Telo length","n TAF per nucleus","Nuclear coordinates"]
 
-dfs_tabs(df,sheets,output_file)
+#dfs_tabs(df,sheets,output_file)
 
 end = time.time()
 print("Runtime = %s" % (end - start))
