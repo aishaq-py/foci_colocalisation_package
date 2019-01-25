@@ -12,9 +12,9 @@ print('Pandas Version ' + pd.__version__)
 print('Np Version ' + np.__version__)
 
 root = 'C:\\Users\\Ishaq\\Documents\\All spreadsheets\\Ed\\' #remember to use double backslash or single forward slash (is a requirement for python convention)
-input_file_H2AX = root + 'All_H2AX_project001.xlsx'
-input_file_TELO = root + 'All_TELO_project001.xlsx'
-input_file_DAPI = root + 'All_DAPI_project001.xlsx'
+input_file_H2AX = root + 'All_H2AX.xlsx'
+input_file_TELO = root + 'All_TELO.xlsx'
+input_file_DAPI = root + 'All_DAPI.xlsx'
 output_file = root + str(date.today()) + '_project001_after_script.xlsx'
 
 #parameters for analysis - change to absolute values if needed as such
@@ -279,7 +279,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                         pass
                     elif (coloc > float(bottom_overlap_ratio) and 
                           coloc < float(top_overlap_ratio) and
-                          not Tval2[0:3] in TAF_TELO):
+                          not Tval2[0:3] in TAF_TELO): #anti-ghosting included here
                         TAF_TELO.append(Tval2[0:3])
                         TELO_length.append(Tval2[15]) #15 is relative telomere length
                         TAF_H2AX.append(Hval2[0:3])
