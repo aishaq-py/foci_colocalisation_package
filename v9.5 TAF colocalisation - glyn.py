@@ -142,8 +142,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                         x_DAPI_end, y_DAPI_start,y_DAPI_end,
                         z_dim_DAPI)) #one less list level to iterate
     all_DAPI.remove(all_DAPI[0])
-    print(all_DAPI)
-    
+
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     #px = pixel size
     for vector in all_H2AX[index_3:index_4]:
@@ -257,15 +256,12 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
 
     dict_nuclei_H2AX, dict_nuclei_TELO = {},{}
     dict_H2AX_count, dict_TELO_count, dict_nuclei = {},{},{}
-    for i in range(len(all_DAPI)-1):
+    for i in range(len(all_DAPI)):
+        dict_nuclei["Nucleus no. " + str(i)] = all_DAPI[i][0:2]
         dict_nuclei_H2AX["Nucleus no. " + str(i)] = (filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]])
         dict_nuclei_TELO["Nucleus no. " + str(i)] = (filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]])
         dict_H2AX_count["Nucleus no. " + str(i)] = len((filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]]))
         dict_TELO_count["Nucleus no. " + str(i)] = len((filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]]))
-    for i in range(len(all_DAPI)):
-        dict_nuclei["Nucleus no. " + str(i)] = all_DAPI[i][0:2]
-        print(dict_nuclei)
-    
     TTAF, TELO_len, HTAF, n_TAF = {},{},{},{}
     TAF_TELO, TAF_H2AX, TELO_length, n_TAF_TELO = [],[],[],[]
     TAF_positive_nuclei, TAF_percent_positive = [],[]
@@ -322,6 +318,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         TAF_percent_positive.append(float(0))
         TAF_percent_positive.append(float(0))
         TAF_percent_positive.append(len(TTAF))
+    print(dict_nuclei)
     return [TTAF, TELO_len, n_TAF, TAF_percent_positive, dict_nuclei]
 
     
@@ -413,21 +410,62 @@ analysis_1 = full_analysis(0,2,0,70,0,65)
 analysis_2 = full_analysis(2,4,70,123,65,133)
 analysis_3 = full_analysis(4,7,123,238,133,284)
 num = 0
-while num < 3:
-    Image_num = "Image_" + str(num)
-    images_TTAF[Image_num] = ("analysis_" + str(num) + "[0]")
-    images_Tlen[Image_num] = ("analysis_" + str(num) + "[1]")
-    images_nTAF[Image_num] = "analysis_" + str(num) + "[2]"
-    images_pos[Image_num] = "analysis_" + str(num) + "[3]"
-    images_nuclei[Image_num] = "analysis_" + str(num) + "[4]"
-    treatments_TTAF.update({dataset_obj[num-1] : images_TTAF})
-    treatments_pos.update({dataset_obj[num-1] : images_pos})
-    treatments_nTAF.update({dataset_obj[num-1] : images_nTAF})
-    treatments_Tlen.update({dataset_obj[num-1] : images_Tlen})
-    treatments_nuclei.update({dataset_obj[num-1] : images_nuclei})
-    num += 1
-    print("X")
+# =============================================================================
+# while num < 3:
+#     Image_num = "Image_" + str(num)
+#     images_TTAF[Image_num] = "analysis_" + str(num) + "[0]") #this doesnt work > excel output incorrect
+#     images_Tlen[Image_num] = "analysis_" + str(num) + "[1]") #check hack method below
+#     images_nTAF[Image_num] = "analysis_" + str(num) + "[2]"
+#     images_pos[Image_num] = "analysis_" + str(num) + "[3]"
+#     images_nuclei[Image_num] = "analysis_" + str(num) + "[4]"
+#     treatments_TTAF.update({dataset_obj[num-1] : images_TTAF})
+#     treatments_pos.update({dataset_obj[num-1] : images_pos})
+#     treatments_nTAF.update({dataset_obj[num-1] : images_nTAF})
+#     treatments_Tlen.update({dataset_obj[num-1] : images_Tlen})
+#     treatments_nuclei.update({dataset_obj[num-1] : images_nuclei})
+#     num += 1
+#     print("X")
+# =============================================================================
     
+# =============================================================================
+# images_TTAF["Image_1"] = analysis_1[0] #this doesnt work > excel output incorrect
+# images_Tlen["Image_1"] = analysis_1[1]
+# images_nTAF["Image_1"] = analysis_1[2]
+# images_pos["Image_1"] = analysis_1[3]
+# images_nuclei["Image_1"] = analysis_1[4]
+# =============================================================================
+treatments_TTAF.update({dataset_obj[0] : analysis_1[0]})
+treatments_pos.update({dataset_obj[0] : analysis_1[1]})
+treatments_nTAF.update({dataset_obj[0] : analysis_1[2]})
+treatments_Tlen.update({dataset_obj[0] : analysis_1[3]})
+treatments_nuclei.update({dataset_obj[0] : analysis_1[4]})
+
+# =============================================================================
+# images_TTAF["Image_2"] = analysis_2[0] #this doesnt work > excel output incorrect
+# images_Tlen["Image_2"] = analysis_2[1]
+# images_nTAF["Image_2"] = analysis_2[2]
+# images_pos["Image_2"] = analysis_2[3]
+# images_nuclei["Image_2"] = analysis_2[4]
+# =============================================================================
+treatments_TTAF.update({dataset_obj[1] : analysis_2[0]})
+treatments_pos.update({dataset_obj[1] : analysis_2[1]})
+treatments_nTAF.update({dataset_obj[1] : analysis_2[2]})
+treatments_Tlen.update({dataset_obj[1] : analysis_2[3]})
+treatments_nuclei.update({dataset_obj[1] : analysis_2[4]})
+
+# =============================================================================
+# images_TTAF["Image_3"] = analysis_2[0] #this doesnt work > excel output incorrect
+# images_Tlen["Image_3"] = analysis_2[1]
+# images_nTAF["Image_3"] = analysis_2[2]
+# images_pos["Image_3"] = analysis_2[3]
+# images_nuclei["Image_3"] = analysis_2[4]
+# =============================================================================
+treatments_TTAF.update({dataset_obj[2] : analysis_3[0]})
+treatments_pos.update({dataset_obj[2] : analysis_3[1]})
+treatments_nTAF.update({dataset_obj[2] : analysis_3[2]})
+treatments_Tlen.update({dataset_obj[2] : analysis_3[3]})
+treatments_nuclei.update({dataset_obj[2] : analysis_3[4]})
+
 mean_pos_treatment = {}
 temp_percent = []
 # =============================================================================
@@ -463,10 +501,12 @@ dfTTAF = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
                                     for j in treatments_TTAF[i].keys()},
                                     orient='index')
 # relative length of each TAF positive telomere
-dfTlen = pd.DataFrame.from_dict({(i,j): treatments_Tlen[i][j]
-                                    for i in treatments_Tlen.keys()
-                                    for j in treatments_Tlen[i].keys()},
-                                    orient='index')
+# =============================================================================
+# dfTlen = pd.DataFrame.from_dict({(i,j): treatments_Tlen[i][j]
+#                                     for i in treatments_Tlen.keys()
+#                                     for j in treatments_Tlen[i].keys()},
+#                                     orient='index')
+# =============================================================================
 # summarised number of TAF per nucleus
 dfnTAF = pd.DataFrame.from_dict({(i,j): treatments_nTAF[i][j]
                                     for i in treatments_nTAF.keys()
@@ -477,6 +517,11 @@ dfnuclei = pd.DataFrame.from_dict({(i,j): treatments_nuclei[i][j]
                                     for i in treatments_nuclei.keys()
                                     for j in treatments_TTAF[i].keys()},
                                     orient='index')
+
+#dfTTAF = pd.DataFrame.from_dict(treatments_TTAF, orient='index')
+dfTlen = pd.DataFrame.from_dict(treatments_Tlen, orient='index')
+#dfnTAF = pd.DataFrame.from_dict(treatments_nTAF, orient='index')
+dfnuclei = pd.DataFrame.from_dict(treatments_nuclei, orient='index')
 
 def dfs_tabs(df_list, sheet_list, file_name):
     writer = pd.ExcelWriter(file_name,engine='xlsxwriter')   
