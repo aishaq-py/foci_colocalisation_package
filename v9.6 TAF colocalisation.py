@@ -218,7 +218,6 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                         avint_TELO[index_5:index_6]))
     all_TELO.remove(all_TELO[0])
     
-    #average_H2AX_count, percent_positive_H2AX = [],[]
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     num = 0
     for DAPI_vectors in all_DAPI:
@@ -252,6 +251,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                     filt_TELO.append(point)
             else:
                 pass
+    average_H2AX_count = len(filt_H2AX)/len(all_DAPI)
 
     dict_nuclei_H2AX, dict_nuclei_TELO = {},{}
     dict_H2AX_count, dict_TELO_count, dict_nuclei = {},{},{}
@@ -262,7 +262,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         dict_H2AX_count["Nucleus no. " + str(i)] = len((filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]]))
         dict_TELO_count["Nucleus no. " + str(i)] = len((filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]]))
     
-    TTAF, TELO_len, HTAF, n_TAF = {},{},{},{}
+    TTAF, TELO_len, HTAF, n_TAF = {},{},{},{} # TTAF = TAF with telomeres as comparisons
     TAF_TELO, TAF_H2AX, TELO_length, n_TAF_TELO = [],[],[],[]
     TAF_positive_nuclei, TAF_percent_positive = [],[]
     num = 0
@@ -318,7 +318,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         TAF_percent_positive.append(float(0))
         TAF_percent_positive.append(len(TTAF))
     return [TTAF, TELO_len, n_TAF, TAF_percent_positive, dict_nuclei,
-            dict_H2AX_count, dict_TELO_count]
+            dict_H2AX_count, dict_TELO_count,average_H2AX_count]
     
 def sortby_treatment(dataset):
     obj_list, index_list = [],[]
@@ -373,9 +373,10 @@ image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),
         
 treatments_TTAF,treatments_pos,treatments_nTAF,treatments_Tlen = {},{},{},{}
 treatments_nuclei,treatments_H2AX,treatments_TELO = {},{},{}
+treatments_nH2AX = {}
 for n, obj in enumerate(dataset_indices):
     images_TTAF, images_pos, images_Tlen, images_nTAF = {},{},{},{}
-    images_nuclei, images_H2AX, images_TELO = {},{},{}
+    images_nuclei, images_H2AX, images_TELO, images_nH2AX = {},{},{},{}
     for m, obj_2 in enumerate(image_indices):
         if m > 0 and n <= len(dataset_indices):
             if ((image_indices[m-1][0] >= (dataset_indices[n-1][0])) and
@@ -392,6 +393,7 @@ for n, obj in enumerate(dataset_indices):
                 images_nuclei[Image_num] = analysis[4]
                 images_H2AX[Image_num] = analysis[5]
                 images_TELO[Image_num] = analysis[6]
+                images_nH2AX[Image_num] = analysis[7]
                 treatments_TTAF.update({dataset_obj[n-1] : images_TTAF})
                 treatments_pos.update({dataset_obj[n-1] : images_pos})
                 treatments_nTAF.update({dataset_obj[n-1] : images_nTAF})
@@ -399,10 +401,11 @@ for n, obj in enumerate(dataset_indices):
                 treatments_nuclei.update({dataset_obj[n-1] : images_nuclei})
                 treatments_H2AX.update({dataset_obj[n-1] : images_H2AX})
                 treatments_TELO.update({dataset_obj[n-1] : images_TELO})
+                treatments_nH2AX.update({dataset_obj[n-1] : images_nH2AX})
             else:
                 pass
 
-mean_pos_treatment = {}
+mean_pos_treatment,mean_H2AX_pos = {},{}
 temp_percent = []
 for n,(treatments,images) in enumerate(treatments_pos.items()):
     for k,v in images.items():
@@ -417,9 +420,25 @@ for n,(treatments,images) in enumerate(treatments_pos.items()):
         mean_pos_treatment.update({dataset_obj[n] : float(0)})
         temp_percent = []
             
+for n,(treatments,images) in enumerate(treatments_nH2AX.items()):
+    for k,v in images.items():
+        if treatments == dataset_obj[n]:
+            temp_percent.append(v)
+    if len(temp_percent) == len(images) and len(temp_percent) > 1:
+        temp_percent = [st.mean(temp_percent),st.stdev(temp_percent),
+            (st.stdev(temp_percent)/sqrt(len(images))),len(images)]
+        mean_H2AX_pos.update({dataset_obj[n] : temp_percent})
+        temp_percent = []
+    else:
+        mean_H2AX_pos.update({dataset_obj[n] : float(0)})
+        temp_percent = []   
+
 # percentage nuclei positive for senescence by treatment
 dfmeanpos = pd.DataFrame.from_dict(mean_pos_treatment,orient='index',
         columns=['Percent TAF positive','SD','SE', 'n'])
+# average H2AX per nucleus
+dfmeanH2AX = pd.DataFrame.from_dict(mean_H2AX_pos,orient='index',
+        columns=['Average H2AX per nucleus', 'SD','SE','n'])
 # percentage of nuclei positive for senescence by images
 dfpos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
         for i in treatments_pos.keys()
@@ -441,7 +460,7 @@ dfnTAF = pd.DataFrame.from_dict({(i,j): treatments_nTAF[i][j]
                                     for i in treatments_nTAF.keys()
                                     for j in treatments_nTAF[i].keys()},
                                     orient='index')
-df_allpos = pd.concat([dfmeanpos,dfpos], axis=1, sort=False)
+df_allpos = pd.concat([dfmeanpos,dfpos,dfmeanH2AX], axis=1, sort=False)
 # position of nuclei
 dfnuclei = pd.DataFrame.from_dict({(i,j): treatments_nuclei[i][j]
                                     for i in treatments_nuclei.keys()
