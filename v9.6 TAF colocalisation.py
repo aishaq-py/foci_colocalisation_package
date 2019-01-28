@@ -405,8 +405,8 @@ for n, obj in enumerate(dataset_indices):
             else:
                 pass
 
-mean_pos_treatment,mean_H2AX_pos = {},{}
-temp_percent = []
+mean_pos_treatment,mean_H2AX_pos,percent_H2AX_pos = {},{},{}
+temp_percent,temp_average = [],[]
 for n,(treatments,images) in enumerate(treatments_pos.items()):
     for k,v in images.items():
         if treatments == dataset_obj[n]:
@@ -423,15 +423,22 @@ for n,(treatments,images) in enumerate(treatments_pos.items()):
 for n,(treatments,images) in enumerate(treatments_nH2AX.items()):
     for k,v in images.items():
         if treatments == dataset_obj[n]:
-            temp_percent.append(v)
-    if len(temp_percent) == len(images) and len(temp_percent) > 1:
+            temp_average.append(v)
+            if not v == 0:
+                temp_percent.append(str(1))
+    if len(temp_average) == len(images) and len(temp_percent) > 1:
+        temp_percent = len(temp_percent)/len(temp_average)
         temp_percent = [st.mean(temp_percent),st.stdev(temp_percent),
             (st.stdev(temp_percent)/sqrt(len(images))),len(images)]
-        mean_H2AX_pos.update({dataset_obj[n] : temp_percent})
-        temp_percent = []
+        percent_H2AX_pos.update({dataset_obj[n] : temp_percent})
+        temp_average = [st.mean(temp_average),st.stdev(temp_average),
+            (st.stdev(temp_average)/sqrt(len(images))),len(images)]
+        mean_H2AX_pos.update({dataset_obj[n] : temp_average})
+        temp_average, temp_percent = [],[]
     else:
+        percent_H2AX_pos.update({dataset_obj[n] : float(0)})
         mean_H2AX_pos.update({dataset_obj[n] : float(0)})
-        temp_percent = []   
+        temp_average = []   
 
 # percentage nuclei positive for senescence by treatment
 dfmeanpos = pd.DataFrame.from_dict(mean_pos_treatment,orient='index',
@@ -439,6 +446,9 @@ dfmeanpos = pd.DataFrame.from_dict(mean_pos_treatment,orient='index',
 # average H2AX per nucleus
 dfmeanH2AX = pd.DataFrame.from_dict(mean_H2AX_pos,orient='index',
         columns=['Average H2AX per nucleus', 'SD','SE','n'])
+# percentage nuclei positive for H2AX
+dfH2AXpos = pd.DataFrame.from_dict(percent_H2AX_pos,orient='index',
+        columns=['Percent H2AX positive','SD','SE', 'n']                          )
 # percentage of nuclei positive for senescence by images
 dfpos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
         for i in treatments_pos.keys()
@@ -460,7 +470,7 @@ dfnTAF = pd.DataFrame.from_dict({(i,j): treatments_nTAF[i][j]
                                     for i in treatments_nTAF.keys()
                                     for j in treatments_nTAF[i].keys()},
                                     orient='index')
-df_allpos = pd.concat([dfmeanpos,dfpos,dfmeanH2AX], axis=1, sort=False)
+df_allpos = pd.concat([dfmeanpos,dfpos,dfmeanH2AX,dfH2AXpos], axis=1, sort=False)
 # position of nuclei
 dfnuclei = pd.DataFrame.from_dict({(i,j): treatments_nuclei[i][j]
                                     for i in treatments_nuclei.keys()
