@@ -17,7 +17,7 @@ input_file_TELO = root + 'All_TELO.xlsx'
 input_file_DAPI = root + 'All_DAPI.xlsx'
 output_file = root + str(date.today()) + '_project001_after_script.xlsx'
 
-#parameters for analysis - change to absolute values if needed as such
+#PARAMETERS FOR ANALYSIS
 print("\n Input all requested values as decimal numbers (floats).")
 px = float(0.065) #float(input("Define pixel length or width in micron: \n")) 
 z_size = float(0.18) #float(input("Define size of z-step in mixron: \n"))
@@ -218,6 +218,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                         avint_TELO[index_5:index_6]))
     all_TELO.remove(all_TELO[0])
     
+    #average_H2AX_count, percent_positive_H2AX = [],[]
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     num = 0
     for DAPI_vectors in all_DAPI:
@@ -236,8 +237,6 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                     filt_H2AX.append(point)
             else:
                 pass
-        
-    for DAPI_vectors in all_DAPI:
         for point in all_TELO:
             if point[0] == all_TELO[0][0]:
                 totaled_TELO_count.append(len(filt_TELO))
@@ -318,7 +317,8 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         TAF_percent_positive.append(float(0))
         TAF_percent_positive.append(float(0))
         TAF_percent_positive.append(len(TTAF))
-    return [TTAF, TELO_len, n_TAF, TAF_percent_positive, dict_nuclei]
+    return [TTAF, TELO_len, n_TAF, TAF_percent_positive, dict_nuclei,
+            dict_H2AX_count, dict_TELO_count]
     
 def sortby_treatment(dataset):
     obj_list, index_list = [],[]
@@ -372,10 +372,10 @@ image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),
                          retrieve_index(x_TELO)))
         
 treatments_TTAF,treatments_pos,treatments_nTAF,treatments_Tlen = {},{},{},{}
-treatments_nuclei = {}
+treatments_nuclei,treatments_H2AX,treatments_TELO = {},{},{}
 for n, obj in enumerate(dataset_indices):
     images_TTAF, images_pos, images_Tlen, images_nTAF = {},{},{},{}
-    images_nuclei = {}
+    images_nuclei, images_H2AX, images_TELO = {},{},{}
     for m, obj_2 in enumerate(image_indices):
         if m > 0 and n <= len(dataset_indices):
             if ((image_indices[m-1][0] >= (dataset_indices[n-1][0])) and
@@ -390,11 +390,15 @@ for n, obj in enumerate(dataset_indices):
                 images_nTAF[Image_num] = analysis[2]
                 images_pos[Image_num] = analysis[3]
                 images_nuclei[Image_num] = analysis[4]
+                images_H2AX[Image_num] = analysis[5]
+                images_TELO[Image_num] = analysis[6]
                 treatments_TTAF.update({dataset_obj[n-1] : images_TTAF})
                 treatments_pos.update({dataset_obj[n-1] : images_pos})
                 treatments_nTAF.update({dataset_obj[n-1] : images_nTAF})
                 treatments_Tlen.update({dataset_obj[n-1] : images_Tlen})
                 treatments_nuclei.update({dataset_obj[n-1] : images_nuclei})
+                treatments_H2AX.update({dataset_obj[n-1] : images_H2AX})
+                treatments_TELO.update({dataset_obj[n-1] : images_TELO})
             else:
                 pass
 
@@ -438,9 +442,20 @@ dfnTAF = pd.DataFrame.from_dict({(i,j): treatments_nTAF[i][j]
                                     for j in treatments_nTAF[i].keys()},
                                     orient='index')
 df_allpos = pd.concat([dfmeanpos,dfpos], axis=1, sort=False)
+# position of nuclei
 dfnuclei = pd.DataFrame.from_dict({(i,j): treatments_nuclei[i][j]
                                     for i in treatments_nuclei.keys()
-                                    for j in treatments_TTAF[i].keys()},
+                                    for j in treatments_nuclei[i].keys()},
+                                    orient='index')
+# summarised number of H2AX per nucleus
+dfnH2AX = pd.DataFrame.from_dict({(i,j): treatments_H2AX[i][j] 
+                                    for i in treatments_H2AX.keys()
+                                    for j in treatments_H2AX[i].keys()},
+                                    orient='index')
+# summarised number of TELO per nucleus
+dfnTELO = pd.DataFrame.from_dict({(i,j): treatments_TELO[i][j] 
+                                    for i in treatments_TELO.keys()
+                                    for j in treatments_TELO[i].keys()},
                                     orient='index')
 
 def dfs_tabs(df_list, sheet_list, file_name):
@@ -449,8 +464,10 @@ def dfs_tabs(df_list, sheet_list, file_name):
         dataframe.to_excel(writer, sheet_name=sheet, startrow=0 , startcol=0)   
     writer.save()
 
-df = [df_allpos,dfTTAF,dfTlen,dfnTAF,dfnuclei]
-sheets = ["Percent positive","TAF coordinates","Relative Telo length","n TAF per nucleus","Nuclear coordinates"]
+df = [df_allpos,dfTTAF,dfTlen,dfnTAF,dfnuclei,dfnH2AX,dfnTELO]
+sheets = ["Percent positive","TAF coordinates","Relative Telo length",
+          "n TAF per nucleus","Nuclear coordinates","H2A.X count",
+          "Telo count"]
 
 dfs_tabs(df,sheets,output_file)
 
