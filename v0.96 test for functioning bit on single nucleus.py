@@ -120,7 +120,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     ROI_end_TELO, IMG_no_TELO, values = ([] for i in range(3))
     xmicron_H2AX_start, ymicron_H2AX_start, zmicron_H2AX_start = [],[],[]
     xmicron_TELO_start, ymicron_TELO_start, zmicron_TELO_start = [],[],[]
-
+    
     for point in all_DAPI[index_1:index_2]:
         if point[0] == all_DAPI[0][0]: #numbers the images
             x_DAPI_start.append('Position X start')
@@ -142,7 +142,6 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                         x_DAPI_end, y_DAPI_start,y_DAPI_end,
                         z_dim_DAPI)) #one less list level to iterate
     all_DAPI.remove(all_DAPI[0])
-    print(all_DAPI)
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     #px = pixel size
@@ -258,13 +257,11 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     dict_nuclei_H2AX, dict_nuclei_TELO = {},{}
     dict_H2AX_count, dict_TELO_count, dict_nuclei = {},{},{}
     for i in range(len(all_DAPI)-1):
+        dict_nuclei["Nucleus no. " + str(i)] = all_DAPI[i][0:2]
         dict_nuclei_H2AX["Nucleus no. " + str(i)] = (filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]])
         dict_nuclei_TELO["Nucleus no. " + str(i)] = (filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]])
         dict_H2AX_count["Nucleus no. " + str(i)] = len((filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]]))
         dict_TELO_count["Nucleus no. " + str(i)] = len((filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]]))
-    for i in range(len(all_DAPI)):
-        dict_nuclei["Nucleus no. " + str(i)] = all_DAPI[i][0:2]
-        print(dict_nuclei)
     
     TTAF, TELO_len, HTAF, n_TAF = {},{},{},{}
     TAF_TELO, TAF_H2AX, TELO_length, n_TAF_TELO = [],[],[],[]
@@ -313,7 +310,6 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                     dict_nuclei.pop('k2')
         else:
             pass
-    
     if len(TTAF) > 0:
         TAF_percent_positive.append(len(TAF_positive_nuclei)/len(TTAF)*100) #percentage, count positive, count total
         TAF_percent_positive.append(len(TAF_positive_nuclei))
@@ -322,174 +318,8 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         TAF_percent_positive.append(float(0))
         TAF_percent_positive.append(float(0))
         TAF_percent_positive.append(len(TTAF))
-    return [TTAF, TELO_len, n_TAF, TAF_percent_positive, dict_nuclei]
+    return [TTAF, TELO_len, n_TAF, TAF_percent_positive, dict_nuclei, all_DAPI]
 
-    
-def sortby_treatment(dataset):
-    obj_list, index_list = [],[]
-    for index, obj in enumerate(dataset):
-        if index == 0:
-            pass
-        elif obj == dataset_H2AX[0]:
-            pass
-        elif obj not in obj_list:
-            obj_list.append(obj)
-            index_list.append(max(0,index-2))
-        elif index+1 == len(dataset):
-            index_list.append(index)
-            break
-    return obj_list
 
-def treatment_index(dataset):
-    obj_list, index_list = [],[]
-    for index, obj in enumerate(dataset):
-        if index == 0:
-            pass
-        elif obj == dataset_H2AX[0]:
-            pass
-        elif obj not in obj_list:
-            obj_list.append(obj)
-            index_list.append(max(0,index-2))
-        elif index+1 == len(dataset):
-            index_list.append(index)
-            break
-    return index_list
-
-def retrieve_index(df):
-    index_list = []
-    for index, obj in enumerate(df):
-        if index == 0:
-            index_list.append(0)
-        elif obj == x_H2AX[0]:
-            index_list.append(index)
-        elif index+1 == len(df):
-            index_list.append(index)
-            break
-        else:
-            pass
-    return index_list
-#have to set separate indices for DAPI, H2AX and TELO since they all have diff lengths
-
-dataset_obj = sortby_treatment(dataset_DAPI)
-dataset_indices = list(zip(treatment_index(dataset_DAPI),
-                  treatment_index(dataset_H2AX),treatment_index(dataset_TELO)))
-image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),
-                         retrieve_index(x_TELO)))
-        
-treatments_TTAF,treatments_pos,treatments_nTAF,treatments_Tlen = {},{},{},{}
-treatments_nuclei = {}
-images_TTAF, images_pos, images_Tlen, images_nTAF = {},{},{},{}
-images_nuclei = {}
-# =============================================================================
-# for n, obj in enumerate(dataset_indices):
-#     images_TTAF, images_pos, images_Tlen, images_nTAF = {},{},{},{}
-#     images_nuclei = {}
-#     for m, obj_2 in enumerate(image_indices):
-#         if m > 0 and n <= len(dataset_indices):
-#             if ((image_indices[m-1][0] >= (dataset_indices[n-1][0])) and
-#                 (image_indices[m][0] <= (dataset_indices[n][0])+1)):
-#                 Image_num = "Image_" + str(m)
-#                 analysis = full_analysis(image_indices[m-1][0],image_indices[m][0],
-#                                      image_indices[m-1][1],image_indices[m][1],
-#                                      image_indices[m-1][2],image_indices[m][2])
-#                 print(m)
-#                 print(n)
-#                 # output for analysis is a list of dicts
-#                 images_TTAF[Image_num] = analysis[0]
-#                 images_Tlen[Image_num] = analysis[1]
-#                 images_nTAF[Image_num] = analysis[2]
-#                 images_pos[Image_num] = analysis[3]
-#                 images_nuclei[Image_num] = analysis[4]
-#                 treatments_TTAF.update({dataset_obj[n-1] : images_TTAF})
-#                 treatments_pos.update({dataset_obj[n-1] : images_pos})
-#                 treatments_nTAF.update({dataset_obj[n-1] : images_nTAF})
-#                 treatments_Tlen.update({dataset_obj[n-1] : images_Tlen})
-#                 treatments_nuclei.update({dataset_obj[n-1] : images_nuclei})
-#             else:
-#                 pass
-# 
-# =============================================================================
-analysis_1 = full_analysis(0,2,0,70,0,65)
-analysis_2 = full_analysis(2,4,70,123,65,133)
-analysis_3 = full_analysis(4,7,123,238,133,284)
-num = 0
-while num < 3:
-    Image_num = "Image_" + str(num)
-    images_TTAF[Image_num] = ("analysis_" + str(num) + "[0]")
-    images_Tlen[Image_num] = ("analysis_" + str(num) + "[1]")
-    images_nTAF[Image_num] = "analysis_" + str(num) + "[2]"
-    images_pos[Image_num] = "analysis_" + str(num) + "[3]"
-    images_nuclei[Image_num] = "analysis_" + str(num) + "[4]"
-    treatments_TTAF.update({dataset_obj[num-1] : images_TTAF})
-    treatments_pos.update({dataset_obj[num-1] : images_pos})
-    treatments_nTAF.update({dataset_obj[num-1] : images_nTAF})
-    treatments_Tlen.update({dataset_obj[num-1] : images_Tlen})
-    treatments_nuclei.update({dataset_obj[num-1] : images_nuclei})
-    num += 1
-    print("X")
-    
-mean_pos_treatment = {}
-temp_percent = []
-# =============================================================================
-# for n,(treatments,images) in enumerate(treatments_pos.items()):
-#     for k,v in images.items():
-#         if treatments == dataset_obj[n]:
-#             temp_percent.append(v[0])
-#     if len(temp_percent) == len(images) and len(temp_percent) > 1:
-#         temp_percent = [st.mean(temp_percent),st.stdev(temp_percent),
-#             (st.stdev(temp_percent)/sqrt(len(images))),len(images)]
-#         mean_pos_treatment.update({dataset_obj[n] : temp_percent})
-#         temp_percent = []
-#     else:
-#         temp_percent = [0,0,0,1]
-#         mean_pos_treatment.update({dataset_obj[n] : temp_percent})
-#         temp_percent = []
-# =============================================================================
-        
-# percentage nuclei positive for senescence by treatment
-dfmeanpos = pd.DataFrame.from_dict(mean_pos_treatment,orient='index',
-        columns=['Percent TAF positive','SD','SE', 'n'])
-# percentage of nuclei positive for senescence by images
-# =============================================================================
-# dfpos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
-#         for i in treatments_pos.keys()
-#         for j in treatments_pos[i].keys()},
-#         orient='index', columns=['Percent TAF positive',
-#                                  'TAF positive count','Total nuclei count'])
-# =============================================================================
-# coordinate of each TAF positive telomere
-dfTTAF = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
-                                    for i in treatments_TTAF.keys()
-                                    for j in treatments_TTAF[i].keys()},
-                                    orient='index')
-# relative length of each TAF positive telomere
-dfTlen = pd.DataFrame.from_dict({(i,j): treatments_Tlen[i][j]
-                                    for i in treatments_Tlen.keys()
-                                    for j in treatments_Tlen[i].keys()},
-                                    orient='index')
-# summarised number of TAF per nucleus
-dfnTAF = pd.DataFrame.from_dict({(i,j): treatments_nTAF[i][j]
-                                    for i in treatments_nTAF.keys()
-                                    for j in treatments_nTAF[i].keys()},
-                                    orient='index')
-#df_allpos = pd.concat([dfmeanpos,dfpos], axis=1, sort=False)
-dfnuclei = pd.DataFrame.from_dict({(i,j): treatments_nuclei[i][j]
-                                    for i in treatments_nuclei.keys()
-                                    for j in treatments_TTAF[i].keys()},
-                                    orient='index')
-
-def dfs_tabs(df_list, sheet_list, file_name):
-    writer = pd.ExcelWriter(file_name,engine='xlsxwriter')   
-    for dataframe, sheet in zip(df_list, sheet_list):
-        dataframe.to_excel(writer, sheet_name=sheet, startrow=0 , startcol=0)   
-    writer.save()
-
-#df = [df_allpos,dfTTAF,dfTlen,dfnTAF,dfnuclei]
-df = [dfTTAF,dfTlen,dfnTAF,dfnuclei]
-#sheets = ["Percent positive","TAF coordinates","Relative Telo length","n TAF per nucleus","Nuclear coordinates"]
-sheets = ["TAF coordinates","Relative Telo length","n TAF per nucleus","Nuclear coordinates"]
-
-dfs_tabs(df,sheets,output_file)
-
-end = time.time()
-print("Runtime = %s" % (end - start))
+analysis = full_analysis(4,7,71,123,66,133)
+print(analysis)

@@ -257,11 +257,14 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     dict_nuclei_H2AX, dict_nuclei_TELO = {},{}
     dict_H2AX_count, dict_TELO_count, dict_nuclei = {},{},{}
     for i in range(len(all_DAPI)-1):
-        dict_nuclei["Nucleus no. " + str(i)] = all_DAPI[i][0:2]
+        #dict_nuclei["Nucleus no. " + str(i)] = all_DAPI[i][0:2]
         dict_nuclei_H2AX["Nucleus no. " + str(i)] = (filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]])
         dict_nuclei_TELO["Nucleus no. " + str(i)] = (filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]])
         dict_H2AX_count["Nucleus no. " + str(i)] = len((filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]]))
         dict_TELO_count["Nucleus no. " + str(i)] = len((filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]]))
+    for i in range(len(all_DAPI)):
+        dict_nuclei["Nucleus no. " + str(i)] = all_DAPI[i][0:2]
+        print(dict_nuclei)
     
     TTAF, TELO_len, HTAF, n_TAF = {},{},{},{}
     TAF_TELO, TAF_H2AX, TELO_length, n_TAF_TELO = [],[],[],[]
@@ -299,7 +302,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         else:
             TAF_positive_nuclei.append("1")
     
-    nuclei_multidict = {}
+    nuclei_multidict = {}       #for checking overlapping nuclei and TAF
     for k,v in dict_nuclei.items():
         nuclei_multidict.setdefault(v,set().add(k))
         
