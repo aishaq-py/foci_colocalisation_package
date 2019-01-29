@@ -30,7 +30,6 @@ H2AX_size_threshold = 0 #input("H2AX foci size threshold in micron (0 will retur
 TELO_size_threshold = 0 #input("Telo foci size threshold in micron (0 will return no threshold): \n")
 
 start = time.time()
-
 df_H2AX = pd.read_excel(input_file_H2AX, header=None)
 df_TELO = pd.read_excel(input_file_TELO, header=None)
 df_DAPI = pd.read_excel(input_file_DAPI, header=None)
