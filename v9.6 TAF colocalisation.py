@@ -122,80 +122,48 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     xmicron_TELO_start, ymicron_TELO_start, zmicron_TELO_start = [],[],[]
     
     for point in all_DAPI[index_1:index_2]:
-        if point[0] == all_DAPI[0][0]: #numbers the images
-            x_DAPI_start.append('Position X start')
-            x_DAPI_end.append('Position X end')
-            y_DAPI_start.append('Position Y start')
-            y_DAPI_end.append('Position Y end')
-            z_dim_DAPI.append('Position Z')
-            nuclear_count.append(len(x_DAPI_start)-1) #first iter will show 0, last iter outside loop, nuclei = total so far. Do subtractions
-        else:
-            x_DAPI_start.append(max(point[0] - (point[3]/2),0)) #x_dim_calc
-            x_DAPI_end.append(point[0] + (point[3]/2))
-            y_DAPI_start.append(max(point[1] - (point[4]/2),0)) #y_dim_calc
-            y_DAPI_end.append(point[1] + (point[4]/2))
-            z_dim_DAPI.append(float(1)) #z_dim_calc
+        x_DAPI_start.append(max(point[0] - (point[3]/2),0)) #x_dim_calc
+        x_DAPI_end.append(point[0] + (point[3]/2))
+        y_DAPI_start.append(max(point[1] - (point[4]/2),0)) #y_dim_calc
+        y_DAPI_end.append(point[1] + (point[4]/2))
+        z_dim_DAPI.append(float(1)) #z_dim_calc
     nuclear_count.append(len(x_DAPI_start))
     nuclear_count.remove(nuclear_count[0])
     all_DAPI = list(zip(x_DAPI[index_1:index_2], y_DAPI[index_1:index_2], 
                         z_DAPI[index_1:index_2], x_DAPI_start,
                         x_DAPI_end, y_DAPI_start,y_DAPI_end,
                         z_dim_DAPI)) #one less list level to iterate
-    all_DAPI.remove(all_DAPI[0])
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     #px = pixel size
     for vector in all_H2AX[index_3:index_4]:
-        if vector[0] == all_H2AX[0][0]:
-            xmicron_H2AX.append("X") #converts x-val into microns (max is 2080x0.16)
-            ymicron_H2AX.append("Y")
-            zmicron_H2AX.append("Z")
-            xmicron_H2AX_start.append("sX") #converts box width values into microns
-            ymicron_H2AX_start.append("sY")
-            zmicron_H2AX_start.append("sZ")
-            xmicron_H2AX_end.append("X end") #adds box width in microns to x-val - calculates len of box side
-            ymicron_H2AX_end.append("Y end")
-            zmicron_H2AX_end.append("Z end")
-        else:
-            xmicron_H2AX.append(convert_micron(px,vector[0]))
-            ymicron_H2AX.append(convert_micron(px,vector[1]))
-            zmicron_H2AX.append(convert_micron(px,vector[2]))
-            xmicron_H2AX_start.append(convert_start(px,vector[0],vector[3]))
-            ymicron_H2AX_start.append(convert_start(px,vector[1],vector[4]))
-            zmicron_H2AX_start.append(convert_start(px,vector[2],vector[5]))            
-            xmicron_H2AX_end.append(convert_end(px,vector[0],vector[3]))
-            ymicron_H2AX_end.append(convert_end(px,vector[1],vector[4]))
-            zmicron_H2AX_end.append(convert_end(px,vector[2],vector[5]))
+        xmicron_H2AX.append(convert_micron(px,vector[0]))
+        ymicron_H2AX.append(convert_micron(px,vector[1]))
+        zmicron_H2AX.append(convert_micron(px,vector[2]))
+        xmicron_H2AX_start.append(convert_start(px,vector[0],vector[3]))
+        ymicron_H2AX_start.append(convert_start(px,vector[1],vector[4]))
+        zmicron_H2AX_start.append(convert_start(px,vector[2],vector[5]))            
+        xmicron_H2AX_end.append(convert_end(px,vector[0],vector[3]))
+        ymicron_H2AX_end.append(convert_end(px,vector[1],vector[4]))
+        zmicron_H2AX_end.append(convert_end(px,vector[2],vector[5]))
     all_H2AX = list(zip(x_H2AX[index_3:index_4],y_H2AX[index_3:index_4],
                         z_H2AX[index_3:index_4],width_H2AX[index_3:index_4], 
                         height_H2AX[index_3:index_4],depth_H2AX[index_3:index_4], 
                         xmicron_H2AX, ymicron_H2AX, zmicron_H2AX,
                         xmicron_H2AX_start,ymicron_H2AX_start,zmicron_H2AX_end,
                         xmicron_H2AX_end,ymicron_H2AX_end,zmicron_H2AX_end))
-    all_H2AX.remove(all_H2AX[0])
-    
+
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     for vector in all_TELO[index_5:index_6]:
-        if vector[0] == all_TELO[0][0]:
-            xmicron_TELO.append("X") #converts x-val into microns (max is 2080x0.16)
-            ymicron_TELO.append("Y")
-            zmicron_TELO.append("Z")
-            xmicron_TELO_start.append("sX") #converts box width values into microns
-            ymicron_TELO_start.append("sY")
-            xmicron_TELO_start.append("sZ")
-            xmicron_TELO_end.append("X end") #defines rightmost edges of the foci
-            ymicron_TELO_end.append("Y end")
-            zmicron_TELO_end.append("Z end")
-        else:
-            xmicron_TELO.append(convert_micron(px,vector[0]))
-            ymicron_TELO.append(convert_micron(px,vector[1]))
-            zmicron_TELO.append(convert_micron(px,vector[2]))
-            xmicron_TELO_start.append(convert_start(px,vector[0],vector[3]))
-            ymicron_TELO_start.append(convert_start(px,vector[1],vector[4]))
-            zmicron_TELO_start.append(convert_start(px,vector[2],vector[5]))            
-            xmicron_TELO_end.append(convert_end(px,vector[0],vector[3]))
-            ymicron_TELO_end.append(convert_end(px,vector[1],vector[4]))
-            zmicron_TELO_end.append(convert_end(px,vector[2],vector[5]))
+        xmicron_TELO.append(convert_micron(px,vector[0]))
+        ymicron_TELO.append(convert_micron(px,vector[1]))
+        zmicron_TELO.append(convert_micron(px,vector[2]))
+        xmicron_TELO_start.append(convert_start(px,vector[0],vector[3]))
+        ymicron_TELO_start.append(convert_start(px,vector[1],vector[4]))
+        zmicron_TELO_start.append(convert_start(px,vector[2],vector[5]))            
+        xmicron_TELO_end.append(convert_end(px,vector[0],vector[3]))
+        ymicron_TELO_end.append(convert_end(px,vector[1],vector[4]))
+        zmicron_TELO_end.append(convert_end(px,vector[2],vector[5]))
     all_TELO = list(zip(x_TELO[index_5:index_6], y_TELO[index_5:index_6], 
                         z_TELO[index_5:index_6], avint_TELO[index_5:index_6]))
     
@@ -204,10 +172,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         return avint_TELO/maxsize_TELO
     
     for vector in all_TELO:
-        if vector[0] == all_TELO[0][0]:
-            rellen_TELO.append("Relative Telo Length")
-        else:
-            rellen_TELO.append(telo_rellen(vector[3]))
+        rellen_TELO.append(telo_rellen(vector[3]))
     all_TELO = list(zip(x_TELO[index_5:index_6],y_TELO[index_5:index_6],
                         z_TELO[index_5:index_6],width_TELO[index_5:index_6],
                         height_TELO[index_5:index_6],depth_TELO[index_5:index_6],
@@ -216,17 +181,12 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                         xmicron_TELO_end,ymicron_TELO_end,zmicron_TELO_end,
                         rellen_TELO,maxint_TELO[index_5:index_6],
                         avint_TELO[index_5:index_6]))
-    all_TELO.remove(all_TELO[0])
     
     #converts all pixels into microns, point comparisons in microns, point vs DAPI comparisons in vectors
     num = 0
     for DAPI_vectors in all_DAPI:
         for point in all_H2AX:
-            if point[0] == all_H2AX[0][0]:
-                totaled_H2AX_count.append(len(filt_H2AX))
-            elif DAPI_vectors[0] == all_DAPI[0][0]:
-                pass #dapi_vector0 < point0 < dapi_vector3
-            elif (nuclear_filter(point,DAPI_vectors[3],
+            if (nuclear_filter(point,DAPI_vectors[3],
                     DAPI_vectors[4],DAPI_vectors[5],DAPI_vectors[6]) == True):
                 if (not H2AX_size_threshold == 0) and (point[9]       #filters by H2AX foci size
                      or point[10] or point[11] >= H2AX_size_threshold):
@@ -236,12 +196,9 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                     filt_H2AX.append(point)
             else:
                 pass
+        totaled_H2AX_count.append(len(filt_H2AX))
         for point in all_TELO:
-            if point[0] == all_TELO[0][0]:
-                totaled_TELO_count.append(len(filt_TELO))
-            elif DAPI_vectors[0] == all_DAPI[0][0]:
-                pass 
-            elif (nuclear_filter(point,DAPI_vectors[3],
+            if (nuclear_filter(point,DAPI_vectors[3],
                     DAPI_vectors[4],DAPI_vectors[5],DAPI_vectors[6]) == True):
                 if (not TELO_size_threshold == 0) and (point[9]       #filters by H2AX foci size
                      or point[10] or point[11] >= TELO_size_threshold):
@@ -251,6 +208,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                     filt_TELO.append(point)
             else:
                 pass
+        totaled_TELO_count.append(len(filt_TELO))
     average_H2AX_count = len(filt_H2AX)/len(all_DAPI)
 
     dict_nuclei_H2AX, dict_nuclei_TELO = {},{}
@@ -261,7 +219,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         dict_nuclei_TELO["Nucleus no. " + str(i)] = (filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]])
         dict_H2AX_count["Nucleus no. " + str(i)] = len((filt_H2AX[totaled_H2AX_count[max(i-1,0)]:totaled_H2AX_count[i]]))
         dict_TELO_count["Nucleus no. " + str(i)] = len((filt_TELO[totaled_TELO_count[max(i-1,0)]:totaled_TELO_count[i]]))
-    
+
     TTAF, TELO_len, HTAF, n_TAF = {},{},{},{} # TTAF = TAF with telomeres as comparisons
     TAF_TELO, TAF_H2AX, TELO_length, n_TAF_TELO = [],[],[],[]
     TAF_positive_nuclei, TAF_percent_positive = [],[]
@@ -278,7 +236,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                         pass
                     elif (coloc > float(bottom_overlap_ratio) and 
                           coloc < float(top_overlap_ratio) and
-                          not Tval2[0:3] in TAF_TELO): #anti-ghosting included here
+                          not Tval2[0:3] in TAF_TELO): # anti-ghosting included here
                         TAF_TELO.append(Tval2[0:3])
                         TELO_length.append(Tval2[15]) #15 is relative telomere length
                         TAF_H2AX.append(Hval2[0:3])
@@ -363,7 +321,6 @@ def retrieve_index(df):
         else:
             pass
     return index_list
-#have to set separate indices for DAPI, H2AX and TELO since they all have diff lengths
 
 dataset_obj = sortby_treatment(dataset_DAPI)
 dataset_indices = list(zip(treatment_index(dataset_DAPI),
@@ -382,11 +339,11 @@ for n, obj in enumerate(dataset_indices):
             if ((image_indices[m-1][0] >= (dataset_indices[n-1][0])) and
                 (image_indices[m][0] <= (dataset_indices[n][0])+1)):
                 Image_num = "Image_" + str(m)
-                analysis = full_analysis(image_indices[m-1][0],image_indices[m][0],
-                                     image_indices[m-1][1],image_indices[m][1],
-                                     image_indices[m-1][2],image_indices[m][2])
+                analysis = full_analysis((image_indices[m-1][0]+1),image_indices[m][0],
+                                     (image_indices[m-1][1]+1),image_indices[m][1],
+                                     (image_indices[m-1][2]+1),image_indices[m][2])
                 # output for analysis is a list of dicts
-                images_TTAF[Image_num] = analysis[0]
+                images_TTAF[Image_num] = analysis[0] # sorts data by image
                 images_Tlen[Image_num] = analysis[1]
                 images_nTAF[Image_num] = analysis[2]
                 images_pos[Image_num] = analysis[3]
@@ -394,7 +351,7 @@ for n, obj in enumerate(dataset_indices):
                 images_H2AX[Image_num] = analysis[5]
                 images_TELO[Image_num] = analysis[6]
                 images_nH2AX[Image_num] = analysis[7]
-                treatments_TTAF.update({dataset_obj[n-1] : images_TTAF})
+                treatments_TTAF.update({dataset_obj[n-1] : images_TTAF}) # sorts images by treatments
                 treatments_pos.update({dataset_obj[n-1] : images_pos})
                 treatments_nTAF.update({dataset_obj[n-1] : images_nTAF})
                 treatments_Tlen.update({dataset_obj[n-1] : images_Tlen})
@@ -419,26 +376,19 @@ for n,(treatments,images) in enumerate(treatments_pos.items()):
     else:
         mean_pos_treatment.update({dataset_obj[n] : float(0)})
         temp_percent = []
-            
+                  
 for n,(treatments,images) in enumerate(treatments_nH2AX.items()):
     for k,v in images.items():
         if treatments == dataset_obj[n]:
             temp_average.append(v)
-            if not v == 0:
-                temp_percent.append(str(1))
-    if len(temp_average) == len(images) and len(temp_percent) > 1:
-        temp_percent = len(temp_percent)/len(temp_average)
-        temp_percent = [st.mean(temp_percent),st.stdev(temp_percent),
-            (st.stdev(temp_percent)/sqrt(len(images))),len(images)]
-        percent_H2AX_pos.update({dataset_obj[n] : temp_percent})
+    if len(temp_average) == len(images) and len(temp_average) > 1:
         temp_average = [st.mean(temp_average),st.stdev(temp_average),
             (st.stdev(temp_average)/sqrt(len(images))),len(images)]
         mean_H2AX_pos.update({dataset_obj[n] : temp_average})
-        temp_average, temp_percent = [],[]
+        temp_average = []
     else:
-        percent_H2AX_pos.update({dataset_obj[n] : float(0)})
         mean_H2AX_pos.update({dataset_obj[n] : float(0)})
-        temp_average = []   
+        temp_average = []
 
 # percentage nuclei positive for senescence by treatment
 dfmeanpos = pd.DataFrame.from_dict(mean_pos_treatment,orient='index',
@@ -448,7 +398,7 @@ dfmeanH2AX = pd.DataFrame.from_dict(mean_H2AX_pos,orient='index',
         columns=['Average H2AX per nucleus', 'SD','SE','n'])
 # percentage nuclei positive for H2AX
 dfH2AXpos = pd.DataFrame.from_dict(percent_H2AX_pos,orient='index',
-        columns=['Percent H2AX positive','SD','SE', 'n']                          )
+        columns=['Percent H2AX positive','SD','SE', 'n'])
 # percentage of nuclei positive for senescence by images
 dfpos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
         for i in treatments_pos.keys()
