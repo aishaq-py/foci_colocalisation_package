@@ -19,7 +19,7 @@ input_file_DAPI = root + '20190417 DAPI.xlsx'
 output_file = root + str(date.today()) + '_threshold_5_no_upper.xlsx'
 
 #PARAMETERS FOR ANALYSIS
-print("\n Reminder to change input and output values if needed. Check readme for help.")
+print("\n Reminder to change input and output values if needed. Check lines 23 - 31, and 55. Check readme for help.")
 px = float(0.1) #float(input("Define pixel length or width in micron: \n"))n micron: \n")) 
 z_size = float(0.2) #float(input("Define size of z-step in mixron: \n"))
 top_overlap_ratio = float(1.5) #input("Upper threshold for H2AX:TAF overlap ratio (> 1 means H2AX encompasses Telo, max 5): \n")
@@ -52,7 +52,7 @@ avint_TELO = np.array(df_TELO[19])
 dataset_DAPI = np.array(df_DAPI[0])
 x_DAPI,y_DAPI, z_DAPI = np.array(df_DAPI[3]), np.array(df_DAPI[4]), np.array(df_DAPI[5])
 width_DAPI, height_DAPI, depth_DAPI = np.array(df_DAPI[6]), np.array(df_DAPI[7]), np.array(df_DAPI[8])
-os.chdir("C:\\Users\\Ishaq\\Anaconda3\\") # change this to your Anaconda3 directory
+os.chdir("C:\\Users\\Ishaq\\Anaconda3\\") # change this to your Anaconda3 directory - Anaconda prompt > "where Anaconda"
 
 def floatify(val):
     if type(val) == int:
@@ -107,7 +107,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
     all_H2AX = list(zip(x_H2AX, y_H2AX, z_H2AX, width_H2AX, height_H2AX, depth_H2AX))
     all_TELO = list(zip(x_TELO, y_TELO, z_TELO, width_TELO, height_TELO, depth_TELO, avint_TELO))
     all_DAPI = list(zip(x_DAPI, y_DAPI, z_DAPI, width_DAPI, height_DAPI, depth_DAPI))
-    x_DAPI_start, y_DAPI_start, z_dim_DAPI= ([] for i in range(3))
+    x_DAPI_start, y_DAPI_start, z_dim_DAPI = ([] for i in range(3))
     x_DAPI_end, y_DAPI_end,nuclear_count = ([] for i in range(3))
     xmicron_H2AX, ymicron_H2AX, zmicron_H2AX = ([] for i in range(3))
     filt_H2AX,filt_TELO,rellen_TELO = ([] for i in range(3))
@@ -218,8 +218,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
 
     TTAF, TELO_len, HTAF, n_TAF = {},{},{},{} # TTAF = TAF with telomeres as comparisons
     percent_53BP1, percent_H2AX_vs_53BP1 = {}, {} # for 53BP1 diagnostic
-    TAF_TELO, TAF_H2AX, TELO_length, n_TAF_TELO = [],[],[],[]
-    TAF_positive_nuclei, TAF_percent_positive = [],[]
+    TAF_positive_nuclei, TAF_percent_positive, n_TAF_TELO = [],[],[]
     _53BP1_total,_53BP1_percent, H2AX_total = [],[],[] # use TAF_TELO for 53BP1 positive
     #colocalisation of H2AX and TELO
     z_stacks_per_TAF = float(TAF_size_threshold) / float(z_size)
@@ -249,12 +248,6 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         TELO_len[Tkey] = TELO_length[:]
         HTAF[Tkey] = TAF_H2AX[:]
         n_TAF[Tkey] = len(TAF_TELO[:])
-        # TAF_TELO.clear()
-        # TAF_H2AX.clear()
-        # _53BP1_total.clear()
-        # H2AX_total.clear()
-        # TELO_length.clear()
-        # TAF_TELO.clear()
         if ((len(TTAF.get(Tkey)) < int(TAF_positive_threshold)) or 
             (len(TTAF.get(Tkey)) > int(upper_TAF_positive_threshold))):
             pass
@@ -272,6 +265,7 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
                     dict_nuclei.pop('k2')
         else:
             pass
+
     if len(TTAF) > 0:
         TAF_percent_positive.append(len(TAF_positive_nuclei)/len(TTAF)*100) #percentage, count positive, count total
         TAF_percent_positive.append(len(TAF_positive_nuclei))
@@ -280,11 +274,12 @@ def full_analysis(index_1,index_2,index_3,index_4,index_5,index_6):
         TAF_percent_positive.append(float(0))
         TAF_percent_positive.append(float(0))
         TAF_percent_positive.append(len(TTAF))
+
     return [TTAF, TELO_len, n_TAF, TAF_percent_positive, dict_nuclei,
             dict_H2AX_count, dict_TELO_count,average_H2AX_count,percent_53BP1,percent_H2AX_vs_53BP1]
     
 def sortby_treatment(dataset):
-    obj_list, index_list = [],[]
+    obj_list = []
     for index, obj in enumerate(dataset):
         if index == 0:
             pass
@@ -292,9 +287,7 @@ def sortby_treatment(dataset):
             pass
         elif obj not in obj_list:
             obj_list.append(obj)
-            index_list.append(max(0,index-2))
         elif index+1 == len(dataset):
-            index_list.append(index)
             break
     return obj_list
 
@@ -328,14 +321,11 @@ def retrieve_index(df):
     return index_list
 
 dataset_obj = sortby_treatment(dataset_DAPI)
-dataset_indices = list(zip(treatment_index(dataset_DAPI),
-                  treatment_index(dataset_H2AX),treatment_index(dataset_TELO)))
-image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),
-                         retrieve_index(x_TELO)))
+dataset_indices = list(zip(treatment_index(dataset_DAPI),treatment_index(dataset_H2AX),treatment_index(dataset_TELO)))
+image_indices = list(zip(retrieve_index(x_DAPI),retrieve_index(x_H2AX),retrieve_index(x_TELO)))
         
 treatments_TTAF,treatments_pos,treatments_nTAF,treatments_Tlen = {},{},{},{}
-treatments_nuclei,treatments_H2AX,treatments_TELO = {},{},{}
-treatments_nH2AX = {}
+treatments_nuclei,treatments_H2AX,treatments_TELO,treatments_nH2AX = {},{},{},{}
 percent_53BP1,percent_H2AX_vs_53BP1 = {},{}
 for n, obj in enumerate(dataset_indices):
     images_TTAF, images_pos, images_Tlen, images_nTAF = {},{},{},{}
@@ -410,53 +400,12 @@ dfmeanH2AX = pd.DataFrame.from_dict(mean_H2AX_pos,orient='index',
 # percentage nuclei positive for H2AX
 dfH2AXpos = pd.DataFrame.from_dict(mean_pos_treatment,orient='index',
         columns=['Percent H2AX positive','SD','SE', 'n'])
-# percentage of nuclei positive for senescence by images
-dfpos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
-        for i in treatments_pos.keys()
-        for j in treatments_pos[i].keys()},
-        orient='index', columns=['Percent TAF positive',
-                                 'TAF positive count','Total nuclei count'])
-# coordinate of each TAF positive telomere
-dfTTAF = pd.DataFrame.from_dict({(i,j): treatments_TTAF[i][j]
-                                    for i in treatments_TTAF.keys()
-                                    for j in treatments_TTAF[i].keys()},
-                                    orient='index')
-# relative length of each TAF positive telomere
-dfTlen = pd.DataFrame.from_dict({(i,j): treatments_Tlen[i][j]
-                                    for i in treatments_Tlen.keys()
-                                    for j in treatments_Tlen[i].keys()},
-                                    orient='index')
-# summarised number of TAF per nucleus
-dfnTAF = pd.DataFrame.from_dict({(i,j): treatments_nTAF[i][j]
-                                    for i in treatments_nTAF.keys()
-                                    for j in treatments_nTAF[i].keys()},
-                                    orient='index')
-df_allpos = pd.concat([dfmeanpos,dfpos,dfmeanH2AX,dfH2AXpos], axis=1, sort=False)
-# position of nuclei
-dfnuclei = pd.DataFrame.from_dict({(i,j): treatments_nuclei[i][j]
-                                    for i in treatments_nuclei.keys()
-                                    for j in treatments_nuclei[i].keys()},
-                                    orient='index')
-# summarised number of H2AX per nucleus
-dfnH2AX = pd.DataFrame.from_dict({(i,j): treatments_H2AX[i][j] 
-                                    for i in treatments_H2AX.keys()
-                                    for j in treatments_H2AX[i].keys()},
-                                    orient='index')
-# summarised number of TELO per nucleus
-dfnTELO = pd.DataFrame.from_dict({(i,j): treatments_TELO[i][j] 
-                                    for i in treatments_TELO.keys()
-                                    for j in treatments_TELO[i].keys()},
-                                    orient='index')
-# % 53BP1 positive vs correlate
-dfppos53BP1 = pd.DataFrame.from_dict({(i,j): percent_53BP1[i][j]
-                                    for i in percent_53BP1.keys()
-                                    for j in percent_53BP1[i].keys()},
-                                    orient='index')
-# % H2AX positive vs total correlate                                    
-dfpposH2AXv53BP1 = pd.DataFrame.from_dict({(i,j): percent_H2AX_vs_53BP1[i][j]
-                                    for i in percent_H2AX_vs_53BP1.keys()
-                                    for j in percent_H2AX_vs_53BP1[i].keys()},
-                                    orient='index')                                    
+
+def df_from_dict(input_dict):
+    return pd.DataFrame.from_dict({(i,j): input_dict[i][j]
+                    for i in input_dict.keys()
+                    for j in input_dict[i].keys()},
+                    orient='index')
 
 def dfs_tabs(df_list, sheet_list, file_name):
     writer = pd.ExcelWriter(file_name,engine='xlsxwriter')   
@@ -464,12 +413,27 @@ def dfs_tabs(df_list, sheet_list, file_name):
         dataframe.to_excel(writer, sheet_name=sheet, startrow=0 , startcol=0)   
     writer.save()
 
+# percentage of nuclei positive for senescence by images
+dfpos = pd.DataFrame.from_dict({(i,j): treatments_pos[i][j]
+        for i in treatments_pos.keys()
+        for j in treatments_pos[i].keys()},
+        orient='index', columns=['Percent TAF positive',
+                                 'TAF positive count','Total nuclei count'])   
+dfTTAF = df_from_dict(treatments_TTAF)  # coordinate of each TAF positive telomere
+dfTlen = df_from_dict(treatments_Tlen)  # relative length of each TAF positive telomere
+dfnTAF = df_from_dict(treatments_nTAF)  # summarised number of TAF per nucleus
+df_allpos = pd.concat([dfmeanpos,dfpos,dfmeanH2AX,dfH2AXpos], axis=1, sort=False)
+dfnuclei = df_from_dict(treatments_nuclei)  # position of nuclei
+dfnH2AX = df_from_dict(treatments_H2AX) # summarised number of H2AX per nucleus
+dfnTELO = df_from_dict(treatments_TELO) # summarised number of TELO per nucleus
+dfppos53BP1 = df_from_dict(percent_53BP1)# % 53BP1 positive vs correlate
+dfpposH2AXv53BP1 = df_from_dict(percent_H2AX_vs_53BP1)  # % H2AX positive vs total correlate        
+                                              
+
 df = [df_allpos,dfTTAF,dfTlen,dfnTAF,dfnuclei,dfnH2AX,dfnTELO,dfppos53BP1,dfpposH2AXv53BP1]
 sheets = ["Percent positive","TAF coordinates","Relative Telo length",
           "n TAF per nucleus","Nuclear coordinates","H2A.X count",
           "Telo count","53BP1 vs coloc","H2AX vs coloc"]
-
 dfs_tabs(df,sheets,output_file)
-
 end = time.time()
 print("Runtime = %s" % (end - start))
