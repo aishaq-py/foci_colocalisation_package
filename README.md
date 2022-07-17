@@ -12,6 +12,7 @@ The image files will be stored as LIF. This is a series of TIFFs that have been 
 -------------------------
 
 II – Icy Image analysis
+
 http://icy.bioimageanalysis.org/
 Icy is an open source image analysis software designed and written by a French group. Icy is written in Java and contains ImageJ within it. Thus, while it may look like an intimidating software, Icy is actually quite relatable for most analysts. Icy contains many powerful functionalities far beyond what we will use in the TAF analysis workflow. As someone had previously described though, documentation for Icy functions is absolutely abysmal. 
 To begin with, try to acquire Icy version 1.9.7. It seems that the later versions have Bioformats modules that will not open LIF files. There are copies of this version around. Ed, Tengfei, and Abbas have one each.
@@ -22,22 +23,27 @@ Next, open a protocols window. From this window, open one of the TAF analysis pr
 To begin with, determine the orders of your blue, green and red channels, starting with 0 and ending with 2. Put the correct numbers into the extract channel blocks. 
 
 DAPI channel parameters
+
 Then, begin by tuning the values for DAPI. In figure 3, 2 lines come off block 5, joining to intensity projection (block 6) and a later block called ROI statistics. These blocks do not need modification. Intensity projection then leads into the median filter (block 7) which also does not require modification. Median filter then leads into the HK-means for nucleus (block 8) block. This block is for detection of nuclei. To tune this block, open one z-stack image in Icy by dragging and dropping a file onto the main Icy toolbar. Navigate to “Detection and Tracking”, then locate the HK-means button. Navigate to “Image/Sequence” and select “Extract”. Extract your blue channel. Then navigate to “Processing” and select “Projection”. Ensure that your extracted blue channel is selected. Press start on the projection window. You now have a maximum z-projection for blue. Navigate to “Region of Interest” and select “Polygon”. Draw a ROI around a large nucleus to get an idea of what nuclear size range you are expecting on your image. Put this value + about 20% into the HK-means window that was opened earlier. Press start. If done correctly, all nuclei within the size specified will be detected. Put this value into the HK-means block on the protocols window. Then navigate to “Detection and Tracking” and select “Active Contours”. Apply the parameters in the “Active Contours” block to the “Active Contours” window. Press start and determine if these parameters are correctly defining the nuclei. Tweak the parameters as necessary and update the “Active Contours” block. Close the HK-means window and extracted blue channel.
 
 γH2A.X and telomere channel parameters
+
 The steps for γH2A.X and telomere parameters optimisation are the same, just performed on different extracted channels. Navigate to “Image/Sequence” and select “Extract” to extract the green channel. Navigate to “Detection and Tracking” and select “Spot Detector”. Select “Detection” from the left menu. Input the detection parameters from the “Spot Detector” block into the “Spot Detector” window and run. Tweak the spot detector settings as necessary. Apply the settings to the “Spot Detector” block.
 
 Saving and loading
+
 There are three blocks for saving, labelled accordingly for DAPI, H2AX and telomeres. Set your save paths on the blocks, then ensure that “merge sheets” is selected, not one of the other selections. Navigate to the top left of the protocols page. Select the folder in which you have your LIF files. Once these parameters have been set, save your protocol and start run. 
 
 -------------------------
 
 III – Data Clean-up
+
 Data clean-up will be the same for all three Excel spreadsheets. Open one spreadsheet. Copy column A and paste into column B. Highlight column B, press CTRL + F, then select replace. Replace all “Dataset” in column B with “Image”. Highlight column A, press CTRL + F, then select replace. Replace all “ - Mark_and_Find 00*/Position00* - channel: *” with “ “. Highlight column F, press CTRL+F, then select replace. Replace all “ALL” with “1”. Highlight column I, press CTRL+F, then select replace. Replace all “N/A” with “1”. Save and close. Repeat for all three spreadsheets. There is also a VBA macro that does all this for each spreadsheet.
 
 -------------------------
 
 IV - Script execution
+
 *At the time of initiating this learning project, I had not learned to execute python scripts from the command line. Thus parameters had to be changed from within the script. This was normally okay because the parameters of the regions of interest did not change very much between experiments.
 
 To prepare the interface for working with the script, download and install Anaconda Navigator. Then, from either the Anaconda Navigator UI or the Anaconda Prompt command line, launch the Spyder IDE. Load in the Python script. Modify lines 15 to 18 for your input directory. Then, modify lines 25, 27, and 31 for the values you have. 25 for pixel length or width, 27 for z step size, and 31 for the TAF count above which you wish to consider your nuclei senescent. Normally, 1 is a good value. 
@@ -45,6 +51,7 @@ To prepare the interface for working with the script, download and install Anaco
 -------------------------
 
 V – Checking your data
+
 Two files will be generated for each analysis. The diagnostics file contains all raw data for the summary analysis in the main output file. To determine if a TAF is actually colocalising, open the diagnostics file. Find the sample, then the nucleus you are looking for. Find the coordinates of the nucleus. Open the corresponding z-stack image, then locate the nucleus of interest on the image.
 Another way to confirm that the data output is accurate is to analyse the distribution of TAF. There should be a decreasing distribution from 1 to 10+, with the highest category being the no-TAF category. This function is not yet coded in, but there is an Excel template for doing this manually. 
 
