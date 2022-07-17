@@ -1,8 +1,7 @@
-# foci_colocalisation_package
+# Foci_colocalisation_package
 Introduction
 
 This script was designed to colocalise 3D dots on multi-channel Z-stack microscopy images, particularly γH2A.X foci and telomere foci. The Python script has been coded to filter all γH2A.X foci and telomere foci in their respective spreadsheets by the nuclear regions in the DAPI spreadsheet, then determine if they are overlapping in the x,y,z axes. 
-
 
 I - Data generation:
 
@@ -48,3 +47,8 @@ To prepare the interface for working with the script, download and install Anaco
 V – Checking your data
 Two files will be generated for each analysis. The diagnostics file contains all raw data for the summary analysis in the main output file. To determine if a TAF is actually colocalising, open the diagnostics file. Find the sample, then the nucleus you are looking for. Find the coordinates of the nucleus. Open the corresponding z-stack image, then locate the nucleus of interest on the image.
 Another way to confirm that the data output is accurate is to analyse the distribution of TAF. There should be a decreasing distribution from 1 to 10+, with the highest category being the no-TAF category. This function is not yet coded in, but there is an Excel template for doing this manually. 
+
+-------------------------
+
+Publication
+This script was initially targetted to be submitted to Scientific Reports. However, no funding bodies are tied to this work, and the idea seems moot at this point considering the progress that has been made in image analysis research since then. Also there are some bugs in the code that have not been worked out.
