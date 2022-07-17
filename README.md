@@ -51,4 +51,5 @@ Another way to confirm that the data output is accurate is to analyse the distri
 -------------------------
 
 Publication
+
 This script was initially targetted to be submitted to Scientific Reports. However, no funding bodies are tied to this work, and the idea seems moot at this point considering the progress that has been made in image analysis research since then. Also there are some bugs in the code that have not been worked out.
