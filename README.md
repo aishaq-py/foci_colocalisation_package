@@ -3,6 +3,9 @@ Introduction
 
 This script was designed to colocalise 3D dots on multi-channel Z-stack microscopy images, particularly γH2A.X foci and telomere foci. The Python script has been coded to filter all γH2A.X foci and telomere foci in their respective spreadsheets by the nuclear regions in the DAPI spreadsheet, then determine if they are overlapping in the x,y,z axes. 
 
+This project was my very first Python project. The course on Coursera proved to be very dry when the data and processes were not directly and personally relevant, so I picked out long-standing problem that we had in our image analysis pipeline and optimised on it. Believe it or not, people used to, and still do, spend hours per image quantifying the colocalisation of each of these dots due to the unreliability of automated analysis.
+
+
 I - Data generation:
 
 This workflow begins with and requires capture of z-stack images with high resolution at approximately 0.1 µm for pixel length, width, and z-step. Using the 40x oil or 63x oil objectives on our Leica DMi8 microscope are both acceptable. The Leica DM5500 can also be used for these image captures. Considering that the Leica DMi8 costs twice as much to use but captures z-stacks in far less time than the DM5500, save some time and just use the DMi8. At 5 z-stacks for 8 samples per hour for the DMi8, one would be able to work through 64 samples in an 8-hour day. 
